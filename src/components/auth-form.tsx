@@ -35,24 +35,31 @@ export function AuthForm({
     }
 
     setLoading(true);
-    const res = await fetch(`/api/auth/${mode}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        mode === "register" ? { name, email, password } : { email, password },
-      ),
-    });
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/auth/${mode}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          mode === "register" ? { name, email, password } : { email, password },
+        ),
+      });
 
-    if (res.ok) {
-      router.push(next || "/app");
-      router.refresh();
-      return;
+      if (res.ok) {
+        router.push(next || "/app");
+        router.refresh();
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
+      if (data.error === "exists") setError(t("auth.errorExists"));
+      else if (data.error === "invalid_credentials") setError(t("auth.errorInvalid"));
+      else setError(t("auth.errorGeneric"));
+    } catch {
+      // fetch rechaza (offline, servidor caído, conexión cortada): sin esto el
+      // botón quedaba deshabilitado para siempre sin mensaje. Mostramos error.
+      setError(t("auth.errorGeneric"));
+    } finally {
+      setLoading(false);
     }
-    const data = await res.json().catch(() => ({}));
-    if (data.error === "exists") setError(t("auth.errorExists"));
-    else if (data.error === "invalid_credentials") setError(t("auth.errorInvalid"));
-    else setError(t("auth.errorGeneric"));
   }
 
   const isLogin = mode === "login";

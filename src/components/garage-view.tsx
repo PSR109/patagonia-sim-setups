@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 import { gameCatalog, getGame } from "@/data/registry";
 import { useT } from "@/lib/i18n/context";
@@ -65,15 +66,35 @@ export function GarageView({
 }) {
   const { t } = useT();
   const router = useRouter();
+  const [delError, setDelError] = useState<string | null>(null);
 
   async function del(kind: "favorites" | "notes" | "laps", id: string) {
-    await fetch(`/api/${kind}?id=${encodeURIComponent(id)}`, { method: "DELETE" });
-    router.refresh();
+    // Borrado permanente (hard delete en la API): confirmamos para evitar
+    // pérdida de datos por un click accidental en la ✕.
+    if (!window.confirm(t("garage.deleteConfirm"))) return;
+    setDelError(null);
+    try {
+      const res = await fetch(`/api/${kind}?id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
+      // Sin chequear res.ok el ítem "reaparecía" tras refresh sin avisar; sin
+      // try/catch un fallo de red dejaba el click sin efecto y sin feedback.
+      if (res.ok) router.refresh();
+      else setDelError(t("garage.deleteError"));
+    } catch {
+      setDelError(t("garage.deleteError"));
+    }
   }
 
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-2xl font-bold tracking-tight">{t("garage.title")}</h1>
+
+      {delError && (
+        <p className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
+          {delError}
+        </p>
+      )}
 
       {/* Favoritos */}
       <section className="flex flex-col gap-3">

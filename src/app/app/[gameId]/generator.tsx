@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { getGame } from "@/data/registry";
 import { generateSetup, baseFor, effectiveParams } from "@/lib/engine";
@@ -183,6 +183,7 @@ export function Generator({ gameId }: { gameId: string }) {
               onChange={(v) => {
                 setCategoryId(v);
                 setCarId("");
+                setResult(null);
               }}
               options={game.categories.map((c) => ({ value: c.id, label: c.name }))}
             />
@@ -191,7 +192,12 @@ export function Generator({ gameId }: { gameId: string }) {
           <Field label={t("gen.car")}>
             <Select
               value={carId}
-              onChange={setCarId}
+              onChange={(v) => {
+                // Limpiamos el result viejo: si no, al cambiar de auto la tabla
+                // y el guardado mezclaban el auto nuevo con los valores del viejo.
+                setCarId(v);
+                setResult(null);
+              }}
               placeholder={t("gen.selectCar")}
               options={cars.map((c) => ({ value: c.id, label: c.name }))}
             />
@@ -203,7 +209,10 @@ export function Generator({ gameId }: { gameId: string }) {
           >
             <Select
               value={trackId}
-              onChange={setTrackId}
+              onChange={(v) => {
+                setTrackId(v);
+                setResult(null);
+              }}
               placeholder={isRally ? t("gen.selectTrackRally") : t("gen.selectTrackCircuit")}
               options={game.tracks.map((tk) => ({
                 value: tk.id,
@@ -610,68 +619,113 @@ function SaveBar({
   result: SetupResult;
 }) {
   const { t, locale } = useT();
-  const [msg, setMsg] = useState<string | null>(null);
+  const [msg, setMsg] = useState<{ text: string; error: boolean } | null>(null);
   const [noteOpen, setNoteOpen] = useState(false);
   const [noteBody, setNoteBody] = useState("");
   const [lapOpen, setLapOpen] = useState(false);
   const [lapInput, setLapInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [favSaved, setFavSaved] = useState(false);
+  const msgTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Mensaje efímero (éxito o error) que se borra solo a los 4s. Antes el texto
+  // "Guardado" quedaba fijo para siempre y los errores se pintaban en verde.
+  function flash(text: string, error = false) {
+    setMsg({ text, error });
+    if (msgTimer.current) clearTimeout(msgTimer.current);
+    msgTimer.current = setTimeout(() => setMsg(null), 4000);
+  }
+  useEffect(
+    () => () => {
+      if (msgTimer.current) clearTimeout(msgTimer.current);
+    },
+    [],
+  );
 
   async function saveFavorite() {
     setBusy(true);
-    const res = await fetch("/api/favorites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        gameId,
-        carId,
-        trackId: trackId || null,
-        label: carName,
-        payload: { values: result.values },
-      }),
-    });
-    setBusy(false);
-    setMsg(res.ok ? t("result.savedFav") : t("auth.errorGeneric"));
+    try {
+      const res = await fetch("/api/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          gameId,
+          carId,
+          trackId: trackId || null,
+          label: carName,
+          payload: { values: result.values },
+        }),
+      });
+      if (res.ok) {
+        // Deshabilitamos el botón tras guardar: cada POST crea una fila nueva,
+        // así evitamos favoritos duplicados por doble click.
+        setFavSaved(true);
+        flash(t("result.savedFav"));
+      } else {
+        flash(t("auth.errorGeneric"), true);
+      }
+    } catch {
+      // Sin este catch un fallo de red dejaba el botón deshabilitado para
+      // siempre y sin ningún mensaje.
+      flash(t("auth.errorGeneric"), true);
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function saveNote() {
     if (!noteBody.trim()) return;
     setBusy(true);
-    const res = await fetch("/api/notes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ gameId, carId, trackId: trackId || null, body: noteBody }),
-    });
-    setBusy(false);
-    if (res.ok) {
-      setNoteBody("");
-      setNoteOpen(false);
-      setMsg(t("common.saved"));
-    } else setMsg(t("auth.errorGeneric"));
+    try {
+      const res = await fetch("/api/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gameId, carId, trackId: trackId || null, body: noteBody }),
+      });
+      if (res.ok) {
+        setNoteBody("");
+        setNoteOpen(false);
+        flash(t("common.saved"));
+      } else {
+        flash(t("auth.errorGeneric"), true);
+      }
+    } catch {
+      flash(t("auth.errorGeneric"), true);
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function saveLap() {
     const ms = parseLapToMs(lapInput);
     if (ms == null || !trackId) {
-      setMsg(
+      flash(
         locale === "es"
           ? "Carga un tiempo válido (ej. 1:23.456) y elige una pista."
           : "Enter a valid time (e.g. 1:23.456) and pick a track.",
+        true,
       );
       return;
     }
     setBusy(true);
-    const res = await fetch("/api/laps", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ gameId, carId, trackId, lapTimeMs: ms }),
-    });
-    setBusy(false);
-    if (res.ok) {
-      setLapInput("");
-      setLapOpen(false);
-      setMsg(t("common.saved"));
-    } else setMsg(t("auth.errorGeneric"));
+    try {
+      const res = await fetch("/api/laps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gameId, carId, trackId, lapTimeMs: ms }),
+      });
+      if (res.ok) {
+        setLapInput("");
+        setLapOpen(false);
+        flash(t("common.saved"));
+      } else {
+        flash(t("auth.errorGeneric"), true);
+      }
+    } catch {
+      flash(t("auth.errorGeneric"), true);
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -679,10 +733,10 @@ function SaveBar({
       <div className="flex flex-wrap gap-2">
         <button
           onClick={saveFavorite}
-          disabled={busy}
+          disabled={busy || favSaved}
           className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-bg transition-colors hover:bg-brand-strong disabled:opacity-50"
         >
-          ★ {t("result.saveFav")}
+          {favSaved ? `✓ ${t("common.saved")}` : `★ ${t("result.saveFav")}`}
         </button>
         <button
           onClick={() => {
@@ -742,7 +796,16 @@ function SaveBar({
         </div>
       )}
 
-      {msg && <p className="mt-3 text-sm font-medium text-good">{msg}</p>}
+      {msg && (
+        <p
+          className={cn(
+            "mt-3 text-sm font-medium",
+            msg.error ? "text-danger" : "text-good",
+          )}
+        >
+          {msg.text}
+        </p>
+      )}
     </div>
   );
 }
