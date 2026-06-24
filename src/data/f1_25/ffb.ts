@@ -36,6 +36,14 @@ export const f1_25Ffb: GameFfb = {
     { paramId: "NFR", value: "OFF–5" },
     { paramId: "NIN", value: "OFF" },
     {
+      paramId: "INT",
+      value: "2–4",
+      note: {
+        es: "F1 25 manda una señal con algo de ruido digital; un INT de 2–4 la suaviza sin agregar latencia perceptible. Déjalo más bajo si quieres la señal más cruda.",
+        en: "F1 25 sends a signal with some digital noise; an INT of 2–4 smooths it without adding noticeable latency. Keep it lower if you want a rawer signal.",
+      },
+    },
+    {
       paramId: "FEI",
       value: "80–100",
       note: {
@@ -68,7 +76,7 @@ export const f1_25Ffb: GameFfb = {
     },
     {
       id: "vibration_ffb_strength",
-      name: { es: "Vibration & Force Feedback Strength (fuerza FFB)", en: "Vibration & Force Feedback Strength" },
+      name: { es: "Vibration & FFB Strength (fuerza del FFB)", en: "Vibration & FFB Strength" },
       value: "75",
       perBase: {
         gt_dd_pro: "85–100",
@@ -83,8 +91,8 @@ export const f1_25Ffb: GameFfb = {
         en: "Overall FFB force inside F1 25. The most important setting: raise it until you feel grip well in the most loaded corners without the wheel saturating and flattening out (clipping, you lose detail).",
       },
       note: {
-        es: "Cuanta más fuerza tiene tu base, más bajo va este valor.",
-        en: "The more torque your base has, the lower this value.",
+        es: "El slider va de 0 a 100 (default 100). Cuanta más fuerza tiene tu base, más bajo va este valor: con 5–8 Nm ronda 85–100, con 15–18 Nm baja a 65–85 y con 20–25 Nm a 48–68. Súbelo hasta sentir bien el agarre en las curvas cargadas; si el volante se aplana y deja de ganar peso, estás saturando: bájalo.",
+        en: "The slider goes from 0 to 100 (default 100). The more torque your base has, the lower this value: with 5–8 Nm it's around 85–100, with 15–18 Nm it drops to 65–85, and with 20–25 Nm to 48–68. Raise it until you feel grip well in loaded corners; if the wheel flattens and stops gaining weight you're clipping: lower it.",
       },
     },
     {
@@ -135,8 +143,8 @@ export const f1_25Ffb: GameFfb = {
   ],
   notes: [
     {
-      es: "Regla de oro: deja la base (FFB) al 100% y ajusta la fuerza con el Vibration & Force Feedback Strength del juego. Si el volante se siente 'aplanado' o pierde detalle al cargar la curva, estás saturando (clipping): baja la fuerza.",
-      en: "Rule of thumb: leave the base (FFB) at 100% and dial in the force with the in-game Vibration & Force Feedback Strength. If the wheel feels 'flattened' or loses detail when loading a corner you're clipping: lower the force.",
+      es: "Regla de oro: deja la base (FFB) al 100% y ajusta la fuerza con el Vibration & FFB Strength del juego. Si el volante se siente 'aplanado' o pierde detalle al cargar la curva, estás saturando (clipping): baja la fuerza.",
+      en: "Rule of thumb: leave the base (FFB) at 100% and dial in the force with the in-game Vibration & FFB Strength. If the wheel feels 'flattened' or loses detail when loading a corner you're clipping: lower the force.",
     },
     {
       es: "Sube la fuerza de a poco hasta sentir bien el agarre en las curvas más cargadas sin que el volante se sature. Baja los efectos (pianos/pista) si tapan la información del agarre del neumático.",

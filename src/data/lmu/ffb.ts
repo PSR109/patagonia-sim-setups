@@ -35,6 +35,14 @@ export const lmuFfb: GameFfb = {
     { paramId: "NFR", value: "OFF–5" },
     { paramId: "NIN", value: "OFF" },
     {
+      paramId: "INT",
+      value: "OFF–2",
+      note: {
+        es: "El motor rF2/LMU manda una señal muy detallada pero algo cruda; una interpolación leve (1–2) la suaviza sin tapar el detalle ni agregar latencia notable. Déjalo en OFF si tu base maneja bien la señal cruda.",
+        en: "The rF2/LMU engine sends a very detailed but somewhat raw signal; light interpolation (1–2) smooths it without masking detail or adding noticeable latency. Leave it OFF if your base handles the raw signal well.",
+      },
+    },
+    {
       paramId: "FEI",
       value: "90–100",
       note: {
@@ -136,6 +144,33 @@ export const lmuFfb: GameFfb = {
       note: {
         es: "Default 150%. En bases de correa/engranaje de menor par suele dejarse en el default de 150%.",
         en: "Default 150%. On lower-torque belt/gear bases it's often left at the 150% default.",
+      },
+    },
+    {
+      id: "ffb_effects",
+      name: { es: "Force Feedback Effects (interruptor maestro)", en: "Force Feedback Effects" },
+      value: "ON",
+      whatItDoes: {
+        es: "Interruptor maestro del Force Feedback. Debe estar en ON: con OFF no sentirás ninguna fuerza en el volante. Es lo primero que conviene revisar si el FFB no funciona.",
+        en: "Master Force Feedback switch. Must be ON: with it OFF you'll feel no force at the wheel. It's the first thing to check if FFB isn't working.",
+      },
+    },
+    {
+      id: "invert_ffb",
+      name: { es: "Invert FFB (invertir FFB)", en: "Invert FFB" },
+      value: "OFF",
+      whatItDoes: {
+        es: "Invierte la polaridad de la señal de FFB. En bases Fanatec Direct Drive déjalo en OFF: así el volante se centra y reacciona correctamente. Solo algunas direcciones de engranaje antiguas necesitan invertirlo.",
+        en: "Inverts the FFB signal polarity. On Fanatec Direct Drive bases leave it OFF: the wheel then centers and reacts correctly. Only some older geared wheels need it inverted.",
+      },
+    },
+    {
+      id: "constant_steering_force",
+      name: { es: "Use Constant Steering Force Effect", en: "Use Constant Steering Force Effect" },
+      value: "OFF",
+      whatItDoes: {
+        es: "Activa un efecto de centrado constante pensado para volantes muy antiguos que no reproducen bien el FFB por telemetría. En bases Fanatec Direct Drive déjalo en OFF: el FFB físico de la base ya entrega esa información. No lo confundas con Invert FFB.",
+        en: "Enables a constant centering-force effect meant for very old wheels that can't reproduce telemetry-based FFB well. On Fanatec Direct Drive bases leave it OFF: the base's physical FFB already delivers that information. Don't confuse it with Invert FFB.",
       },
     },
   ],

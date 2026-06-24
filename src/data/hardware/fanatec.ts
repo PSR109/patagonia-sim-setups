@@ -32,8 +32,8 @@ export const fanatecBases: FanatecBase[] = [
     name: "ClubSport DD",
     maxTorqueNm: 15,
     note: {
-      es: "Direct drive de gama media, 15 Nm (subió de 12 a 15 Nm vía firmware v1.4.2.3, 2026). Buen equilibrio entre fuerza y detalle.",
-      en: "Mid-range direct drive, 15 Nm (raised from 12 to 15 Nm via firmware v1.4.2.3, 2026). Good balance of force and detail.",
+      es: "Direct drive de gama media, 15 Nm de par de sujeción (subió de 12 a 15 Nm vía firmware v1.4.2.3, 2026). Buen equilibrio entre fuerza y detalle. Con volantes de lado QR2 Lite queda limitada a 8 Nm.",
+      en: "Mid-range direct drive, 15 Nm holding torque (raised from 12 to 15 Nm via firmware v1.4.2.3, 2026). Good balance of force and detail. Limited to 8 Nm when used with QR2 Lite wheel-side connectors.",
     },
   },
   {
@@ -76,8 +76,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     name: { es: "Sensibilidad / ángulo de giro", en: "Sensitivity / steering angle" },
     unit: "°",
     whatItDoes: {
-      es: "Define cuántos grados gira el volante de tope a tope. En AUTO, el juego fija el ángulo correcto para cada auto, que es lo ideal en sims modernos.",
-      en: "Sets how many degrees the wheel turns lock to lock. On AUTO the game sets the correct angle per car, which is ideal in modern sims.",
+      es: "Define cuántos grados gira el volante de tope a tope (rango 90–1080° en el menú estándar, hasta 2520° en el menú avanzado de las bases Podium; default AUTO). En AUTO, el juego fija el ángulo correcto para cada auto, que es lo ideal en sims modernos.",
+      en: "Sets how many degrees the wheel turns lock to lock (range 90–1080° in the standard menu, up to 2520° in the advanced menu on Podium bases; default AUTO). On AUTO the game sets the correct angle per car, which is ideal in modern sims.",
     },
     increaseEffect: {
       es: "Más grados = volante más lento y suave, pero menos directo en curvas cerradas.",
@@ -129,8 +129,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     name: { es: "Amortiguación natural (Natural Damper)", en: "Natural Damper" },
     unit: "%",
     whatItDoes: {
-      es: "Agrega amortiguación al movimiento del volante. Ayuda a calmar oscilaciones cuando el juego no manda damper propio (como ACC).",
-      en: "Adds damping to the wheel's motion. Helps calm oscillations when the game sends no damper of its own (like ACC).",
+      es: "Agrega amortiguación al movimiento del volante (rango OFF/01–100, default de fábrica 50: la base aplica algo de amortiguación de fábrica). Ayuda a calmar oscilaciones cuando el juego no manda damper propio (como ACC).",
+      en: "Adds damping to the wheel's motion (range OFF/01–100, factory default 50: the base applies some damping out of the box). Helps calm oscillations when the game sends no damper of its own (like ACC).",
     },
     increaseEffect: {
       es: "Volante más pesado y estable, pero pierde algo de detalle fino.",
@@ -147,8 +147,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     name: { es: "Fricción natural (Natural Friction)", en: "Natural Friction" },
     unit: "%",
     whatItDoes: {
-      es: "Simula la fricción mecánica de una columna de dirección real. Da algo de cuerpo al volante.",
-      en: "Simulates the mechanical friction of a real steering column. Gives the wheel some body.",
+      es: "Simula la fricción mecánica de una columna de dirección real; da algo de cuerpo al volante (rango OFF–100, default de fábrica OFF).",
+      en: "Simulates the mechanical friction of a real steering column; gives the wheel some body (range OFF–100, factory default OFF).",
     },
     increaseEffect: {
       es: "Más resistencia constante al girar; sensación más 'mecánica' pero menos viva.",
@@ -165,8 +165,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     name: { es: "Inercia natural (Natural Inertia)", en: "Natural Inertia" },
     unit: "%",
     whatItDoes: {
-      es: "Agrega inercia simulada, haciendo que el volante se sienta más 'pesado' al cambiar de dirección.",
-      en: "Adds simulated inertia, making the wheel feel 'heavier' when changing direction.",
+      es: "Agrega inercia simulada, haciendo que el volante se sienta más 'pesado' al cambiar de dirección (rango OFF–100, default de fábrica OFF).",
+      en: "Adds simulated inertia, making the wheel feel 'heavier' when changing direction (range OFF–100, factory default OFF).",
     },
     increaseEffect: {
       es: "Sensación de más masa; suaviza cambios bruscos pero resta inmediatez.",
@@ -218,8 +218,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     name: { es: "Efecto resorte (Spring)", en: "Spring effect" },
     unit: "%",
     whatItDoes: {
-      es: "Cuánto deja pasar la base el efecto de resorte (centrado) que manda el juego. DEPENDE DEL JUEGO: iRacing y los rally/AC lo quieren en 100; algunos sims que mandan su propio resorte piden bajarlo. Default de fábrica 100.",
-      en: "How much of the game-sent spring (centering) effect the base lets through. GAME-DEPENDENT: iRacing and the rally/AC titles want it at 100; some sims that send their own spring ask to lower it. Factory default 100.",
+      es: "Cuánto deja pasar la base el efecto de resorte (centrado) que manda el juego: en 100 pasa sin modificar, por debajo lo atenúa y por encima de 100 (hasta ~120) lo amplifica. DEPENDE DEL JUEGO: iRacing y los rally/AC lo quieren en 100; algunos sims que mandan su propio resorte piden bajarlo. Default de fábrica 100.",
+      en: "How much of the game-sent spring (centering) effect the base lets through: at 100 it passes unchanged, below 100 it attenuates and above 100 (up to ~120) it amplifies. GAME-DEPENDENT: iRacing and the rally/AC titles want it at 100; some sims that send their own spring ask to lower it. Factory default 100.",
     },
     increaseEffect: {
       es: "Más centrado artificial del volante cuando el juego lo pide.",
@@ -236,8 +236,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     name: { es: "Efecto amortiguador (Damper)", en: "Damper effect" },
     unit: "%",
     whatItDoes: {
-      es: "Cuánto deja pasar la base el efecto de amortiguación que manda el juego. DEPENDE DEL JUEGO: iRacing y los rally/AC lo quieren en 100; otros sims piden bajarlo. Default de fábrica 100.",
-      en: "How much of the game-sent damper effect the base lets through. GAME-DEPENDENT: iRacing and the rally/AC titles want it at 100; other sims ask to lower it. Factory default 100.",
+      es: "Cuánto deja pasar la base el efecto de amortiguación que manda el juego: en 100 pasa sin modificar, por debajo lo atenúa y por encima de 100 (hasta ~120) lo amplifica. DEPENDE DEL JUEGO: iRacing y los rally/AC lo quieren en 100; otros sims piden bajarlo. Default de fábrica 100.",
+      en: "How much of the game-sent damper effect the base lets through: at 100 it passes unchanged, below 100 it attenuates and above 100 (up to ~120) it amplifies. GAME-DEPENDENT: iRacing and the rally/AC titles want it at 100; other sims ask to lower it. Factory default 100.",
     },
     increaseEffect: {
       es: "Más amortiguación cuando el juego la pide; volante más calmo.",

@@ -89,8 +89,8 @@ export const ac_rallyFfb: GameFfb = {
         podium_dd2: "52–62",
       },
       whatItDoes: {
-        es: "Fuerza total del FFB dentro de Assetto Corsa Rally. Es el ajuste más importante: súbelo hasta que en los apoyos más cargados el medidor de FFB llegue al tope sin quedarse clavado en rojo (eso es clipping y se pierde detalle del agarre).",
-        en: "Overall FFB force inside Assetto Corsa Rally. The most important setting: raise it until the FFB meter peaks in the most loaded corners without staying pinned in red (that's clipping and you lose grip detail).",
+        es: "Fuerza total del FFB dentro de Assetto Corsa Rally. Es el ajuste más importante. La escala del slider llega hasta 200% (no 100): súbelo hasta que en los apoyos más cargados el medidor de FFB llegue al tope sin quedarse clavado en rojo (eso es clipping y se pierde detalle del agarre).",
+        en: "Overall FFB force inside Assetto Corsa Rally. The most important setting. The slider scale goes up to 200% (not 100): raise it until the FFB meter peaks in the most loaded corners without staying pinned in red (that's clipping and you lose grip detail).",
       },
       note: {
         es: "En rally hay que cuidar los golpes de grava/saltos: un gain alto que no clipea en curva sí puede saturar de golpe en un impacto. Cuanta más fuerza tiene la base, más bajo va el gain.",
@@ -115,6 +115,15 @@ export const ac_rallyFfb: GameFfb = {
         en: "In-game software wheel damping in Assetto Corsa Rally (one of the three core FFB settings: Gain, Minimum Force and Damper). On direct drive keep it low or 0 (Fanatec recommends 0) and calm oscillations with the base's NDP; raise it only if the wheel shakes too much on gravel.",
       },
     },
+    {
+      id: "steering_lock",
+      name: { es: "Steering Lock + Wheel Soft Lock", en: "Steering Lock + Wheel Soft Lock" },
+      value: "900° + Soft Lock ON",
+      whatItDoes: {
+        es: "Fija la rotación máxima que usa el juego y el tope físico por software (Wheel Soft Lock). Con el SEN de la base en AUTO, deja el Steering Lock alto (p. ej. 900°) y el Soft Lock activado: así el juego aplica el ángulo real de cada auto y el volante no gira más allá del tope del coche.",
+        en: "Sets the maximum rotation the game uses and the software end-stop (Wheel Soft Lock). With the base's SEN on AUTO, set Steering Lock high (e.g. 900°) and turn Soft Lock ON: the game then applies each car's real angle and the wheel can't turn past the car's limit.",
+      },
+    },
   ],
   notes: [
     {
@@ -124,6 +133,10 @@ export const ac_rallyFfb: GameFfb = {
     {
       es: "En rally el peligro de clipping no está solo en las curvas sino en los impactos (saltos, piedras, pianos). Conviene subir el Gain hasta justo antes de saturar en los apoyos cargados y dejar un margen para que los golpes no claven el medidor en rojo.",
       en: "In rally the clipping risk isn't only in corners but in impacts (jumps, rocks, kerbs). Raise the Gain to just before clipping in loaded corners and leave headroom so impacts don't pin the meter in the red.",
+    },
+    {
+      es: "Además del Gain global, cada auto tiene un multiplicador de FFB propio en su setup (service park, sección de volante) que escala la fuerza solo para ese coche. Sirve para emparejar autos con FFB flojo sin tocar el Gain global; déjalo en x1.00 salvo que un auto puntual se sienta débil.",
+      en: "Besides the global Gain, each car has its own FFB multiplier in its setup (service park, wheel section) that scales force for that car only. Use it to even out cars with weak FFB without touching the global Gain; leave it at x1.00 unless a specific car feels weak.",
     },
   ],
 };

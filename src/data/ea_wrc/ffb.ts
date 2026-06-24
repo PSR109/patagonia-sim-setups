@@ -113,8 +113,8 @@ export const ea_wrcFfb: GameFfb = {
         en: "Adds weight and damping to the wheel from the tyre and accentuates the understeer feel. Higher = heavier wheel and more pronounced understeer; values near 100 create a constant background heaviness that masks the lateral signals.",
       },
       note: {
-        es: "El rango real va de ~6 a 65 según la base; estos valores son un punto de partida intermedio.",
-        en: "The real range runs from ~6 to 65 depending on the base; these values are a mid starting point.",
+        es: "El slider usa la misma escala que el resto (0 a ~150, 100 = neutro). El rango ~6 a 65 es de valores recomendados, no el tope del slider: las guías de Fanatec rondan 45–65, y valores muy bajos como 6 son típicos de volantes de engranaje.",
+        en: "The slider uses the same scale as the others (0 to ~150, 100 = neutral). The ~6 to 65 figure is a recommended value range, not the slider's ceiling: Fanatec guides sit around 45–65, and very low values like 6 are typical of geared wheels.",
       },
     },
     {
@@ -210,8 +210,8 @@ export const ea_wrcFfb: GameFfb = {
       en: "Rule of thumb: leave the base (FFB) at 100% and dial in the force with Vibration & FFB Strength and Self-Aligning Torque in-game. If the wheel feels 'flat' at the peaks (big bumps and hard corners no longer feel stronger than the rest), you're clipping and losing grip information.",
     },
     {
-      es: "Los canales del juego usan una escala de 0 a ~150 donde 100 es el valor neutro/por defecto: se puede pasar de 100, pero conviene no superar ~150 en ninguno.",
-      en: "The in-game channels use a 0 to ~150 scale where 100 is the neutral/default value: you can go above 100, but it's best not to push any of them past ~150.",
+      es: "Los canales del juego se muestran en porcentaje, con 100% como valor por defecto/neutro, y se pueden subir por encima de 100. Las guías y los usuarios suelen llegar hasta ~130–150 (p. ej. SAT 140, Suspension 130); ~150 es un límite práctico recomendado, no el tope oficial del slider.",
+      en: "The in-game channels are shown as percentages, with 100% as the default/neutral value, and can be pushed above 100. Guides and users commonly go up to ~130–150 (e.g. SAT 140, Suspension 130); ~150 is a practical recommended limit, not the slider's official ceiling.",
     },
     {
       es: "Suba Vibration & FFB Strength y Self-Aligning Torque de a poco hasta que los baches grandes y las curvas más cargadas se sientan fuertes pero sigan teniendo detalle por encima.",

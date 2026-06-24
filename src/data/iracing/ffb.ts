@@ -77,8 +77,8 @@ export const iracingFfb: GameFfb = {
         en: "The most important FFB setting: it sets at how many Nm of car force the base reaches 100% of its torque. LOWER number = stronger wheel (clips sooner); HIGHER number = lighter wheel (more headroom without clipping). Hit the 'Auto' button after a few laps and iRacing computes the value so the peak of the most loaded corner doesn't clip.",
       },
       note: {
-        es: "Cuanta más fuerza tiene tu base, más alto va el Strength en Nm (la base aguanta más par antes de saturar). 'Auto' es el punto de partida recomendado.",
-        en: "The more torque your base has, the higher the Strength in Nm (the base handles more torque before clipping). 'Auto' is the recommended starting point.",
+        es: "Cuanta más fuerza tiene tu base, más alto va el Strength en Nm (la base aguanta más par antes de saturar). 'Auto' es el punto de partida recomendado. Ojo: el Strength es POR AUTO: cada coche carga distinto la dirección, así que recalibra con 'Auto' (tras 2–3 vueltas limpias) cada vez que cambies de auto.",
+        en: "The more torque your base has, the higher the Strength in Nm (the base handles more torque before clipping). 'Auto' is the recommended starting point. Note: Strength is PER CAR — each car loads the steering differently, so recalibrate with 'Auto' (after 2–3 clean laps) whenever you switch cars.",
       },
     },
     {
@@ -129,8 +129,17 @@ export const iracingFfb: GameFfb = {
         en: "Tells iRacing the base's physical max torque so it scales the FFB correctly. Enter it MANUALLY in Nm, equal to the base's peak torque (there is NO AUTO mode). Do not confuse it with Strength/Max Force, which is the in-track clipping point and a separate field.",
       },
       note: {
-        es: "El CSL DD entrega 5 Nm sin el Boost Kit 180; con el Boost Kit (o la versión 8 Nm) llega a 8 Nm.",
-        en: "The CSL DD delivers 5 Nm without the Boost Kit 180; with the Boost Kit (or the 8 Nm version) it reaches 8 Nm.",
+        es: "Ponlo EXACTO al par pico de tu base, ni más ni menos. Subirlo por encima no da más fuerza: solo le saca el margen de seguridad y deja que el Auto pida más par del que la base puede entregar (se satura y puede forzar el hardware). El CSL DD entrega 5 Nm sin el Boost Kit 180; con el Boost Kit (o la versión 8 Nm) llega a 8 Nm.",
+        en: "Set it EXACTLY to your base's peak torque, no more, no less. Raising it above doesn't add force: it just removes the safety margin and lets Auto request more torque than the base can deliver (it clips and can strain the hardware). The CSL DD delivers 5 Nm without the Boost Kit 180; with the Boost Kit (or the 8 Nm version) it reaches 8 Nm.",
+      },
+    },
+    {
+      id: "reduce_force_when_parked",
+      name: { es: "Reduce Force When Parked (reducir fuerza detenido)", en: "Reduce Force When Parked" },
+      value: "ON",
+      whatItDoes: {
+        es: "Reduce la fuerza del volante cuando el auto está detenido o casi parado (boxes, grilla, trompo). Conviene dejarlo MARCADO en direct drive: evita el pico de par muy alto que iRacing manda con el auto quieto, protegiendo tus muñecas y el hardware.",
+        en: "Reduces wheel force when the car is stopped or nearly stopped (pits, grid, spins). Keep it CHECKED on direct drive: it avoids the very high torque spike iRacing sends with the car standing still, protecting your wrists and the hardware.",
       },
     },
   ],
