@@ -55,6 +55,23 @@ for (const game of implementedGames) {
     if (!catIds.has(c.categoryId))
       log(`[${id}] auto "${c.id}" → categoryId inexistente "${c.categoryId}"`);
 
+  // Guarda de calibración: los parámetros tipo MAPA (entero, ≤3 posiciones, p. ej.
+  // TC/ABS 1-3 de AC Rally) sólo tienen sentido con saltos de 1 click. Un |delta|≥2
+  // satura el mapa (salta la posición intermedia y se clava al extremo al apilar),
+  // que el clamp esconde. Caza la regresión de la auditoría de deltas (2026-06-24).
+  const mapParamIds = new Set(
+    game.parameters.filter((p) => p.step === 1 && p.max - p.min <= 2).map((p) => p.id),
+  );
+  const checkMapDeltas = (ctx: string, adjust: { paramId: string; delta: number }[]) => {
+    for (const a of adjust)
+      if (mapParamIds.has(a.paramId) && Math.abs(a.delta) >= 2)
+        log(
+          `[${id}] ${ctx} → delta ${a.delta} en param-mapa "${a.paramId}" (≤3 posiciones); usá |delta|=1`,
+        );
+  };
+  for (const r of game.conditionRules) checkMapDeltas(`conditionRule "${r.id}"`, r.adjust);
+  for (const r of game.symptomRules) checkMapDeltas(`symptomRule "${r.symptom}"`, r.adjust);
+
   for (const p of game.parameters)
     if (!(p.min <= p.default && p.default <= p.max))
       log(`[${id}] param "${p.id}" default ${p.default} fuera de [${p.min}, ${p.max}]`);

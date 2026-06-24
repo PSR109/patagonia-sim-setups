@@ -13,8 +13,12 @@ import type { ParameterDef } from "@/lib/types";
 //   Diferencial on-throttle 0-100 · off-throttle 10-100
 //   Presión delantera máx ~29.5 psi · trasera máx ~26.5 psi
 // PENDIENTE: los `default` de suspensión (21) y altura son baselines de mitad de
-// escala; confirmar el valor exacto del garaje del juego. Las magnitudes de delta en
-// rules.ts se calibraron para las escalas viejas: revisar proporción tras este cambio.
+// escala; confirmar el valor exacto del garaje del juego.
+// CALIBRACIÓN DE DELTAS (revisada 2026-06-24): las magnitudes de delta de rules.ts
+// se recalibraron a estas escalas nuevas. Suspensión 1-41: los deltas de mojado se
+// llevaron a -6 (15% del rango) y los de bouncing/kerb a -4 (10%), porque -1/-2
+// sobre un rango de 40 era imperceptible (~2-5%). Ver auditoría adversarial del
+// pendiente #2 del HANDOFF.
 export const f1_25Parameters: ParameterDef[] = [
   {
     id: "front_wing",

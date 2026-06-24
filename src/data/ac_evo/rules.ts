@@ -149,7 +149,7 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "arb_rear", delta: -1 },
       { paramId: "rear_wing", delta: 1 },
-      { paramId: "spring_rate_rear", delta: -2 },
+      { paramId: "spring_rate_rear", delta: -12 },
     ],
     reason: {
       es: "Sobreviraje en el medio: ablandamos la barra y el muelle traseros (más agarre atrás) y sumamos ala para estabilizar.",

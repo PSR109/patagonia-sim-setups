@@ -44,8 +44,8 @@ export const ac_rallyConditionRules: ConditionRule[] = [
       { paramId: "diff_coast", delta: 4, excludeDrivetrains: ["fwd"] },
       { paramId: "toe_rear", delta: 6 },
       { paramId: "brake_pressure", delta: -10 },
-      { paramId: "tc", delta: 2 },
-      { paramId: "abs", delta: 2 },
+      { paramId: "tc", delta: 1 },
+      { paramId: "abs", delta: 1 },
     ],
     reason: {
       es: "Nieve/hielo: adherencia bajísima. Subimos y ablandamos el auto, y por el bug de PSI invertido de la build EA SUBIMOS presiones para ganar grip in-game (al revés de la física real); subimos el coast lock y el toe-in trasero para que la cola no se cruce al levantar/frenar, bajamos la presión de freno para no bloquear y sumamos TC/ABS donde existan.",
@@ -89,8 +89,8 @@ export const ac_rallyConditionRules: ConditionRule[] = [
     id: "weather_wet",
     when: (c) => c.weather === "wet",
     adjust: [
-      { paramId: "tc", delta: 2 },
-      { paramId: "abs", delta: 2 },
+      { paramId: "tc", delta: 1 },
+      { paramId: "abs", delta: 1 },
       { paramId: "brake_pressure", delta: -5 },
       { paramId: "diff_power", delta: 2, excludeDrivetrains: ["fwd"] },
       { paramId: "tyre_pressure_front", delta: 10 },

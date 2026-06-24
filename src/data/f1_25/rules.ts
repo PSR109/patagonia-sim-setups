@@ -14,8 +14,8 @@ export const f1_25ConditionRules: ConditionRule[] = [
       { paramId: "rear_wing", delta: 5 },
       { paramId: "diff_on_throttle", delta: -8 },
       { paramId: "diff_off_throttle", delta: 3 },
-      { paramId: "front_suspension", delta: -2 },
-      { paramId: "rear_suspension", delta: -2 },
+      { paramId: "front_suspension", delta: -6 },
+      { paramId: "rear_suspension", delta: -6 },
       { paramId: "front_ride_height", delta: 2 },
       { paramId: "rear_ride_height", delta: 2 },
       { paramId: "brake_pressure", delta: -10 },
@@ -229,8 +229,8 @@ export const f1_25SymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "front_ride_height", delta: 2 },
       { paramId: "rear_ride_height", delta: 2 },
-      { paramId: "front_suspension", delta: -1 },
-      { paramId: "rear_suspension", delta: -1 },
+      { paramId: "front_suspension", delta: -4 },
+      { paramId: "rear_suspension", delta: -4 },
     ],
     reason: {
       es: "El auto rebota / toca fondo: subimos la altura para darle recorrido y ablandamos un poco la suspensión para que el piso no golpee el asfalto.",
@@ -242,8 +242,8 @@ export const f1_25SymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "front_arb", delta: -1 },
       { paramId: "rear_arb", delta: -1 },
-      { paramId: "front_suspension", delta: -2 },
-      { paramId: "rear_suspension", delta: -2 },
+      { paramId: "front_suspension", delta: -4 },
+      { paramId: "rear_suspension", delta: -4 },
     ],
     reason: {
       es: "Inestable en los pianos: ablandamos las barras y la suspensión para que el auto absorba el piano en vez de saltar y desestabilizarse.",

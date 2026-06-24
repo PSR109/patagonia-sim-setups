@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-23.
+> Última actualización: 2026-06-24 (iteración 3: recalibración de deltas — ver §3d).
 
 ---
 
@@ -103,9 +103,9 @@ Patricio pidió (2026-06-23): (a) investigar apps de setups existentes y copiar 
 - **NO aplicado (marcado incierto, no inventado):** rangos por-auto/clase (ACC ARB/altura/ala, EA WRC muelles/ARB — hoy rango representativo único con nota); LMU `tc_slip` (nombres reales Power Cut/Slip Angle, no confirmados); ratios de marchas individuales F1/EA WRC (rangos sin confirmar). Las 24 verificaciones no confirmadas quedan en el output para revisión.
 - **PENDIENTE priorizado (próximas iteraciones):**
   1. **Arquitectura de rangos por-auto/clase** (el gap de exactitud más grande): permitir `min/max/step/default` por coche o clase, no global. Afecta ACC (ARB, altura, ala — varían por coche) y EA WRC (muelles/ARB en N/mm por clase).
-  2. **Revisar magnitudes de delta en `rules.ts`** tras los cambios de escala (F1 suspensión 1-11→1-41 y altura; AC Rally ABS/TC 0-6→1-3; EA WRC muelles a N/mm step 5, ARB step 1). Los deltas se calibraron para las escalas viejas; revisar que la proporción siga teniendo sentido.
+  2. ~~**Revisar magnitudes de delta en `rules.ts`** tras los cambios de escala~~ — **HECHO en iteración 3** (ver §3d): 13 deltas recalibrados + guarda de regresión en el validador.
   3. **Completar listas de autos/pistas** (ver `auditoriaResumen[].completeness`: ACC ~22% autos / 50% pistas; EA WRC, AC EVO, etc. parciales). Generar el faltante por clase desde fuentes oficiales.
-  4. Neutralización a castellano neutro (voseo aún en UI "Elegí tu simulador" y muchos strings).
+  4. ~~Neutralización a castellano neutro~~ — **HECHO en iteración 2** (§3c); verificado en vivo: UI muestra "Elige tu simulador".
   5. Branding; cosmético reasons FWD.
 - **Re-iterar:** `Workflow({ resumeFromRunId: "wugoj2iqp", scriptPath })` cachea los agentes ya corridos; re-correr el audit tras aplicar fixes hasta cero discrepancias.
 - **Expectativa honesta:** "exactamente idéntico" es best-effort contra fuentes públicas; AC EVO y AC Rally son early-access (blanco móvil); lo no verificable se marca, no se inventa.
@@ -140,7 +140,21 @@ Workflow de **investigación + verificación adversarial 2ª fuente** (1 agente 
 Pase completo voseo→**tuteo** en TODOS los textos `.es`: diccionario i18n (`dictionaries.ts`), `layout.tsx`, `generator.tsx`, y los `.es` de los 7 juegos (`parameters/rules/ffb/index`) + `hardware/fanatec.ts`. Se corrigieron además inconsistencias de **usted** (formas `bájelo/súbalo/déjelo/ajústelo` → `bájalo/súbelo/déjalo/ajústalo`) que rompían el registro. Verificado con grep: **0 ocurrencias** de voseo/usted en strings de UI. El `.en` quedó intacto.
 
 ### Estado tras iteración 2
-`tsc` limpio · `validate-engine` **0 problemas** · `npm run build` **verde** · preview sin errores de consola. Pendiente priorizado restante: (a) seguir afinando rangos por-auto del `review` (sobre todo verificar topes reales de slider leyendo el juego, no setups de usuarios); (b) modelar TC doble del McLaren 720S Evo (y otros con TC1/TC2); (c) `rules.ts`: revisar magnitudes de delta tras los cambios de escala (springs N/mm, AC Rally TC/ABS 1-3); (d) completar listas autos/pistas; (e) branding; (f) cosmético reasons FWD.
+`tsc` limpio · `validate-engine` **0 problemas** · `npm run build` **verde** · preview sin errores de consola. Pendiente priorizado restante: (a) seguir afinando rangos por-auto del `review` (sobre todo verificar topes reales de slider leyendo el juego, no setups de usuarios); (b) modelar TC doble del McLaren 720S Evo (y otros con TC1/TC2); (c) `rules.ts`: revisar magnitudes de delta tras los cambios de escala (springs N/mm, AC Rally TC/ABS 1-3) — **HECHO en iteración 3**; (d) completar listas autos/pistas; (e) branding; (f) cosmético reasons FWD.
+
+## 3d. COMPLETADA (iteración 3) — Recalibración de magnitudes de delta (pendiente #2, 2026-06-24)
+
+Se atacó el **pendiente #2/(c)**: tras los reescalados del 2026-06-23, las magnitudes de `delta` en `rules.ts` (que el motor aplica como `valor + delta*step`, recortado al rango **efectivo por auto/clase**) habían quedado descalibradas. Dos patrones: deltas **negligibles** (un rango que se expandió dejó el delta en ~2-5% del rango, imperceptible) y deltas **saturantes/over_resolution** (un rango que se comprimió a mapa hace que `|delta|≥2` salte la posición intermedia y se clave al tope, escondido por el clamp — `validate-engine` no lo cazaba).
+
+- **Workflow adversarial** `wf_f8cd74a1-f2b` (Task `wxnzm7sn6`, 20 agentes): 1 auditor por juego → 1 verificador escéptico por hallazgo. **13 hallazgos, 13 confirmados.** Output: `…/tasks/wxnzm7sn6.output`.
+- **APLICADO (13 deltas, signo/física SIEMPRE conservados, sólo se reescaló la magnitud):**
+  - **F1 25** (suspensión 1-41 expandida, `-1/-2` ≈ 2-5%): `wet` front/rear_suspension −2→**−6** (15%); `bouncing` front/rear −1→**−4** (10%); `kerb_instability` front/rear −2→**−4** (10%). *(El rear de `wet` se llevó a −6 simétrico con el front, no al −4 que sugirió su verificador aislado, para no introducir desbalance front/rear que la regla no busca.)*
+  - **AC EVO** (`spring_rate_rear` 40-250 step 1): `oversteer_mid` −2 (=2 N/mm ≈ 1%) → **−12** (12 N/mm ≈ 5.7%).
+  - **AC Rally** (TC/ABS son MAPAS 1-3): `surface_snow` tc/abs +2→**+1**; `weather_wet` tc/abs +2→**+1**. Con +2 saltaban al mapa 3 (máx) salteando el 2; +1 da un click graduado (verificado: Citroën Xsara base 1 → 2 en nieve, antes 3).
+  - **EA WRC** (ARB en N/mm 5-40): `surface_tarmac` arb_front/arb_rear +1 (=1 N/mm ≈ 2.9%) → **+4** (≈11%). *(Simétrico +4/+4 para preservar el gap front/rear de los defaults, no el +4/+5 asimétrico de los verificadores aislados.)*
+- **NO tocado (correctamente):** EA WRC muelles/altura (ya estaban en N/mm/offset bien escalados), iRacing y ACC enteros (deltas proporcionados; ACC GT4 ARB override 0-2 recibe sólo ±1 = un click, OK), presiones psi (deltas dan 0.3–4 psi, OK), y todos los deltas de síntoma de ARB chicos (ajustes menores co-aplicados). El auditor fue conservador y no sobre-marcó.
+- **Guarda de regresión nueva** en `scripts/validate-engine.ts`: los parámetros tipo MAPA (entero, ≤3 posiciones) ahora **fallan la validación** si una regla les mete `|delta|≥2` (caza el patrón AC Rally a futuro).
+- **Verificado:** `tsc` limpio · `validate-engine` **0 problemas** (con la guarda activa) · `npm run build` **verde** · 8/8 asserts del motor (script temporal, ya borrado) · **en vivo**: F1 25 McLaren MCL39 mojado muestra suspensión 21→15.
 
 ---
 
