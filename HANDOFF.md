@@ -280,6 +280,17 @@ Continuación del loop sobre las dimensiones que el rate-limit de la iteración 
 
 **Verificado:** `tsc` 0 · `validate-engine` 0 · `next build` verde · split confirmado en el build · live (logueado) generator carga ACC completo, genera setup y limpia result al cambiar de auto, consola sin errores.
 
+**Verificación en vivo completa (cierre del hueco — #2–#7 se habían shippeado sólo con tsc/build):** los 7 fixes probados en el preview corriendo, no sólo el build.
+- **#3 + #7 (save favorito):** click → botón pasa a `✓ Guardado` disabled (anti-duplicado), mensaje `text-good` "¡Guardado en tu garaje!", **desaparece a los ~4s** (efímero).
+- **#3 (save nota):** textarea → "Guardar" → mensaje verde "Guardado", el bloque se cierra.
+- **#3 + #7 path error (save lap sin pista):** mensaje en **`text-danger` (rojo)** — confirma que los errores ya no se pintan en verde.
+- **#3 (save lap OK con pista Spa):** verde "Guardado", bloque cierra.
+- **#6:** seleccionar pista tras generar limpia el `result` (sin tabla, sin SaveBar).
+- **#5 (confirm borrado):** stub `confirm→false` → `window.confirm("¿Eliminar esto?")` se llama, item **no** se borra (3→3). `confirm→true` → DELETE real → `router.refresh()` → 3→2.
+- **#4 (delete robusto):** `fetch` DELETE forzado a 500 → banner `text-danger` "No se pudo eliminar. Inténtalo de nuevo." (clave i18n `garage.deleteError`), item conservado; `fetch` rechazado (red caída) → mismo banner, sin rejection sin atrapar.
+- **#2 (auth-form):** en `/login`, `fetch` a `/api/auth/login` rechazado → error "Algo salió mal. Inténtalo de nuevo." + **botón re-habilitado** (`Ingresar`, no colgado). Antes del fix quedaba disabled para siempre sin mensaje.
+- Datos de prueba creados durante la verificación **eliminados**; garaje limpio; consola sin errores. Sin cambios de código → sin commit (sólo verificación).
+
 **Re-iterar:** `Workflow({ scriptPath: "<script de wf_39830199-ce0>", resumeFromRunId: "wf_39830199-ce0" })`. Las dimensiones código/seguridad/UX/perf ya están bastante exprimidas; el terreno fértil restante sin datos in-game es escaso. Lo pendiente real sigue siendo la captura de datos in-game de Patricio (§3f–3i).
 
 ---
