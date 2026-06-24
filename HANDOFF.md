@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 9: afinar + ampliar FFB vía auditoría adversarial, ver §3i; iteración 7 en §3h).
+> Última actualización: 2026-06-24 (iteración 9: afinar + ampliar FFB vía auditoría adversarial, ver §3i; iteración 7 en §3h). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
 
 ---
 
@@ -211,7 +211,9 @@ Ya NO quedan listas por completar. Solo faltan **rangos de sliders por-auto** no
 
 **Mejora extra aplicada (iteración 8, commit `53367b0`):** manejo **FWD en AC EVO** — 8 hot-hatch de tracción delantera (Abarth 695, Golf 8 GTI, i30 N, Alfa Junior, Alpine A290, Renault 5 GT Turbo, Mini Cooper S, Golf GTI Mk1) marcados `drivetrain:"fwd"` y los 7 deltas de diferencial de AC EVO con `excludeDrivetrains:["fwd"]`. Ahora los FWD no reciben ajustes de diff trasero y muestran la nota educativa, igual que los juegos de rally. Verificado por motor.
 
-**Mejoras nuevas opcionales (NO parte de las 5; requieren tu OK):** expandir iRacing más allá del subset curado de road racing; ~~afinar/ampliar datos de FFB por juego~~ → **HECHO en iteración 9 (§3i)**.
+**Mejoras nuevas opcionales — ambas resueltas (ya no hay opcionales abiertas):**
+- ~~expandir iRacing más allá del subset curado de road racing~~ → **DECIDIDO (2026-06-24): Patricio confirma dejar iRacing como subset curado de road racing a propósito; NO se expande.**
+- ~~afinar/ampliar datos de FFB por juego~~ → **HECHO en iteración 9 (§3i)**.
 
 ## 3i. COMPLETADA (iteración 9) — Afinar + ampliar FFB (auditoría adversarial, 2026-06-24)
 
