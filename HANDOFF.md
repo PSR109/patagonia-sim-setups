@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 3: recalibración de deltas — ver §3d).
+> Última actualización: 2026-06-24 (iteración 4: branding oficial + roster ACC — ver §3e; iteración 3 deltas en §3d).
 
 ---
 
@@ -33,7 +33,7 @@ los **ajustes de FFB / Fanatec** por juego. Objetivo doble: dar el setup correct
 - Datos: **originales y exactos de cada juego** (Patricio NO aporta setups; se compilan de fuentes oficiales + comunidad).
 - 7 juegos: **ACC · F1 25 · Le Mans Ultimate · Assetto Corsa EVO · Assetto Corsa Rally · EA Sports WRC · iRacing**.
 - **FFB/Fanatec** (pedido nuevo): cubrir **toda la línea DD moderna** (GT DD Pro, CSL DD, ClubSport DD, ClubSport DD+, Podium DD1, Podium DD2) + pedales load cell. Recomendar **ambas capas**: Panel de Control Fanatec (menú tuning) **y** FFB dentro del juego.
-- Branding: Patricio tiene logo y colores (PENDIENTE recibir archivos).
+- Branding: **HECHO (2026-06-24)** — extraído de `patagoniasimracing.cl` + IG `@patagonia_simracing_pv` (logo casco+PSR, azul-noche `#061018` + acento `#2981f3`, fuente Inter). Ver §3e.
 
 **Proceso pedido:** copiar lo bueno de apps similares / evitar lo malo; correr un
 **loop de QA con agentes verificadores adversariales** que "renieguen lo hecho";
@@ -155,6 +155,14 @@ Se atacó el **pendiente #2/(c)**: tras los reescalados del 2026-06-23, las magn
 - **NO tocado (correctamente):** EA WRC muelles/altura (ya estaban en N/mm/offset bien escalados), iRacing y ACC enteros (deltas proporcionados; ACC GT4 ARB override 0-2 recibe sólo ±1 = un click, OK), presiones psi (deltas dan 0.3–4 psi, OK), y todos los deltas de síntoma de ARB chicos (ajustes menores co-aplicados). El auditor fue conservador y no sobre-marcó.
 - **Guarda de regresión nueva** en `scripts/validate-engine.ts`: los parámetros tipo MAPA (entero, ≤3 posiciones) ahora **fallan la validación** si una regla les mete `|delta|≥2` (caza el patrón AC Rally a futuro).
 - **Verificado:** `tsc` limpio · `validate-engine` **0 problemas** (con la guarda activa) · `npm run build` **verde** · 8/8 asserts del motor (script temporal, ya borrado) · **en vivo**: F1 25 McLaren MCL39 mojado muestra suspensión 21→15.
+
+## 3e. COMPLETADA (iteración 4) — Branding oficial + roster ACC + nota FWD (2026-06-24)
+
+- **Branding (#4) — HECHO.** Patricio pasó las fuentes: sitio `patagoniasimracing.cl` + IG `@patagonia_simracing_pv`. Se extrajo la marca real (logo casco+PSR, paleta azul-noche `#061018` + acento `#2981f3`, tipografía **Inter**) bajando los assets del sitio (favicon/og-image/apple-touch-icon) y el CSS. Aplicado: `public/psr-logo.png` (logo oficial) en `brand.tsx`; favicon + `icon.png` + `apple-icon.png` reales en `src/app/`; paleta de marca en `globals.css` (reemplaza el turquesa placeholder); fuente Inter en `layout.tsx`. Verificado en vivo (`--color-brand #2981f3`, Inter, logo cargado, sin errores). *(El logo oficial es raster; si Patricio tiene un SVG vectorial, reemplazar `public/psr-logo.png`.)*
+- **Roster ACC (#1) — HECHO.** Workflow `wf_83477f1c-92f` (investigación + verificación adversarial 2.ª fuente). ACC pasó de **13→42 autos** (+20 GT3, +9 GT4) y **12→25 pistas** (DLC: Silverstone, Bathurst, Laguna Seca, COTA, Nordschleife, etc.). IDs con sufijo de año para no colisionar con los existentes.
+- **Cosmético FWD (#4b) — HECHO.** La nota FWD del motor ahora aclara que si una explicación menciona el diferencial, ese ajuste no se aplicó (fix en un solo lugar, sin reescribir 22 reasons).
+- **Commits:** `9893b29` (ACC roster), `a364602` (branding + FWD), pusheados a `main`.
+- **Sobre #1 (resto):** ACC era EL gran hueco (estaba ~22%). Los demás juegos están en cobertura razonable o son scope intencional: iRacing 46 (subset curado de road racing — el juego tiene cientos), LMU 33, F1 25 23, EA WRC 57 (roster completo). AC EVO 37 y AC Rally 12 son **early access** (blanco móvil, best-effort). O sea #1 queda sustancialmente cubierto; el resto es afinado incremental.
 
 ---
 
