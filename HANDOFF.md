@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 7: loop 3 — #1 rosters completos en todos los juegos, ver §3h; iteración 6 en §3g).
+> Última actualización: 2026-06-24 (iteración 9: afinar + ampliar FFB vía auditoría adversarial, ver §3i; iteración 7 en §3h).
 
 ---
 
@@ -211,7 +211,29 @@ Ya NO quedan listas por completar. Solo faltan **rangos de sliders por-auto** no
 
 **Mejora extra aplicada (iteración 8, commit `53367b0`):** manejo **FWD en AC EVO** — 8 hot-hatch de tracción delantera (Abarth 695, Golf 8 GTI, i30 N, Alfa Junior, Alpine A290, Renault 5 GT Turbo, Mini Cooper S, Golf GTI Mk1) marcados `drivetrain:"fwd"` y los 7 deltas de diferencial de AC EVO con `excludeDrivetrains:["fwd"]`. Ahora los FWD no reciben ajustes de diff trasero y muestran la nota educativa, igual que los juegos de rally. Verificado por motor.
 
-**Mejoras nuevas opcionales (NO parte de las 5; requieren tu OK):** expandir iRacing más allá del subset curado de road racing; afinar/ampliar datos de FFB por juego.
+**Mejoras nuevas opcionales (NO parte de las 5; requieren tu OK):** expandir iRacing más allá del subset curado de road racing; ~~afinar/ampliar datos de FFB por juego~~ → **HECHO en iteración 9 (§3i)**.
+
+## 3i. COMPLETADA (iteración 9) — Afinar + ampliar FFB (auditoría adversarial, 2026-06-24)
+
+Patricio eligió "afinar y ampliar FFB" (el diferenciador de mercado central). Workflow `wf_da4ad691-680` (commit `ca86353`, pusheado): **8 auditores** (7 juegos + registro de hardware Fanatec) → **126 verificadores escépticos** (2 votos independientes por hallazgo, ángulos *existencia/exactitud* y *física/coherencia/hecho-vs-preferencia*) → síntesis con chequeo de coherencia cross-juego. **63 hallazgos: 28 confirmados, 7 débiles, 28 descartados/preferencia.** Output crudo: `…/tasks/w7zs8oatl.output` (bajo `.result`).
+
+**APLICADO (solo factual/confirmado, vetado a mano; ES+EN castellano neutro):**
+- **hardware/fanatec.ts:** SEN/NDP/NFR/NIN con rango + default de fábrica oficiales; SPR/DPR aclarado que **>100 amplifica** (hasta ~120), no solo atenúa; ClubSport DD = **par de sujeción** + límite **8 Nm con QR2 Lite**.
+- **LMU:** 3 toggles reales que faltaban — **Force Feedback Effects** (interruptor maestro), **Invert FFB**, **Use Constant Steering Force Effect** — + **INT** en el panel tuning (señal cruda rF2).
+- **F1 25:** nombre real del slider **"Vibration & FFB Strength"** (el juego abrevia; alineada también la nota regla-de-oro) + nota con escala 0-100 y ballparks por base + **INT** en el panel.
+- **AC Rally:** aclarada la **escala del gain (0-200%)**; agregado **Steering Lock + Wheel Soft Lock**; nota del **multiplicador de FFB por auto** (service park).
+- **EA WRC:** reescrita la nota de **Tyre Friction** (rango recomendado ≠ escala del slider) y el marco de escala de canales (son **%**, ~150 es práctico, no tope oficial).
+- **iRacing:** agregado **Reduce Force When Parked** (ON, seguridad en DD); nota de **seguridad del Wheel Force** (ponerlo EXACTO al par pico); aclarado que **Strength es por-auto** (recalibrar con Auto al cambiar de coche).
+- Verificado: `tsc` limpio, `validate-engine` 0, `build` verde, en vivo (login admin → /app/lmu, f1_25, iracing; 0 errores de consola), sin voseo.
+
+**EN ESPERA (NO aplicado, a propósito — decisión/lectura in-game):**
+1. **INT default 6 vs 11** en el panel (`fanatec.ts`): fuentes oficiales en conflicto (FAQ Fanatec dice 6; manuales CSL/CS dicen 11). No se tocó hasta confirmar contra el firmware real.
+2. **AC EVO (early access):** la auditoría sugiere que `Vibrations` y `Speed Sensitivity` serían exclusivos del menú Logitech **TrueForce** (no del menú Fanatec), que `min_force` no está corroborado, y propone 4 sliders de efectos (Curbs/Road/Tyre Slips/ABS). Confianza media/baja + blanco móvil; el chequeo cross-juego además **refutó** bajar el perBase de gain (ya está alineado). → **Patricio: confirmar en el garaje de AC EVO qué sliders muestra realmente el menú FFB con una base Fanatec.**
+3. **F1 25:** `Pit Stop Effects` (¿existe el slider?) y subir NDP 10-25→20-40 (preferencia) — sin aplicar.
+4. **EA WRC:** `Understeer Enhance` (¿existe en EA WRC? incierto) y reframe de Self-Aligning Torque como no-master (el texto actual es defendible) — sin aplicar.
+5. **iRacing:** `Intensity` (slider del Auto, 2023) — existencia no confirmada con certeza; sin aplicar.
+
+**Re-iterar FFB:** `Workflow({ scriptPath: "<script de wf_da4ad691-680>", resumeFromRunId: "wf_da4ad691-680" })` para cachear lo ya corrido. Lo que falta son sobre todo confirmaciones in-game (igual que los rangos de sliders del §3h).
 
 ---
 
