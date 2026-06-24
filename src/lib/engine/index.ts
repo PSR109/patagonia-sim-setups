@@ -44,8 +44,13 @@ export function effectiveParams(game: GameData, carId: string): ParameterDef[] {
     ? game.categories.find((c) => c.id === car.categoryId)?.paramOverrides
     : undefined;
   const carOv = car?.paramOverrides;
-  if (!catOv && !carOv) return game.parameters;
-  return game.parameters.map((p) => mergeParam(p, catOv?.[p.id], carOv?.[p.id]));
+  const extra = car?.extraParams;
+  if (!catOv && !carOv && !(extra && extra.length)) return game.parameters;
+  const base =
+    catOv || carOv
+      ? game.parameters.map((p) => mergeParam(p, catOv?.[p.id], carOv?.[p.id]))
+      : game.parameters;
+  return extra && extra.length ? [...base, ...extra] : base;
 }
 
 // Parámetro efectivo único para un auto (conveniencia para validación/UI).

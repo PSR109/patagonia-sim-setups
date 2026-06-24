@@ -26,7 +26,41 @@ export const accCars: Car[] = [
   { id: "acc_audi_r8_evo2", gameId: "acc", categoryId: "gt3", name: "Audi R8 LMS Evo II", brand: "Audi", year: 2022 },
   { id: "acc_mercedes_amg_gt3evo", gameId: "acc", categoryId: "gt3", name: "Mercedes-AMG GT3 Evo", brand: "Mercedes-AMG", year: 2020 },
   { id: "acc_lamborghini_huracan_evo2", gameId: "acc", categoryId: "gt3", name: "Lamborghini Huracán GT3 Evo2", brand: "Lamborghini", year: 2023 },
-  { id: "acc_mclaren_720s_evo", gameId: "acc", categoryId: "gt3", name: "McLaren 720S GT3 Evo", brand: "McLaren", year: 2023 },
+  // El 720S GT3 Evo es el único de la parrilla con DOBLE control de tracción (TC1 + TC2).
+  // El slider "Control de tracción (TC)" de arriba actúa como TC1 (lo ajustan las reglas);
+  // TC2 es un segundo nivel propio de este auto, que se muestra y explica aparte.
+  {
+    id: "acc_mclaren_720s_evo",
+    gameId: "acc",
+    categoryId: "gt3",
+    name: "McLaren 720S GT3 Evo",
+    brand: "McLaren",
+    year: 2023,
+    extraParams: [
+      {
+        id: "tc2",
+        group: "electronics",
+        name: { es: "Control de tracción 2 (TC2)", en: "Traction Control 2 (TC2)" },
+        unit: "",
+        min: 0,
+        max: 11,
+        step: 1,
+        default: 4,
+        whatItDoes: {
+          es: "Segundo control de tracción, exclusivo del McLaren 720S GT3 Evo. Trabaja junto al TC principal (que en este auto hace de TC1): el TC1 fija el nivel general de intervención y el TC2 ajusta una segunda capa de corte cuando el patinaje supera el umbral del TC1. Más alto = más intervención.",
+          en: "Second traction control, exclusive to the McLaren 720S GT3 Evo. Works alongside the main TC (which acts as TC1 on this car): TC1 sets the general intervention level and TC2 adds a second cut layer once slip exceeds TC1's threshold. Higher = more intervention.",
+        },
+        increaseEffect: {
+          es: "Más TC2 = más red de seguridad sobre el TC1 (sobre todo en mojado o baja adherencia), a costa de algo de aceleración.",
+          en: "More TC2 = a bigger safety net on top of TC1 (especially in the wet or low grip), at the cost of some acceleration.",
+        },
+        decreaseEffect: {
+          es: "Menos TC2 = la segunda capa interviene menos: más aceleración pura si el TC1 ya te alcanza, con más riesgo de patinar.",
+          en: "Less TC2 = the second layer intervenes less: more raw acceleration if TC1 is enough for you, with more wheelspin risk.",
+        },
+      },
+    ],
+  },
   { id: "acc_aston_v8_vantage", gameId: "acc", categoryId: "gt3", name: "Aston Martin V8 Vantage GT3", brand: "Aston Martin", year: 2019 },
   { id: "acc_bentley_continental", gameId: "acc", categoryId: "gt3", name: "Bentley Continental GT3", brand: "Bentley", year: 2018 },
   { id: "acc_ford_mustang_gt3", gameId: "acc", categoryId: "gt3", name: "Ford Mustang GT3", brand: "Ford", year: 2024 },

@@ -62,6 +62,11 @@ export interface Car {
   // Overrides de rango/valor específicos de ESTE auto. Ganan sobre los de la
   // clase. Se usan cuando el rango real del slider difiere coche a coche.
   paramOverrides?: Record<string, ParamRangeOverride>; // paramId -> override
+  // Parámetros que SOLO tiene este auto, además de los del juego. Para coches con
+  // ajustes que el resto de la clase no expone (ej. el McLaren 720S GT3 Evo de ACC
+  // tiene un segundo control de tracción, TC2). Se muestran y explican en la tabla,
+  // pero las reglas del juego no los tocan (aparecen en su valor por defecto).
+  extraParams?: ParameterDef[];
 }
 
 export interface Track {
