@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { getLocale } from "@/lib/i18n/locale";
 import { getCurrentUser } from "@/lib/auth/current-user";
@@ -7,7 +7,8 @@ import { LocaleProvider } from "@/lib/i18n/context";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 import { SiteHeader } from "@/components/site-header";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+// Inter es la tipografía de la marca oficial (patagoniasimracing.cl).
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
+      className={`${inter.variable} ${geistMono.variable} h-full`}
     >
       <body className="flex min-h-full flex-col font-sans antialiased">
         <LocaleProvider initialLocale={locale}>

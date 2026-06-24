@@ -1,23 +1,23 @@
 @import "tailwindcss";
 
-/* Paleta Patagonia Sim Racing: base oscura (clima de carrera) con acento
-   turquesa glaciar y celeste cielo patagónico. Cambiá estos tokens para
-   re-brandear toda la app desde un solo lugar. */
+/* Paleta Patagonia Sim Racing: tomada de la marca oficial (patagoniasimracing.cl):
+   base azul-noche con acento azul de carrera (#2981f3), igual que el logo PSR.
+   Cambiá estos tokens para re-brandear toda la app desde un solo lugar. */
 @theme {
-  --color-bg: #0a0e13;
-  --color-surface: #121a22;
-  --color-surface-2: #1a242f;
-  --color-border: #25323f;
-  --color-fg: #e8eef4;
-  --color-muted: #93a4b5;
-  --color-brand: #2dd4bf;
-  --color-brand-strong: #14b8a6;
-  --color-sky: #38bdf8;
+  --color-bg: #061018;
+  --color-surface: #0c1c2a;
+  --color-surface-2: #122a3d;
+  --color-border: #1e3a4f;
+  --color-fg: #f5faff;
+  --color-muted: #8da3b8;
+  --color-brand: #2981f3;
+  --color-brand-strong: #1c6fe0;
+  --color-sky: #5aa6f7;
   --color-warn: #f59e0b;
   --color-danger: #ef4444;
   --color-good: #34d399;
 
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
@@ -27,8 +27,8 @@ html {
 
 body {
   background:
-    radial-gradient(1100px 600px at 85% -10%, rgba(45, 212, 191, 0.08), transparent 60%),
-    radial-gradient(900px 500px at 0% 0%, rgba(56, 189, 248, 0.06), transparent 55%),
+    radial-gradient(1100px 600px at 85% -10%, rgba(41, 129, 243, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 0% 0%, rgba(90, 166, 247, 0.06), transparent 55%),
     var(--color-bg);
   color: var(--color-fg);
 }

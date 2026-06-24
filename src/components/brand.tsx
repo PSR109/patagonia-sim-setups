@@ -1,7 +1,8 @@
+import Image from "next/image";
 import { cn } from "@/lib/cn";
 
-// Marca de Patagonia Sim Racing. Por ahora es un wordmark con un glifo de
-// montaña. Cuando tengas el logo oficial, reemplazá el <svg> por un <Image/>.
+// Marca de Patagonia Sim Racing. Usa el logo oficial (helmet + PSR) tomado de
+// patagoniasimracing.cl (public/psr-logo.png), con el wordmark al lado.
 export function Brand({
   className,
   withText = true,
@@ -11,27 +12,14 @@ export function Brand({
 }) {
   return (
     <span className={cn("flex items-center gap-2", className)}>
-      <svg
-        width="28"
-        height="28"
-        viewBox="0 0 32 32"
-        fill="none"
-        aria-hidden="true"
-        className="shrink-0"
-      >
-        <rect width="32" height="32" rx="8" fill="#0f1922" />
-        <path
-          d="M5 23L12 11l4 6 3-5 7 11H5z"
-          fill="url(#psr-g)"
-        />
-        <circle cx="22" cy="9" r="2.4" fill="#38bdf8" />
-        <defs>
-          <linearGradient id="psr-g" x1="5" y1="23" x2="26" y2="9" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#14b8a6" />
-            <stop offset="1" stopColor="#2dd4bf" />
-          </linearGradient>
-        </defs>
-      </svg>
+      <Image
+        src="/psr-logo.png"
+        width={28}
+        height={28}
+        alt="Patagonia Sim Racing"
+        priority
+        className="shrink-0 rounded-md"
+      />
       {withText && (
         <span className="flex flex-col leading-none">
           <span className="text-sm font-bold tracking-tight">Patagonia</span>

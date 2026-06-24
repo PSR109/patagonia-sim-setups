@@ -132,8 +132,8 @@ export function generateSetup(game: GameData, input: GenerateInput): SetupResult
 
   if (carDrivetrain === "fwd" && skippedForDrivetrain) {
     notes.push({
-      es: "Auto de tracción delantera (FWD): omitimos los ajustes de diferencial pensados para el eje trasero. En un FWD el diferencial autoblocante está en el tren delantero (afecta el subviraje de salida y el torque steer), no la rotación de la cola.",
-      en: "Front-wheel-drive car (FWD): we skip the differential tweaks meant for the rear axle. On a FWD the limited-slip diff sits on the front axle (affecting corner-exit understeer and torque steer), not rear rotation.",
+      es: "Auto de tracción delantera (FWD): omitimos los ajustes de diferencial pensados para el eje trasero. En un FWD el diferencial autoblocante está en el tren delantero (afecta el subviraje de salida y el torque steer), no la rotación de la cola. Si alguna explicación de abajo menciona el diferencial, ese ajuste NO se aplicó a tu auto.",
+      en: "Front-wheel-drive car (FWD): we skip the differential tweaks meant for the rear axle. On a FWD the limited-slip diff sits on the front axle (affecting corner-exit understeer and torque steer), not rear rotation. If any explanation below mentions the differential, that adjustment was NOT applied to your car.",
     });
   }
 
