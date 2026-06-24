@@ -590,15 +590,15 @@ export const lmuParameters: ParameterDef[] = [
   {
     id: "tc",
     group: "electronics",
-    name: { es: "Control de tracción (TC)", en: "Traction control (TC)" },
+    name: { es: "Control de tracción (TC)", en: "Traction Control (TC)" },
     unit: "",
     min: 0,
     max: 11,
     step: 1,
     default: 4,
     whatItDoes: {
-      es: "Cuánto corta el motor para evitar que patinen las ruedas al acelerar (ajustable sobre la marcha). Más alto = interviene antes.",
-      en: "How much it cuts power to stop wheelspin on throttle (adjustable on the fly). Higher = intervenes earlier.",
+      es: "Nivel base del control de tracción en autos equipados (GT3/Hypercar): escala 1-11 (más alto = interviene antes para frenar el patinaje). Es uno de los canales de TC de LMU, junto con el ángulo de patinaje (Slip Angle). En prototipos sin TC (LMP2/LMP3) se deja en 0.",
+      en: "Base traction control level on TC-equipped cars (GT3/Hypercar): 1-11 scale (higher = intervenes earlier to stop wheelspin). One of LMU's TC channels, alongside the Slip Angle. On prototypes without TC (LMP2/LMP3) it stays at 0.",
     },
     increaseEffect: {
       es: "Más TC = más seguro en mojado o baja adherencia, pero más lento (corta potencia antes) en seco.",
@@ -612,15 +612,15 @@ export const lmuParameters: ParameterDef[] = [
   {
     id: "tc_slip",
     group: "electronics",
-    name: { es: "Umbral de patinaje del TC (Slip)", en: "TC slip threshold" },
+    name: { es: "Ángulo de patinaje del TC (Slip Angle)", en: "TC Slip Angle" },
     unit: "",
     min: 0,
     max: 11,
     step: 1,
     default: 4,
     whatItDoes: {
-      es: "Fija cuánto patinaje se permite antes de que el TC actúe. Complementa al nivel de TC para afinar su agresividad.",
-      en: "Sets how much wheelspin is allowed before TC kicks in. Complements the TC level to fine-tune its aggressiveness.",
+      es: "Segundo canal del control de tracción de LMU (escala 1-11 en autos equipados): fija cuánto patinaje se permite antes de que el TC intervenga. Más bajo = interviene antes (más conservador). En prototipos sin TC (LMP2/LMP3) se deja en 0. (LMU tiene además un tercer canal, Power Cut, que esta app todavía no modela por separado.)",
+      en: "LMU's second traction-control channel (1-11 on equipped cars): sets how much wheelspin is allowed before TC intervenes. Lower = intervenes sooner (more conservative). On prototypes without TC (LMP2/LMP3) it stays at 0. (LMU also has a third channel, Power Cut, not yet modelled separately here.)",
     },
     increaseEffect: {
       es: "Más slip permitido = el TC deja patinar más antes de actuar: más potencia disponible pero menos red de seguridad.",

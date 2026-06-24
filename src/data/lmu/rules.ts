@@ -71,8 +71,8 @@ export const lmuConditionRules: ConditionRule[] = [
       { paramId: "tc_slip", delta: -1 },
     ],
     reason: {
-      es: "Pista verde (sin goma): hay menos agarre, sumamos un punto de TC y bajamos el umbral de patinaje para no irnos de cola al acelerar.",
-      en: "Green track (no rubber): less grip, add one TC step and lower the slip threshold to avoid the rear stepping out on power.",
+      es: "Pista verde (sin goma): hay menos agarre, sumamos un punto de TC y bajamos el ángulo de patinaje (Slip Angle) para que el TC intervenga antes y no nos vayamos de cola al acelerar.",
+      en: "Green track (no rubber): less grip, add one TC step and lower the Slip Angle so TC intervenes sooner and the rear doesn't step out on power.",
     },
   },
   {

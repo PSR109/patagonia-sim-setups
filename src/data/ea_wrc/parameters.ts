@@ -479,13 +479,15 @@ export const ea_wrcParameters: ParameterDef[] = [
     group: "gearing",
     name: { es: "Relación final (final drive)", en: "Final drive" },
     unit: "",
+    // PENDIENTE: confirmar in-game (Vehicle Setup > Tuning > Gears) el rango/unidad real
+    // del final drive; el 0-20 de abajo es una escala representativa sin corroborar por fuente.
     min: 0,
     max: 20,
     step: 1,
     default: 10,
     whatItDoes: {
-      es: "Ajuste global de marchas. Corta = más aceleración; larga = más velocidad punta. Es más eficiente que tocar cada marcha.",
-      en: "Global gearing adjustment. Short = more acceleration; long = more top speed. More efficient than tuning each gear.",
+      es: "Ajuste global de marchas. El juego también permite tocar cada marcha por separado, pero conviene mover el final drive: corre todas las relaciones a la vez sin dejar 'huecos' de par. Corta = más aceleración; larga = más velocidad punta.",
+      en: "Global gearing adjustment. The game also lets you tune each individual gear, but adjusting the final drive is preferred: it shifts all ratios at once without creating torque holes. Short = more acceleration; long = more top speed.",
     },
     increaseEffect: {
       es: "Más larga sube la velocidad punta, ideal en rallies rápidos y abiertos, a costa de aceleración.",
