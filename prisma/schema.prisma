@@ -1,0 +1,70 @@
+// Esquema de datos de USUARIO. El catálogo de juegos/autos/pistas/parámetros y
+// las reglas de setup viven como módulos TypeScript en src/data (versionados,
+// rápidos de leer y fáciles de corregir). La base de datos guarda solo lo que
+// pertenece a cada usuario: cuenta, favoritos, notas y registros de vueltas.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  name         String?
+  passwordHash String
+  locale       String      @default("es")
+  role         String      @default("client") // client | admin
+  createdAt    DateTime    @default(now())
+  favorites    Favorite[]
+  notes        Note[]
+  lapRecords   LapRecord[]
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId    String
+  carId     String
+  trackId   String?
+  label     String?
+  payload   String // snapshot JSON del setup generado + condiciones
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId    String
+  carId     String
+  trackId   String?
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model LapRecord {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId     String
+  carId      String
+  trackId    String
+  lapTimeMs  Int
+  conditions String? // JSON
+  setupRef   String? // JSON o referencia a un favorito
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}

@@ -1,0 +1,164 @@
+import type { Track } from "@/lib/types";
+
+// Etapas / rallies de EA Sports WRC. El juego tiene ~264 etapas en ~20 ubicaciones;
+// aquí cargamos los rallies (ubicaciones) verificados de la investigación con su
+// superficie característica. La lista es PARCIAL (ver gaps): cada ubicación agrupa
+// múltiples etapas individuales que no se desglosan aquí.
+export const ea_wrcTracks: Track[] = [
+  {
+    id: "ea_wrc_monte_carlo",
+    gameId: "ea_wrc",
+    name: "Rallye Monte-Carlo",
+    country: "Mónaco / Francia",
+    kind: "stage",
+    surface: "mixed",
+    roughness: "smooth",
+    notes: {
+      es: "Asfalto de montaña con tramos de nieve y hielo impredecibles. Superficie mixta clásica de inicio de temporada.",
+      en: "Mountain tarmac with unpredictable snow and ice patches. Classic mixed season-opener surface.",
+    },
+  },
+  {
+    id: "ea_wrc_sweden",
+    gameId: "ea_wrc",
+    name: "Rally Sweden",
+    country: "Suecia",
+    kind: "stage",
+    surface: "snow",
+    roughness: "smooth",
+    notes: {
+      es: "Nieve y hielo compactos. Se corre con neumáticos clavados (studded) que muerden el hielo; la rotación es generosa.",
+      en: "Compact snow and ice. Run with studded tyres that bite the ice; rotation is generous.",
+    },
+  },
+  {
+    id: "ea_wrc_sardegna",
+    gameId: "ea_wrc",
+    name: "Rally Italia Sardegna",
+    country: "Italia (Cerdeña)",
+    kind: "stage",
+    surface: "gravel",
+    roughness: "rough",
+    notes: {
+      es: "Tierra rugosa, estrecha y técnica, con piedras sueltas y calor. Exige altura y amortiguación firmes.",
+      en: "Rough, narrow, technical gravel with loose rocks and heat. Demands firm ride height and damping.",
+    },
+  },
+  {
+    id: "ea_wrc_estonia",
+    gameId: "ea_wrc",
+    name: "Rally Estonia",
+    country: "Estonia",
+    kind: "stage",
+    surface: "gravel",
+    roughness: "medium",
+    notes: {
+      es: "Tierra rápida y fluida con saltos. Premia la velocidad punta y una plataforma estable en alta.",
+      en: "Fast, flowing gravel with jumps. Rewards top speed and a stable platform at high speed.",
+    },
+  },
+  {
+    id: "ea_wrc_greece",
+    gameId: "ea_wrc",
+    name: "EKO Acropolis Rally Greece",
+    country: "Grecia",
+    kind: "stage",
+    surface: "gravel",
+    roughness: "rough",
+    notes: {
+      es: "La tierra más rugosa y rompecoches del calendario, con calor extremo. Setup conservador y resistente.",
+      en: "The roughest, most car-breaking gravel on the calendar, with extreme heat. A conservative, durable setup.",
+    },
+  },
+  {
+    id: "ea_wrc_kenya",
+    gameId: "ea_wrc",
+    name: "Safari Rally Kenya",
+    country: "Kenia",
+    kind: "stage",
+    surface: "gravel",
+    roughness: "rough",
+    notes: {
+      es: "Pistas abiertas, baches enormes, barro y agua. Requiere la altura máxima y mucho recorrido de suspensión.",
+      en: "Open tracks, huge bumps, mud and water. Requires maximum ride height and plenty of suspension travel.",
+    },
+  },
+  {
+    id: "ea_wrc_central_european",
+    gameId: "ea_wrc",
+    name: "Central European Rally",
+    country: "Centroeuropa",
+    kind: "stage",
+    surface: "tarmac",
+    roughness: "smooth",
+    notes: {
+      es: "Asfalto rápido entre Alemania, Austria y Chequia. Premia baja altura, plataforma firme y caster alto.",
+      en: "Fast tarmac across Germany, Austria and Czechia. Rewards low ride height, a firm platform and high caster.",
+    },
+  },
+  {
+    id: "ea_wrc_iberia",
+    gameId: "ea_wrc",
+    name: "Rally Iberia",
+    country: "España",
+    kind: "stage",
+    surface: "tarmac",
+    roughness: "medium",
+    notes: {
+      es: "Ubicación ficticia de asfalto en España. Etapas reviradas que premian la agilidad y el agarre mecánico.",
+      en: "Fictional Spanish tarmac location. Twisty stages that reward agility and mechanical grip.",
+    },
+  },
+  {
+    id: "ea_wrc_japan",
+    gameId: "ea_wrc",
+    name: "Forum8 Rally Japan",
+    country: "Japón",
+    kind: "stage",
+    surface: "tarmac",
+    roughness: "smooth",
+    notes: {
+      es: "Asfalto estrecho y muy revirado entre bosques. Frenadas fuertes y horquillas: clave el freno de mano.",
+      en: "Narrow, very twisty forest tarmac. Heavy braking and hairpins: the handbrake is key.",
+    },
+  },
+  {
+    id: "ea_wrc_chile",
+    gameId: "ea_wrc",
+    name: "Bio Bío Rally Chile",
+    country: "Chile",
+    kind: "stage",
+    surface: "gravel",
+    roughness: "medium",
+    notes: {
+      es: "Tierra rápida y fluida con buen agarre. Mezcla de tramos abiertos y zonas reviradas.",
+      en: "Fast, flowing gravel with good grip. A mix of open sections and twisty zones.",
+    },
+  },
+  {
+    id: "ea_wrc_oceania",
+    gameId: "ea_wrc",
+    name: "Rally Oceania",
+    country: "Oceanía",
+    kind: "stage",
+    surface: "gravel",
+    roughness: "medium",
+    notes: {
+      es: "Tierra fluida con buen agarre. Caminos de superficie blanda que se ensucian con el paso de los coches.",
+      en: "Flowing gravel with good grip. Soft-surface roads that get dirty as cars pass through.",
+    },
+  },
+  {
+    id: "ea_wrc_croatia",
+    gameId: "ea_wrc",
+    name: "Croatia Rally",
+    country: "Croacia",
+    kind: "stage",
+    surface: "tarmac",
+    roughness: "medium",
+    notes: {
+      es: "Asfalto revirado con cambios de agarre y tramos sucios. Superficie variable que exige precisión.",
+      en: "Twisty tarmac with grip changes and dirty sections. A variable surface that demands precision.",
+    },
+  },
+];

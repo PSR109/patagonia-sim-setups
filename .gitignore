@@ -33,6 +33,11 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# database (generada por seed-admin.ts; no versionar)
+/prisma/*.db
+/prisma/*.db-journal
+*.db
+
 # vercel
 .vercel
 

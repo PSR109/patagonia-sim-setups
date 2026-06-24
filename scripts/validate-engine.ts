@@ -1,0 +1,154 @@
+// Validación de integridad del motor sobre los 7 juegos. Chequea que las reglas
+// y baseSetups referencien paramIds que existen, que las categorías/autos cuadren,
+// que min<=default<=max, que el FFB use ids de base válidos, y que generateSetup
+// no rompa ni produzca NaN para ningún auto. Correr: npx tsx scripts/validate-engine.ts
+import { implementedGames } from "@/data/registry";
+import { generateSetup, baseFor, effectiveParams } from "@/lib/engine";
+import type { Symptom } from "@/lib/types";
+
+const ALL_SYMPTOMS: Symptom[] = [
+  "understeer_entry",
+  "understeer_mid",
+  "understeer_exit",
+  "oversteer_entry",
+  "oversteer_mid",
+  "oversteer_exit",
+  "braking_instability",
+  "poor_traction",
+  "tyres_overheat",
+  "tyres_cold",
+  "bouncing",
+  "kerb_instability",
+];
+
+const BASE_IDS = new Set([
+  "gt_dd_pro",
+  "csl_dd",
+  "clubsport_dd",
+  "clubsport_dd_plus",
+  "podium_dd1",
+  "podium_dd2",
+]);
+
+let problems = 0;
+const log = (m: string) => {
+  problems++;
+  console.log("  ✗ " + m);
+};
+
+for (const game of implementedGames) {
+  const id = game.meta.id;
+  const paramIds = new Set(game.parameters.map((p) => p.id));
+  const catIds = new Set(game.categories.map((c) => c.id));
+
+  for (const r of game.conditionRules)
+    for (const a of r.adjust)
+      if (!paramIds.has(a.paramId))
+        log(`[${id}] conditionRule "${r.id}" → paramId inexistente "${a.paramId}"`);
+
+  for (const r of game.symptomRules)
+    for (const a of r.adjust)
+      if (!paramIds.has(a.paramId))
+        log(`[${id}] symptomRule "${r.symptom}" → paramId inexistente "${a.paramId}"`);
+
+  for (const c of game.cars)
+    if (!catIds.has(c.categoryId))
+      log(`[${id}] auto "${c.id}" → categoryId inexistente "${c.categoryId}"`);
+
+  for (const p of game.parameters)
+    if (!(p.min <= p.default && p.default <= p.max))
+      log(`[${id}] param "${p.id}" default ${p.default} fuera de [${p.min}, ${p.max}]`);
+
+  for (const [carId, sv] of Object.entries(game.baseSetups))
+    for (const pid of Object.keys(sv))
+      if (!paramIds.has(pid))
+        log(`[${id}] baseSetup "${carId}" → paramId inexistente "${pid}"`);
+
+  // Overrides de rango por clase/auto: el paramId debe existir, y tras fusionar
+  // el rango efectivo debe ser coherente (min < max, min <= default <= max).
+  const checkOverrides = (
+    ctx: string,
+    ov: Record<string, { min?: number; max?: number; step?: number; default?: number }> | undefined,
+  ) => {
+    if (!ov) return;
+    for (const [pid, o] of Object.entries(ov)) {
+      if (!paramIds.has(pid)) {
+        log(`[${id}] ${ctx} → override de paramId inexistente "${pid}"`);
+        continue;
+      }
+      if (o.step !== undefined && o.step <= 0)
+        log(`[${id}] ${ctx} param "${pid}" step ${o.step} debe ser > 0`);
+    }
+  };
+  for (const cat of game.categories) checkOverrides(`clase "${cat.id}"`, cat.paramOverrides);
+  for (const car of game.cars) checkOverrides(`auto "${car.id}"`, car.paramOverrides);
+
+  // Rango efectivo por auto: coherente y con el valor base dentro del slider real
+  // del auto (validamos el valor CRUDO de baseSetups, antes del clamp del motor).
+  for (const car of game.cars) {
+    const eff = effectiveParams(game, car.id);
+    const effById = new Map(eff.map((p) => [p.id, p]));
+    for (const p of eff) {
+      if (!(p.min < p.max))
+        log(`[${id}] auto "${car.id}" param efectivo "${p.id}" rango inválido [${p.min}, ${p.max}]`);
+      if (!(p.min <= p.default && p.default <= p.max))
+        log(`[${id}] auto "${car.id}" param efectivo "${p.id}" default ${p.default} fuera de [${p.min}, ${p.max}]`);
+    }
+    const raw = game.baseSetups[car.id];
+    if (raw)
+      for (const [pid, v] of Object.entries(raw)) {
+        const p = effById.get(pid);
+        if (p && !(p.min <= v && v <= p.max))
+          log(`[${id}] auto "${car.id}" baseSetup "${pid}" = ${v} fuera del rango efectivo [${p.min}, ${p.max}]`);
+      }
+  }
+
+  if (game.ffb) {
+    for (const s of game.ffb.inGame)
+      if (s.perBase)
+        for (const k of Object.keys(s.perBase))
+          if (!BASE_IDS.has(k)) log(`[${id}] ffb inGame "${s.id}" perBase base desconocida "${k}"`);
+    for (const c of game.ffb.controlPanel)
+      if (c.perBase)
+        for (const k of Object.keys(c.perBase))
+          if (!BASE_IDS.has(k)) log(`[${id}] ffb controlPanel "${c.paramId}" perBase base desconocida "${k}"`);
+  } else {
+    log(`[${id}] sin datos de FFB (game.ffb undefined)`);
+  }
+
+  // Ejercitar el motor con condiciones extremas + todos los síntomas por auto.
+  for (const car of game.cars) {
+    try {
+      baseFor(game, car.id);
+      const res = generateSetup(game, {
+        carId: car.id,
+        conditions: {
+          weather: "wet",
+          trackTempC: 8,
+          grip: "green",
+          fuelLoad: "high",
+          surface: "gravel",
+          roughness: "rough",
+          timeOfDay: "day",
+        },
+        symptoms: ALL_SYMPTOMS,
+      });
+      for (const [pid, v] of Object.entries(res.values))
+        if (typeof v !== "number" || Number.isNaN(v))
+          log(`[${id}] auto "${car.id}" param "${pid}" = ${v}`);
+    } catch (e) {
+      log(`[${id}] auto "${car.id}" generateSetup LANZÓ: ${(e as Error).message}`);
+    }
+  }
+
+  console.log(
+    `• ${id}: ${game.cars.length} autos, ${game.tracks.length} pistas, ${game.parameters.length} params, FFB ${game.ffb ? "sí" : "NO"}`,
+  );
+}
+
+console.log(
+  problems === 0
+    ? "\nVALIDACIÓN DEL MOTOR: OK (0 problemas)"
+    : `\nVALIDACIÓN DEL MOTOR: ${problems} problema(s)`,
+);
+process.exit(problems === 0 ? 0 : 1);
