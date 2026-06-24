@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 10: auditoría adversarial de código/seguridad/UX-a11y/i18n/Next16 — 5 bugs reales corregidos, ver §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
+> Última actualización: 2026-06-24 (iteración 11: 2º pase adversarial sobre performance/errores-cliente/UX — 7 hallazgos confirmados, 7 corregidos, ver §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
 
 ---
 
@@ -258,6 +258,32 @@ Las 9 iteraciones previas fueron casi todas exactitud-de-datos + FFB. Esta apunt
 
 ---
 
+## 3k. COMPLETADA (iteración 11) — 2º pase adversarial: performance / errores-cliente / UX (2026-06-24)
+
+Continuación del loop sobre las dimensiones que el rate-limit de la iteración 10 dejó sin exprimir. Workflow `wf_39830199-ce0` (Task `wfpuag7nt`, 27 agentes): 3 auditores (performance, manejo de errores cliente, UX) → 2 escépticos refutadores por hallazgo, **refute-by-default** (confirma solo si NINGÚN escéptico refuta). **12 hallazgos, 7 confirmados, 5 refutados.** Commits `f895687` (6 quirúrgicos) + `1b49bad` (code-split), pusheados.
+
+**APLICADO (7 bugs reales):**
+- **🟠 ALTO perf — code-split del catálogo (`src/data/load-game.ts` nuevo + `generator.tsx`).** `registry.ts` barrel-importaba los 7 juegos; como las reglas son closures no tree-shakeables, `/app/[gameId]` embebía **~101 KB gzip** de catálogo entero por visita. Ahora `loadGame(id)` hace `import()` dinámico por juego y el generator carga async. Medido: chunk del generator 10 KB gz (0 datos estáticos), +1 juego ~15-17 KB gz → **~101→~25 KB gz, −74%** en la ruta más usada. `garage-view`/`games-grid` siguen con el registry estático (sus rutas sí listan todo el catálogo).
+- **🟠 ALTO errores — `auth-form.tsx`:** `fetch` del login/registro sin `try/catch` → si la red fallaba, el botón quedaba deshabilitado para siempre sin mensaje. Ahora `try/catch/finally` + error.
+- **🟠 ALTO errores — `generator.tsx` SaveBar:** `save{Favorite,Note,Lap}` sin `try/catch` → botón trabado en `busy` ante un `fetch` rechazado. Envueltos en `try/catch/finally`.
+- **🟡 MEDIO errores — `garage-view.tsx` `del()`:** no chequeaba `res.ok` (el ítem "reaparecía" sin avisar tras un 401/500) ni atrapaba fallos de red. Ahora valida la respuesta y muestra `garage.deleteError`.
+- **🟠 ALTO UX — `garage-view.tsx` borrado:** la ✕ hacía hard-delete permanente en un click, sin confirmación → pérdida de datos por misclick. Agregada confirmación (`window.confirm` con `garage.deleteConfirm`).
+- **🟠 ALTO UX (integridad) — `generator.tsx` cambio de auto/categoría/pista:** tras generar, cambiar de auto dejaba el `result` viejo → la tabla mezclaba auto nuevo con valores viejos y **se guardaba un favorito corrupto** (nombre de un auto, valores de otro). Ahora los 3 selectores de identidad limpian `result` (`setResult(null)`). Verificado live: generar Ferrari → cambiar a Porsche → result se limpia.
+- **🟡 MEDIO UX — `generator.tsx` SaveBar mensajes:** el "Guardado" quedaba fijo para siempre, los errores se pintaban en verde y el doble-click duplicaba favoritos. Ahora mensaje efímero (4s) con color según éxito/error + botón anti-duplicado tras guardar.
+
+**REFUTADO (5, no se tocó — coincide con la lectura previa de las rutas):**
+- GET `/api/{favorites,laps,notes}` sin `take`/límite y POST sin tope por usuario: técnicamente cierto pero **auto-scoped** (usuario autenticado floodeando su propia cuenta, `@@index([userId])`), deployment interno ~100 usuarios confiables, SQLite necesita millones de filas para degradar. Hardening teórico, no defecto presente. Los GET además **no tienen consumidores** (el garaje lee Prisma directo server-side, omitiendo el `payload`).
+- Garaje sin paginación/virtualización: mismo razonamiento (datos por-usuario creados a mano de a uno).
+- Input de temp-pista "acepta valores inválidos": refutado — `trackTempC` solo alimenta gates booleanos de umbral y todo sale acotado por `clampToParam`; `<input type=number>` ya filtra.
+
+**i18n:** nueva clave `garage.deleteError` en ES y EN (paridad **155 = 155**).
+
+**Verificado:** `tsc` 0 · `validate-engine` 0 · `next build` verde · split confirmado en el build · live (logueado) generator carga ACC completo, genera setup y limpia result al cambiar de auto, consola sin errores.
+
+**Re-iterar:** `Workflow({ scriptPath: "<script de wf_39830199-ce0>", resumeFromRunId: "wf_39830199-ce0" })`. Las dimensiones código/seguridad/UX/perf ya están bastante exprimidas; el terreno fértil restante sin datos in-game es escaso. Lo pendiente real sigue siendo la captura de datos in-game de Patricio (§3f–3i).
+
+---
+
 ## 4. Cómo retomar (pasos concretos)
 
 ### A. Integrar los 6 juegos (cuando el workflow `wf_855c6e6b-1b2` termine)
@@ -296,7 +322,8 @@ patagonia-sim-setups/
       auth/                 # session.ts (cookie secure condicional), current-user.ts, password.ts
       i18n/                 # context.tsx (useT, localize), dictionaries.ts, getLocale()
     data/
-      registry.ts           # los 7 juegos; implementedGames + gameCatalog  <-- INTEGRACIÓN ACÁ
+      registry.ts           # los 7 juegos; implementedGames + gameCatalog (barrel estático: grilla /app + /garage)
+      load-game.ts          # loadGame(id) con import() dinámico por juego (code-split de /app/[gameId], §3k)
       hardware/fanatec.ts   # bases Fanatec + parámetros menú tuning (NUEVO)
       acc/                  # PLANTILLA de referencia (parameters/cars/tracks/rules/ffb/index)
       <otros 6 juegos>/     # los genera el workflow
