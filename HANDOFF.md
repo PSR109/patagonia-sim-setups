@@ -7,13 +7,13 @@
 
 ## 0. Repositorio (GitHub)
 
-- **Repo:** https://github.com/PSR109/patagonia-sim-setups — **privado** (cuenta `PSR109`).
+- **Repo:** https://github.com/PSR109/patagonia-sim-setups — **público** (cuenta `PSR109`).
 - **Rama principal:** `main` · remoto `origin` ya configurado · credenciales vía `git credential.helper store` (push directo, sin pasos extra).
 - **Subido el 2026-06-23** (commit `5cdced4`, "feat: app generadora y educativa de setups para 7 sims"). Quedó toda la app: motor, datos de los 7 juegos, auth, i18n, FFB, validador, seed.
 - **NO versionado** (por `.gitignore`): `.env` (tiene `AUTH_SECRET` real), `prisma/dev.db` y cualquier `*.db` (la regenera `scripts/seed-admin.ts`), `node_modules`, `.next`, `*.tsbuildinfo`.
 - **Sí versionado:** `.env.example` (plantilla sin secretos, forzada con `git add -f`).
 - Para retomar: `git clone https://github.com/PSR109/patagonia-sim-setups.git`, luego ver §7 (instalar, `.env`, `prisma db push`, `npm run dev`).
-- Para cambiar a **público**: en GitHub → Settings → General → Danger Zone → Change visibility (o avisar y lo hago).
+- Visibilidad **pública** desde 2026-06-23. El repo se revisó y no contiene secretos (`.env`/`*.db` excluidos), por eso es seguro tenerlo público. Para volver a **privado**: GitHub → Settings → General → Danger Zone → Change visibility (o avisar y lo hago).
 
 ---
 
