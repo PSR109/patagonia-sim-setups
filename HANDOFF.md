@@ -207,7 +207,11 @@ Workflow `wf_891905b9-f55` (research + verificación adversarial 2.ª fuente) co
 **#1 (listas autos/pistas): COMPLETO** para todo lo documentable. `tsc`/`validate-engine` 0/`build` verdes (categoryIds válidos, sin duplicados, FWD ok).
 
 ### ⏳ Único pendiente real, y necesita leer el garaje (Patricio)
-Ya NO quedan listas por completar. Solo faltan **rangos de sliders por-auto** no publicados en fuentes (ACC camber/altura por coche; rango exacto de TC2 del McLaren; final drive de EA WRC; formato %/grados del diff de LMU; AC EVO/AC Rally al salir de early access). Re-loopear no los consigue: requieren tu lectura in-game. (Opcional, si querés: expandir iRacing más allá del subset de road racing, o refinar datos de FFB — son decisiones nuevas, no parte de las 5 pendientes.)
+Ya NO quedan listas por completar. Solo faltan **rangos de sliders por-auto** no publicados en fuentes (ACC camber/altura por coche; rango exacto de TC2 del McLaren; final drive de EA WRC; formato %/grados del diff de LMU; AC EVO/AC Rally al salir de early access). Re-loopear no los consigue: requieren tu lectura in-game.
+
+**Mejora extra aplicada (iteración 8, commit `53367b0`):** manejo **FWD en AC EVO** — 8 hot-hatch de tracción delantera (Abarth 695, Golf 8 GTI, i30 N, Alfa Junior, Alpine A290, Renault 5 GT Turbo, Mini Cooper S, Golf GTI Mk1) marcados `drivetrain:"fwd"` y los 7 deltas de diferencial de AC EVO con `excludeDrivetrains:["fwd"]`. Ahora los FWD no reciben ajustes de diff trasero y muestran la nota educativa, igual que los juegos de rally. Verificado por motor.
+
+**Mejoras nuevas opcionales (NO parte de las 5; requieren tu OK):** expandir iRacing más allá del subset curado de road racing; afinar/ampliar datos de FFB por juego.
 
 ---
 
