@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 5: loop "5 pendientes" — McLaren TC2, LMU/marchas, estado #3 — ver §3f; iteración 4 branding+ACC en §3e).
+> Última actualización: 2026-06-24 (iteración 6: loop 2 — LMU Power Cut + ala por-auto ACC, ver §3g; iteración 5 en §3f).
 
 ---
 
@@ -180,6 +180,20 @@ Esto desbloquea #3 y los flecos de #5 sin inventar nada:
 - **LMU**: ¿el garaje muestra un tercer canal **TC Power Cut** además de TC y Slip Angle? Rango. Y confirmar si power/coast del diferencial van en **% o en grados de rampa**.
 - **EA WRC**: rango/unidad real del **final drive** (hoy `0-20` representativo, marcado PENDIENTE en el código) y si conviene exponer las marchas individuales.
 - **AC EVO / AC Rally** (early access): cuando estabilicen, confirmar listas de autos/pistas y topes de sliders.
+
+## 3g. COMPLETADA (iteración 6) — Loop 2: más exactitud sin inventar (2026-06-24)
+
+Patricio re-lanzó el `/loop`. Se exprimió lo que SÍ es verificable sin tener el juego en mano:
+- **#5 fleco — 3er canal de TC de LMU (Power Cut): HECHO.** Commit `75aaa48`. Se creó `Category.extraParams` (params solo de una clase) y se agregó `tc_power_cut` (1-11, dato ya confirmado por el research) a Hypercar/LMGT3/GTE; los prototipos LMP2/LMP3 (sin TC) no lo reciben. LMU ahora modela los 3 canales reales (TC + Slip Angle + Power Cut).
+- **#3 — ala por-auto en ACC: HECHO lo confirmable (6 autos).** Commit `7073c32`. Workflow `wf_fcb5ed3a-78d` (spec del garaje, no setups): Merc GT3 Evo / McLaren 720S GT3 / Huracán GT3 Evo → ala 0-8; BMW M4 GT4 → 0-5; Alpine A110 GT4 y McLaren 570S GT4 → 0-4. Los autos sin confirmar con ≥2 fuentes quedan en el global 0-12 (no se inventa).
+- **Mecanismos nuevos reutilizables:** `Car.extraParams` (iter 5, McLaren TC2) y `Car`/`Category.extraParams` + el merge en `effectiveParams`. Habilitan modelar diferencias reales por auto/clase sin tocar el resto.
+
+### ⏳ Lo que QUEDA y necesita leer el garaje del juego (Patricio)
+- **ACC camber y altura por-auto** (no documentados en fuentes públicas; los agregadores los ocultan).
+- **ACC ala** de los autos no confirmados (Audi R8 Evo II, Huracán Evo2, Aston V8 Vantage, Bentley, Ford Mustang, Nissan GT-R, Porsche 992 — probablemente 0-12 los modernos, 0-8 los 2018-19, pero sin confirmar).
+- **ACC McLaren 720S Evo:** rango real de **TC2** (hoy 0-11 asumido).
+- **EA WRC:** rango/unidad real del **final drive** (hoy 0-20 representativo) y formato %/grados del diferencial de LMU.
+- **AC EVO / AC Rally:** listas y topes cuando salgan de early access.
 
 ---
 
