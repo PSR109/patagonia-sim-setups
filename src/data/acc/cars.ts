@@ -34,6 +34,37 @@ export const accCars: Car[] = [
   { id: "acc_porsche_718_gt4", gameId: "acc", categoryId: "gt4", name: "Porsche 718 Cayman GT4", brand: "Porsche", year: 2019 },
   // Ala verificada 0-7 (setup real de simracingsetup llega a 7; Coach Dave: 8 posiciones).
   { id: "acc_amg_gt4", gameId: "acc", categoryId: "gt4", name: "Mercedes-AMG GT4", brand: "Mercedes-AMG", year: 2016, paramOverrides: { rear_wing: { max: 7 } } },
+  // Roster GT3 completo (investigación + verificación adversarial 2.ª fuente: Coach Dave Academy + simracingsetup, 2026-06-24).
+  { id: "acc_ferrari_488_gt3_evo", gameId: "acc", categoryId: "gt3", name: "Ferrari 488 GT3 Evo", brand: "Ferrari", year: 2020 },
+  { id: "acc_ferrari_488_gt3", gameId: "acc", categoryId: "gt3", name: "Ferrari 488 GT3", brand: "Ferrari", year: 2018 },
+  { id: "acc_honda_nsx_gt3_evo", gameId: "acc", categoryId: "gt3", name: "Honda NSX GT3 Evo", brand: "Honda", year: 2019 },
+  { id: "acc_honda_nsx_gt3", gameId: "acc", categoryId: "gt3", name: "Honda NSX GT3", brand: "Honda", year: 2017 },
+  { id: "acc_lamborghini_huracan_gt3_evo", gameId: "acc", categoryId: "gt3", name: "Lamborghini Huracán GT3 Evo", brand: "Lamborghini", year: 2019 },
+  { id: "acc_lamborghini_huracan_gt3", gameId: "acc", categoryId: "gt3", name: "Lamborghini Huracán GT3", brand: "Lamborghini", year: 2015 },
+  { id: "acc_mclaren_720s_gt3", gameId: "acc", categoryId: "gt3", name: "McLaren 720S GT3", brand: "McLaren", year: 2019 },
+  { id: "acc_mclaren_650s_gt3", gameId: "acc", categoryId: "gt3", name: "McLaren 650S GT3", brand: "McLaren", year: 2015 },
+  { id: "acc_porsche_991ii_gt3r", gameId: "acc", categoryId: "gt3", name: "Porsche 991 II GT3 R", brand: "Porsche", year: 2019 },
+  { id: "acc_porsche_991_gt3r", gameId: "acc", categoryId: "gt3", name: "Porsche 991 GT3 R", brand: "Porsche", year: 2018 },
+  { id: "acc_audi_r8_lms_evo", gameId: "acc", categoryId: "gt3", name: "Audi R8 LMS Evo", brand: "Audi", year: 2019 },
+  { id: "acc_audi_r8_lms_gt3", gameId: "acc", categoryId: "gt3", name: "Audi R8 LMS GT3", brand: "Audi", year: 2015 },
+  { id: "acc_lexus_rcf_gt3", gameId: "acc", categoryId: "gt3", name: "Lexus RC F GT3", brand: "Lexus", year: 2016 },
+  { id: "acc_bmw_m6_gt3", gameId: "acc", categoryId: "gt3", name: "BMW M6 GT3", brand: "BMW", year: 2017 },
+  { id: "acc_aston_v12_vantage", gameId: "acc", categoryId: "gt3", name: "Aston Martin V12 Vantage GT3", brand: "Aston Martin", year: 2013 },
+  { id: "acc_mercedes_amg_gt3", gameId: "acc", categoryId: "gt3", name: "Mercedes-AMG GT3", brand: "Mercedes-AMG", year: 2015 },
+  { id: "acc_nissan_gtr_nismo_gt3_2015", gameId: "acc", categoryId: "gt3", name: "Nissan GT-R Nismo GT3 (2015)", brand: "Nissan", year: 2015 },
+  { id: "acc_bentley_continental_2015", gameId: "acc", categoryId: "gt3", name: "Bentley Continental GT3 (2015)", brand: "Bentley", year: 2015 },
+  { id: "acc_jaguar_emil_frey_g3", gameId: "acc", categoryId: "gt3", name: "Emil Frey Jaguar G3", brand: "Jaguar", year: 2012 },
+  { id: "acc_reiter_engineering_rex_gt3", gameId: "acc", categoryId: "gt3", name: "Reiter Engineering R-EX GT3", brand: "Reiter Engineering", year: 2017 },
+  // Roster GT4 completo (mismas fuentes). Heredan el override de barras 0-2 de la clase GT4.
+  { id: "acc_alpine_a110_gt4", gameId: "acc", categoryId: "gt4", name: "Alpine A110 GT4", brand: "Alpine", year: 2018 },
+  { id: "acc_aston_v8_vantage_gt4", gameId: "acc", categoryId: "gt4", name: "Aston Martin V8 Vantage GT4", brand: "Aston Martin", year: 2018 },
+  { id: "acc_audi_r8_lms_gt4", gameId: "acc", categoryId: "gt4", name: "Audi R8 LMS GT4", brand: "Audi", year: 2018 },
+  { id: "acc_bmw_m4_gt4", gameId: "acc", categoryId: "gt4", name: "BMW M4 GT4", brand: "BMW", year: 2018 },
+  { id: "acc_chevrolet_camaro_gt4r", gameId: "acc", categoryId: "gt4", name: "Chevrolet Camaro GT4.R", brand: "Chevrolet", year: 2017 },
+  { id: "acc_ginetta_g55_gt4", gameId: "acc", categoryId: "gt4", name: "Ginetta G55 GT4", brand: "Ginetta", year: 2012 },
+  { id: "acc_ktm_xbow_gt4", gameId: "acc", categoryId: "gt4", name: "KTM X-Bow GT4", brand: "KTM", year: 2016 },
+  { id: "acc_maserati_granturismo_mc_gt4", gameId: "acc", categoryId: "gt4", name: "Maserati GranTurismo MC GT4", brand: "Maserati", year: 2016 },
+  { id: "acc_mclaren_570s_gt4", gameId: "acc", categoryId: "gt4", name: "McLaren 570S GT4", brand: "McLaren", year: 2016 },
 ];
 
 // Pequeños ajustes de base por auto (el resto usa los defaults de los parámetros).

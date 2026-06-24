@@ -13,4 +13,18 @@ export const accTracks: Track[] = [
   { id: "acc_suzuka", gameId: "acc", name: "Suzuka", country: "Japón", kind: "circuit", lengthKm: 5.81, cornerProfile: "high-speed" },
   { id: "acc_hungaroring", gameId: "acc", name: "Hungaroring", country: "Hungría", kind: "circuit", lengthKm: 4.38, cornerProfile: "low-speed" },
   { id: "acc_kyalami", gameId: "acc", name: "Kyalami", country: "Sudáfrica", kind: "circuit", lengthKm: 4.52, cornerProfile: "mixed" },
+  // Circuitos de los DLC (GT World Challenge, Intercontinental GT, British GT, American Track Pack), verificados 2.ª fuente (2026-06-24).
+  { id: "acc_silverstone", gameId: "acc", name: "Silverstone", country: "Reino Unido", kind: "circuit", lengthKm: 5.89, cornerProfile: "high-speed" },
+  { id: "acc_zolder", gameId: "acc", name: "Zolder", country: "Bélgica", kind: "circuit", lengthKm: 4.01, cornerProfile: "mixed" },
+  { id: "acc_mount_panorama", gameId: "acc", name: "Mount Panorama (Bathurst)", country: "Australia", kind: "circuit", lengthKm: 6.21, cornerProfile: "mixed" },
+  { id: "acc_laguna_seca", gameId: "acc", name: "Laguna Seca", country: "Estados Unidos", kind: "circuit", lengthKm: 3.6, cornerProfile: "mixed" },
+  { id: "acc_oulton_park", gameId: "acc", name: "Oulton Park", country: "Reino Unido", kind: "circuit", lengthKm: 4.33, cornerProfile: "mixed" },
+  { id: "acc_snetterton", gameId: "acc", name: "Snetterton", country: "Reino Unido", kind: "circuit", lengthKm: 4.78, cornerProfile: "mixed" },
+  { id: "acc_donington", gameId: "acc", name: "Donington Park", country: "Reino Unido", kind: "circuit", lengthKm: 4.02, cornerProfile: "mixed" },
+  { id: "acc_cota", gameId: "acc", name: "Circuit of the Americas (COTA)", country: "Estados Unidos", kind: "circuit", lengthKm: 5.51, cornerProfile: "mixed" },
+  { id: "acc_indianapolis", gameId: "acc", name: "Indianapolis (circuito ruta)", country: "Estados Unidos", kind: "circuit", lengthKm: 3.93, cornerProfile: "mixed" },
+  { id: "acc_watkins_glen", gameId: "acc", name: "Watkins Glen", country: "Estados Unidos", kind: "circuit", lengthKm: 5.55, cornerProfile: "high-speed" },
+  { id: "acc_valencia", gameId: "acc", name: "Valencia (Ricardo Tormo)", country: "España", kind: "circuit", lengthKm: 4.0, cornerProfile: "low-speed" },
+  { id: "acc_red_bull_ring", gameId: "acc", name: "Red Bull Ring", country: "Austria", kind: "circuit", lengthKm: 4.32, cornerProfile: "high-speed" },
+  { id: "acc_nordschleife", gameId: "acc", name: "Nürburgring Nordschleife", country: "Alemania", kind: "circuit", lengthKm: 20.83, cornerProfile: "high-speed" },
 ];
