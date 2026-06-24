@@ -72,6 +72,46 @@ export const ac_evoCars: Car[] = [
   // Formula (confirmados/anunciados; verificar disponibilidad jugable in-game)
   { id: "ac_evo_ferrari_f2004", gameId: "ac_evo", categoryId: "formula", name: "Ferrari F2004", brand: "Ferrari", year: 2004 },
   { id: "ac_evo_ferrari_sf25", gameId: "ac_evo", categoryId: "formula", name: "Ferrari SF-25", brand: "Ferrari", year: 2025 },
+  // ── Roster ampliado del build actual (early access; workflow wf_891905b9-f55, 2.ª fuente: Coach Dave + changelogs v0.2-0.7, 2026-06-24) ──
+  // Road - Entry / Hot Hatch
+  { id: "ac_evo_mazda_mx5_na", gameId: "ac_evo", categoryId: "road_entry", name: "Mazda MX-5 (NA)", brand: "Mazda" },
+  { id: "ac_evo_renault_5_gt_turbo", gameId: "ac_evo", categoryId: "road_entry", name: "Renault 5 GT Turbo", brand: "Renault" },
+  { id: "ac_evo_mini_cooper_s", gameId: "ac_evo", categoryId: "road_entry", name: "Mini Cooper S (Mk VI)", brand: "Mini" },
+  { id: "ac_evo_vw_golf_gti_mk1", gameId: "ac_evo", categoryId: "road_entry", name: "VW Golf GTI Mk1", brand: "Volkswagen" },
+  // Road - Sportscar
+  { id: "ac_evo_porsche_911_turbo_964", gameId: "ac_evo", categoryId: "road_sport", name: "Porsche 911 Turbo 3.6 (964)", brand: "Porsche" },
+  { id: "ac_evo_peugeot_205_t16", gameId: "ac_evo", categoryId: "road_sport", name: "Peugeot 205 T16", brand: "Peugeot" },
+  { id: "ac_evo_audi_sport_quattro", gameId: "ac_evo", categoryId: "road_sport", name: "Audi Sport quattro", brand: "Audi" },
+  { id: "ac_evo_caterham_485_csr", gameId: "ac_evo", categoryId: "road_sport", name: "Caterham Seven 485 CSR", brand: "Caterham" },
+  // Road - Supercar / Muscle
+  { id: "ac_evo_honda_nsx_r_92r", gameId: "ac_evo", categoryId: "road_supercar", name: "Honda NSX-R (92R)", brand: "Honda" },
+  { id: "ac_evo_audi_rs6_avant", gameId: "ac_evo", categoryId: "road_supercar", name: "Audi RS6 Avant", brand: "Audi" },
+  { id: "ac_evo_bmw_m8_competition", gameId: "ac_evo", categoryId: "road_supercar", name: "BMW M8 Competition (F92)", brand: "BMW" },
+  { id: "ac_evo_bmw_m3_e46_csl", gameId: "ac_evo", categoryId: "road_supercar", name: "BMW M3 CSL (E46)", brand: "BMW" },
+  { id: "ac_evo_toyota_supra_mk4", gameId: "ac_evo", categoryId: "road_supercar", name: "Toyota Supra Turbo RZ (Mk IV)", brand: "Toyota" },
+  { id: "ac_evo_bmw_m2_g87", gameId: "ac_evo", categoryId: "road_supercar", name: "BMW M2 (G87)", brand: "BMW" },
+  { id: "ac_evo_porsche_911_gt3_rs_992", gameId: "ac_evo", categoryId: "road_supercar", name: "Porsche 911 GT3 RS (992)", brand: "Porsche" },
+  { id: "ac_evo_porsche_718_cayman_gt4_rs", gameId: "ac_evo", categoryId: "road_supercar", name: "Porsche 718 Cayman GT4 RS", brand: "Porsche" },
+  { id: "ac_evo_lamborghini_countach_lp5000_qv", gameId: "ac_evo", categoryId: "road_supercar", name: "Lamborghini Countach LP5000 QV", brand: "Lamborghini" },
+  // Road - Hypercar
+  { id: "ac_evo_dallara_stradale", gameId: "ac_evo", categoryId: "road_hypercar", name: "Dallara Stradale", brand: "Dallara" },
+  { id: "ac_evo_ferrari_daytona_sp3", gameId: "ac_evo", categoryId: "road_hypercar", name: "Ferrari Daytona SP3", brand: "Ferrari" },
+  // Race - Vintage / Touring
+  { id: "ac_evo_alfa_romeo_75_turbo_evoluzione", gameId: "ac_evo", categoryId: "race_vintage", name: "Alfa Romeo 75 Turbo Evoluzione", brand: "Alfa Romeo" },
+  { id: "ac_evo_alfa_romeo_giulia_sprint_gta", gameId: "ac_evo", categoryId: "race_vintage", name: "Alfa Romeo Giulia Sprint GTA", brand: "Alfa Romeo" },
+  // Race - Spec / Cup / Challenge
+  { id: "ac_evo_lotus_exige_v6_cup", gameId: "ac_evo", categoryId: "race_spec", name: "Lotus Exige V6 Cup", brand: "Lotus" },
+  { id: "ac_evo_caterham_academy", gameId: "ac_evo", categoryId: "race_spec", name: "Caterham Seven Academy Racer", brand: "Caterham" },
+  { id: "ac_evo_lamborghini_huracan_st_evo2", gameId: "ac_evo", categoryId: "race_spec", name: "Lamborghini Huracán Super Trofeo EVO2", brand: "Lamborghini" },
+  // Race - GT2 / Track
+  { id: "ac_evo_maserati_gt2", gameId: "ac_evo", categoryId: "race_gt2", name: "Maserati GT2", brand: "Maserati" },
+  { id: "ac_evo_porsche_718_cayman_gt4_clubsport", gameId: "ac_evo", categoryId: "race_gt2", name: "Porsche 718 Cayman GT4 Clubsport", brand: "Porsche" },
+  { id: "ac_evo_audi_r8_lms_gt4_evo", gameId: "ac_evo", categoryId: "race_gt2", name: "Audi R8 LMS GT4 Evo", brand: "Audi" },
+  { id: "ac_evo_ferrari_f40_lm", gameId: "ac_evo", categoryId: "race_gt2", name: "Ferrari F40 LM", brand: "Ferrari" },
+  { id: "ac_evo_dallara_exp", gameId: "ac_evo", categoryId: "race_gt2", name: "Dallara EXP", brand: "Dallara" },
+  // Race - GT3
+  { id: "ac_evo_bmw_m4_gt3_evo", gameId: "ac_evo", categoryId: "race_gt3", name: "BMW M4 GT3 Evo", brand: "BMW" },
+  { id: "ac_evo_ford_mustang_gt3", gameId: "ac_evo", categoryId: "race_gt3", name: "Ford Mustang GT3", brand: "Ford" },
 ];
 
 // Pequeños ajustes de base por auto. La mayoría usa los defaults de los parámetros;

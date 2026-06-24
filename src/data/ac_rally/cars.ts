@@ -35,8 +35,12 @@ export const ac_rallyCars: Car[] = [
   { id: "peugeot-306-maxi-kitcar", gameId: "ac_rally", categoryId: "kitcar", name: "Peugeot 306 Maxi Kit Car", brand: "Peugeot", year: 1996, drivetrain: "fwd" },
   // Rally2
   { id: "hyundai-i20n-rally2", gameId: "ac_rally", categoryId: "rally2", name: "Hyundai i20 N Rally2", brand: "Hyundai", year: 2021 },
+  { id: "skoda-fabia-rs-rally2", gameId: "ac_rally", categoryId: "rally2", name: "Škoda Fabia RS Rally2", brand: "Škoda", year: 2022 }, // EA v0.3
   // Rally4
   { id: "peugeot-208-rally4", gameId: "ac_rally", categoryId: "rally4", name: "Peugeot 208 Rally4", brand: "Peugeot", year: 2020, drivetrain: "fwd" },
+  // Group 4 agregados (EA v0.2/v0.3, workflow wf_891905b9-f55). El Fulvia es FWD.
+  { id: "alpine-a110-gr4", gameId: "ac_rally", categoryId: "gr4", name: "Alpine A110 Gr.4", brand: "Alpine", year: 1973 },
+  { id: "lancia-fulvia-16hf-gr4", gameId: "ac_rally", categoryId: "gr4", name: "Lancia Fulvia Coupé 1.6 HF Gr.4", brand: "Lancia", year: 1970, drivetrain: "fwd" },
 ];
 
 // Ajustes de base por auto. Los clásicos exponen menos parámetros (aero fija,

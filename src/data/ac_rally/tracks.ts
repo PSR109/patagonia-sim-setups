@@ -70,17 +70,31 @@ export const ac_rallyTracks: Track[] = [
       en: "Ice/snow track with 1 variant. Very low grip: low pressures, high coast lock and plenty of toe-in.",
     },
   },
+  // Monte Carlo (EA v0.3): el juego trae estos DOS tramos por separado, no uno combinado.
   {
-    id: "monte-carlo-col-de-turini-sisteron",
+    id: "monte-carlo-la-bollene-col-de-turini",
     gameId: "ac_rally",
-    name: "Rally Monte Carlo - Col de Turini / Sisteron",
+    name: "Rally Monte Carlo - La Bollène-Vésubie / Col de Turini",
     country: "Mónaco",
     kind: "stage",
     surface: "mixed",
     roughness: "medium",
     notes: {
-      es: "Asfalto alpino con 2 variantes y tramos mixtos de nieve/hielo. El clásico desafío de adherencia variable del Monte: setup de compromiso.",
-      en: "Alpine tarmac with 2 variants and mixed snow/ice sections. The classic Monte variable-grip challenge: a compromise setup.",
+      es: "Asfalto alpino (~18 km) con tramos mixtos de nieve/hielo en el Col de Turini. Adherencia variable: setup de compromiso.",
+      en: "Alpine tarmac (~18 km) with mixed snow/ice sections over the Col de Turini. Variable grip: a compromise setup.",
+    },
+  },
+  {
+    id: "monte-carlo-sisteron",
+    gameId: "ac_rally",
+    name: "Rally Monte Carlo - Sisteron",
+    country: "Mónaco",
+    kind: "stage",
+    surface: "tarmac",
+    roughness: "smooth",
+    notes: {
+      es: "Asfalto rápido y fluido (~13 km) con curvas amplias y clima dinámico; pide un setup más bajo y rígido que Turini.",
+      en: "Fast, flowing tarmac (~13 km) with wide corners and dynamic weather; wants a lower, stiffer setup than Turini.",
     },
   },
 ];

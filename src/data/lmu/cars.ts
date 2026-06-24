@@ -80,6 +80,9 @@ export const lmuCars: Car[] = [
   { id: "lmu_porsche_911_rsr19", gameId: "lmu", categoryId: "gte", name: "Porsche 911 RSR-19", brand: "Porsche", year: 2019 },
   { id: "lmu_corvette_c8r", gameId: "lmu", categoryId: "gte", name: "Chevrolet Corvette C8.R", brand: "Chevrolet", year: 2020 },
   { id: "lmu_aston_vantage_gte", gameId: "lmu", categoryId: "gte", name: "Aston Martin Vantage AMR GTE", brand: "Aston Martin", year: 2018 },
+  // Agregados verificados (workflow wf_891905b9-f55, 2026-06-24): LMP3 (V1.3) y Hypercar 2026 (V1.3.3).
+  { id: "lmu_duqueine_d09", gameId: "lmu", categoryId: "lmp3", name: "Duqueine D09", brand: "Duqueine", year: 2025 },
+  { id: "lmu_toyota_tr010", gameId: "lmu", categoryId: "hypercar", name: "Toyota TR010 Hybrid (2026)", brand: "Toyota", year: 2026 },
 ];
 
 // Pequeños overrides de base por auto. La mayoría usa los defaults de los

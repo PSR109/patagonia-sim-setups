@@ -122,6 +122,65 @@ export const ea_wrcCars: Car[] = [
   { id: "ea_wrc_ford_fiesta_wrc", gameId: "ea_wrc", categoryId: "wrc_2017_2021", name: "Ford Fiesta WRC", brand: "Ford" },
   { id: "ea_wrc_vw_polo_gti_r5_wrc", gameId: "ea_wrc", categoryId: "wrc_2017_2021", name: "VW Polo GTI R5/WRC", brand: "Volkswagen" },
   { id: "ea_wrc_hyundai_i20_coupe_wrc", gameId: "ea_wrc", categoryId: "wrc_2017_2021", name: "Hyundai i20 Coupe WRC", brand: "Hyundai" },
+  // ── Roster ampliado (workflow wf_891905b9-f55, verificación 2.ª fuente: horizonforge + EA car list, 2026-06-24) ──
+  // H2 RWD (clásicos tracción trasera)
+  { id: "ea_wrc_ford_escort_rs1600_mk1", gameId: "ea_wrc", categoryId: "h2_rwd", name: "Ford Escort RS 1600 MK1", brand: "Ford", year: 1972 },
+  { id: "ea_wrc_ford_escort_mk2", gameId: "ea_wrc", categoryId: "h2_rwd", name: "Ford Escort Mk2", brand: "Ford", year: 1977 },
+  { id: "ea_wrc_hillman_avenger", gameId: "ea_wrc", categoryId: "h2_rwd", name: "Hillman Avenger", brand: "Hillman", year: 1979 },
+  { id: "ea_wrc_talbot_sunbeam_lotus", gameId: "ea_wrc", categoryId: "h2_rwd", name: "Talbot Sunbeam Lotus", brand: "Talbot", year: 1979 },
+  // H3 RWD
+  { id: "ea_wrc_ford_escort_mk2_mcrae", gameId: "ea_wrc", categoryId: "h3_rwd", name: "Ford Escort Mk2 McRae Motorsport", brand: "Ford", year: 2003 },
+  { id: "ea_wrc_renault_5_turbo", gameId: "ea_wrc", categoryId: "h3_rwd", name: "Renault 5 Turbo", brand: "Renault", year: 1983 },
+  { id: "ea_wrc_opel_ascona_400", gameId: "ea_wrc", categoryId: "h3_rwd", name: "Opel Ascona 400", brand: "Opel", year: 1984 },
+  // Group B RWD
+  { id: "ea_wrc_porsche_911_sc_rs", gameId: "ea_wrc", categoryId: "group_b_rwd", name: "Porsche 911 SC RS", brand: "Porsche", year: 1984 },
+  // Group B 4WD
+  { id: "ea_wrc_ford_rs200", gameId: "ea_wrc", categoryId: "group_b_4wd", name: "Ford RS200", brand: "Ford", year: 1986 },
+  { id: "ea_wrc_mg_metro_6r4", gameId: "ea_wrc", categoryId: "group_b_4wd", name: "MG Metro 6R4", brand: "MG", year: 1986 },
+  // Group A
+  { id: "ea_wrc_mitsubishi_galant_vr4", gameId: "ea_wrc", categoryId: "group_a", name: "Mitsubishi Galant VR4", brand: "Mitsubishi", year: 1988 },
+  { id: "ea_wrc_subaru_legacy_rs", gameId: "ea_wrc", categoryId: "group_a", name: "Subaru Legacy RS", brand: "Subaru", year: 1992 },
+  // F2 Kit Car (FWD)
+  { id: "ea_wrc_citroen_xsara_kit_car", gameId: "ea_wrc", categoryId: "f2_kit_car", name: "Citroën Xsara Kit Car", brand: "Citroën", year: 1999, drivetrain: "fwd" },
+  { id: "ea_wrc_renault_maxi_megane", gameId: "ea_wrc", categoryId: "f2_kit_car", name: "Renault Maxi Mégane", brand: "Renault", year: 1996, drivetrain: "fwd" },
+  { id: "ea_wrc_vauxhall_astra_rally_car", gameId: "ea_wrc", categoryId: "f2_kit_car", name: "Vauxhall Astra Rally Car", brand: "Vauxhall", year: 1998, drivetrain: "fwd" },
+  { id: "ea_wrc_volkswagen_golf_iv_kit_car", gameId: "ea_wrc", categoryId: "f2_kit_car", name: "Volkswagen Golf IV Kit Car", brand: "Volkswagen", year: 1999, drivetrain: "fwd" },
+  // S1600 (FWD)
+  { id: "ea_wrc_ford_puma_s1600", gameId: "ea_wrc", categoryId: "s1600", name: "Ford Puma S1600", brand: "Ford", year: 1998, drivetrain: "fwd" },
+  { id: "ea_wrc_peugeot_206_s1600", gameId: "ea_wrc", categoryId: "s1600", name: "Peugeot 206 S1600", brand: "Peugeot", year: 2001, drivetrain: "fwd" },
+  // NR4/R4
+  { id: "ea_wrc_subaru_wrx_sti_nr4", gameId: "ea_wrc", categoryId: "nr4_r4", name: "Subaru WRX STI NR4", brand: "Subaru", year: 2015 },
+  // Rally4 (FWD)
+  { id: "ea_wrc_citroen_c2_r2_max", gameId: "ea_wrc", categoryId: "rally4", name: "Citroën C2 R2 Max", brand: "Citroën", year: 2009, drivetrain: "fwd" },
+  { id: "ea_wrc_opel_adam_r2", gameId: "ea_wrc", categoryId: "rally4", name: "Opel Adam R2", brand: "Opel", year: 2013, drivetrain: "fwd" },
+  { id: "ea_wrc_renault_clio_rally4", gameId: "ea_wrc", categoryId: "rally4", name: "Renault Clio Rally4", brand: "Renault", year: 2021, drivetrain: "fwd" },
+  { id: "ea_wrc_renault_twingo_ii", gameId: "ea_wrc", categoryId: "rally4", name: "Renault Twingo II", brand: "Renault", year: 2010, drivetrain: "fwd" },
+  // Rally2
+  { id: "ea_wrc_peugeot_208_t16_r5", gameId: "ea_wrc", categoryId: "rally2", name: "Peugeot 208 T16 R5", brand: "Peugeot", year: 2015 },
+  { id: "ea_wrc_skoda_fabia_rally2_evo", gameId: "ea_wrc", categoryId: "rally2", name: "Škoda Fabia Rally2 Evo", brand: "Škoda", year: 2018 },
+  // WRC2 (Rally2 actuales que faltaban)
+  { id: "ea_wrc_ford_fiesta_rally2", gameId: "ea_wrc", categoryId: "wrc2", name: "Ford Fiesta Rally2", brand: "Ford", year: 2019 },
+  { id: "ea_wrc_hyundai_i20_n_rally2", gameId: "ea_wrc", categoryId: "wrc2", name: "Hyundai i20 N Rally2", brand: "Hyundai", year: 2020 },
+  // WRC 1997-2011
+  { id: "ea_wrc_citroen_c4_wrc", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Citroën C4 WRC", brand: "Citroën", year: 2010 },
+  { id: "ea_wrc_ford_focus_wrc_99", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Ford Focus WRC '99", brand: "Ford", year: 1999 },
+  { id: "ea_wrc_ford_focus_rs_rally_2001", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Ford Focus RS Rally 2001", brand: "Ford", year: 2001 },
+  { id: "ea_wrc_ford_focus_rs_rally_2008", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Ford Focus RS Rally 2008", brand: "Ford", year: 2008 },
+  { id: "ea_wrc_mini_countryman_rally_edition", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Mini Countryman Rally Edition", brand: "Mini", year: 2011 },
+  { id: "ea_wrc_mitsubishi_lancer_evo_vi", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Mitsubishi Lancer Evolution VI", brand: "Mitsubishi", year: 1999 },
+  { id: "ea_wrc_peugeot_206_rally", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Peugeot 206 Rally", brand: "Peugeot", year: 2002 },
+  { id: "ea_wrc_seat_cordoba_wrc", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Seat Córdoba WRC", brand: "SEAT", year: 1999 },
+  { id: "ea_wrc_skoda_fabia_wrc", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Škoda Fabia WRC", brand: "Škoda", year: 2005 },
+  { id: "ea_wrc_subaru_impreza_1998", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Subaru Impreza 1998", brand: "Subaru", year: 1998 },
+  { id: "ea_wrc_subaru_impreza_2001", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Subaru Impreza 2001", brand: "Subaru", year: 2001 },
+  { id: "ea_wrc_subaru_impreza_2008", gameId: "ea_wrc", categoryId: "wrc_1997_2011", name: "Subaru Impreza 2008", brand: "Subaru", year: 2008 },
+  // WRC 2017-2021
+  { id: "ea_wrc_citroen_c3_wrc", gameId: "ea_wrc", categoryId: "wrc_2017_2021", name: "Citroën C3 WRC", brand: "Citroën", year: 2018 },
+  { id: "ea_wrc_volkswagen_polo_2017", gameId: "ea_wrc", categoryId: "wrc_2017_2021", name: "Volkswagen Polo 2017", brand: "Volkswagen", year: 2017 },
+  // WRC Rally1 Hybrid (variantes 2024)
+  { id: "ea_wrc_ford_puma_rally1_24", gameId: "ea_wrc", categoryId: "wrc_rally1", name: "Ford Puma Rally1 HYBRID '24", brand: "Ford", year: 2024 },
+  { id: "ea_wrc_hyundai_i20_n_rally1_24", gameId: "ea_wrc", categoryId: "wrc_rally1", name: "Hyundai i20 N Rally1 HYBRID '24", brand: "Hyundai", year: 2024 },
+  { id: "ea_wrc_toyota_gr_yaris_rally1_24", gameId: "ea_wrc", categoryId: "wrc_rally1", name: "Toyota GR Yaris Rally1 HYBRID '24", brand: "Toyota", year: 2024 },
 ];
 
 // Pequeños ajustes de base por auto. El juego ajusta setups por superficie, no
