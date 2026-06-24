@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 6: loop 2 — LMU Power Cut + ala por-auto ACC, ver §3g; iteración 5 en §3f).
+> Última actualización: 2026-06-24 (iteración 7: loop 3 — #1 rosters completos en todos los juegos, ver §3h; iteración 6 en §3g).
 
 ---
 
@@ -194,6 +194,20 @@ Patricio re-lanzó el `/loop`. Se exprimió lo que SÍ es verificable sin tener 
 - **ACC McLaren 720S Evo:** rango real de **TC2** (hoy 0-11 asumido).
 - **EA WRC:** rango/unidad real del **final drive** (hoy 0-20 representativo) y formato %/grados del diferencial de LMU.
 - **AC EVO / AC Rally:** listas y topes cuando salgan de early access.
+
+## 3h. COMPLETADA (iteración 7) — #1 rosters COMPLETOS en todos los juegos (2026-06-24)
+
+Workflow `wf_891905b9-f55` (research + verificación adversarial 2.ª fuente) completó las listas de los juegos que faltaban (commit `bd2b838`):
+- **LMU** 33→**35** (+Duqueine D09 LMP3, +Toyota TR010 Hybrid 2026).
+- **EA WRC** 57→**101 autos** (+44: históricos H2/H3 RWD, Group B, Group A, Kit Car/S1600/Rally4 con `drivetrain:"fwd"`, Rally2/WRC2, WRC 1997-2011, Rally1 '24) y 12→**18 pistas** (+México, Portugal, Finlandia + ficticias Scandia/Pacífico/Mediterráneo).
+- **AC Rally** 12→**15** (+Škoda Fabia RS Rally2, Alpine A110 Gr.4, Lancia Fulvia 1.6 HF Gr.4 FWD) y el tramo combinado de Monte Carlo se partió en los 2 oficiales (La Bollène/Turini + Sisteron).
+- **AC EVO** (early access) 37→**68** (del changelog v0.2-0.7, verificado).
+- **F1 25** ya estaba completo. **iRacing** queda como subset curado de road racing **a propósito** (el juego tiene cientos; expandirlo es una decisión, no un gap).
+
+**#1 (listas autos/pistas): COMPLETO** para todo lo documentable. `tsc`/`validate-engine` 0/`build` verdes (categoryIds válidos, sin duplicados, FWD ok).
+
+### ⏳ Único pendiente real, y necesita leer el garaje (Patricio)
+Ya NO quedan listas por completar. Solo faltan **rangos de sliders por-auto** no publicados en fuentes (ACC camber/altura por coche; rango exacto de TC2 del McLaren; final drive de EA WRC; formato %/grados del diff de LMU; AC EVO/AC Rally al salir de early access). Re-loopear no los consigue: requieren tu lectura in-game. (Opcional, si querés: expandir iRacing más allá del subset de road racing, o refinar datos de FFB — son decisiones nuevas, no parte de las 5 pendientes.)
 
 ---
 
