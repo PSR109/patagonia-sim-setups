@@ -100,7 +100,7 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "brake_bias", delta: -3 },
       { paramId: "arb_front", delta: -1 },
-      { paramId: "diff_coast", delta: -2 },
+      { paramId: "diff_coast", delta: -2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
       es: "Subviraje al entrar: atrasamos un poco la frenada para que la cola ayude a girar, ablandamos la barra delantera para dar más agarre al frente y bajamos el coast del diferencial para liberar rotación al levantar gas.",
@@ -123,8 +123,8 @@ export const ac_evoSymptomRules: SymptomRule[] = [
   {
     symptom: "understeer_exit",
     adjust: [
-      { paramId: "diff_power", delta: -2 },
-      { paramId: "diff_preload", delta: -2 },
+      { paramId: "diff_power", delta: -2, excludeDrivetrains: ["fwd"] },
+      { paramId: "diff_preload", delta: -2, excludeDrivetrains: ["fwd"] },
       { paramId: "arb_rear", delta: 1 },
     ],
     reason: {
@@ -137,7 +137,7 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "brake_bias", delta: 3 },
       { paramId: "toe_rear", delta: 2 },
-      { paramId: "diff_coast", delta: 2 },
+      { paramId: "diff_coast", delta: 2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
       es: "Sobreviraje al entrar: adelantamos la frenada para calmar la cola, sumamos convergencia trasera y subimos el coast del diferencial para estabilizar bajo freno motor.",
@@ -161,7 +161,7 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "tc", delta: 1 },
       { paramId: "toe_rear", delta: 2 },
-      { paramId: "diff_power", delta: 2 },
+      { paramId: "diff_power", delta: 2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
       es: "Sobreviraje al salir (al acelerar): sumamos TC, convergencia trasera y bloqueo en aceleración (power) para que la cola no se suelte al poner gas.",
@@ -173,7 +173,7 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "brake_bias", delta: 3 },
       { paramId: "abs", delta: 1 },
-      { paramId: "diff_coast", delta: 2 },
+      { paramId: "diff_coast", delta: 2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
       es: "Inestable al frenar: adelantamos el reparto de frenada, subimos un punto de ABS y aumentamos el coast del diferencial para que la cola no se cruce.",
@@ -186,7 +186,7 @@ export const ac_evoSymptomRules: SymptomRule[] = [
       { paramId: "arb_rear", delta: -1 },
       { paramId: "tc", delta: 1 },
       { paramId: "toe_rear", delta: 1 },
-      { paramId: "diff_power", delta: 1 },
+      { paramId: "diff_power", delta: 1, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
       es: "Falta de tracción: ablandamos la barra trasera para que las ruedas copien mejor el piso, sumamos algo de TC y convergencia trasera, y subimos el bloqueo en aceleración.",

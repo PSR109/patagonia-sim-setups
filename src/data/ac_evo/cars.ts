@@ -19,12 +19,12 @@ export const ac_evoCategories: Category[] = [
 // hoy, ~120 previstos para 1.0). Se cargan los exampleCars confirmados por clase.
 export const ac_evoCars: Car[] = [
   // Road - Entry / Hot Hatch
-  { id: "ac_evo_abarth_695_biposto", gameId: "ac_evo", categoryId: "road_entry", name: "Abarth 695 Biposto", brand: "Abarth" },
-  { id: "ac_evo_vw_golf8_gti_clubsport", gameId: "ac_evo", categoryId: "road_entry", name: "VW Golf 8 GTI Clubsport", brand: "Volkswagen" },
+  { id: "ac_evo_abarth_695_biposto", gameId: "ac_evo", categoryId: "road_entry", name: "Abarth 695 Biposto", brand: "Abarth", drivetrain: "fwd" },
+  { id: "ac_evo_vw_golf8_gti_clubsport", gameId: "ac_evo", categoryId: "road_entry", name: "VW Golf 8 GTI Clubsport", brand: "Volkswagen", drivetrain: "fwd" },
   { id: "ac_evo_honda_s2000_ap1", gameId: "ac_evo", categoryId: "road_entry", name: "Honda S2000 AP1", brand: "Honda" },
-  { id: "ac_evo_hyundai_i30_n", gameId: "ac_evo", categoryId: "road_entry", name: "Hyundai i30 N", brand: "Hyundai" },
+  { id: "ac_evo_hyundai_i30_n", gameId: "ac_evo", categoryId: "road_entry", name: "Hyundai i30 N", brand: "Hyundai", drivetrain: "fwd" },
   { id: "ac_evo_ford_escort_rs_cosworth", gameId: "ac_evo", categoryId: "road_entry", name: "Ford Escort RS Cosworth", brand: "Ford" },
-  { id: "ac_evo_alfa_romeo_junior", gameId: "ac_evo", categoryId: "road_entry", name: "Alfa Romeo Junior (Veloce/Elettrica)", brand: "Alfa Romeo" },
+  { id: "ac_evo_alfa_romeo_junior", gameId: "ac_evo", categoryId: "road_entry", name: "Alfa Romeo Junior (Veloce/Elettrica)", brand: "Alfa Romeo", drivetrain: "fwd" },
   { id: "ac_evo_mazda_mx5_nd", gameId: "ac_evo", categoryId: "road_entry", name: "Mazda MX-5 ND", brand: "Mazda" },
 
   // Road - Sportscar
@@ -32,7 +32,7 @@ export const ac_evoCars: Car[] = [
   { id: "ac_evo_toyota_gr86", gameId: "ac_evo", categoryId: "road_sport", name: "Toyota GR86", brand: "Toyota" },
   { id: "ac_evo_audi_rs3_sportback", gameId: "ac_evo", categoryId: "road_sport", name: "Audi RS3 Sportback", brand: "Audi" },
   { id: "ac_evo_lancia_delta_hf_integrale", gameId: "ac_evo", categoryId: "road_sport", name: "Lancia Delta HF Integrale", brand: "Lancia" },
-  { id: "ac_evo_alpine_a290_beta", gameId: "ac_evo", categoryId: "road_sport", name: "Alpine A290 Beta", brand: "Alpine" },
+  { id: "ac_evo_alpine_a290_beta", gameId: "ac_evo", categoryId: "road_sport", name: "Alpine A290 Beta", brand: "Alpine", drivetrain: "fwd" },
   { id: "ac_evo_toyota_ae86", gameId: "ac_evo", categoryId: "road_sport", name: "Toyota AE86", brand: "Toyota" },
 
   // Road - Supercar / Muscle
@@ -75,9 +75,9 @@ export const ac_evoCars: Car[] = [
   // ── Roster ampliado del build actual (early access; workflow wf_891905b9-f55, 2.ª fuente: Coach Dave + changelogs v0.2-0.7, 2026-06-24) ──
   // Road - Entry / Hot Hatch
   { id: "ac_evo_mazda_mx5_na", gameId: "ac_evo", categoryId: "road_entry", name: "Mazda MX-5 (NA)", brand: "Mazda" },
-  { id: "ac_evo_renault_5_gt_turbo", gameId: "ac_evo", categoryId: "road_entry", name: "Renault 5 GT Turbo", brand: "Renault" },
-  { id: "ac_evo_mini_cooper_s", gameId: "ac_evo", categoryId: "road_entry", name: "Mini Cooper S (Mk VI)", brand: "Mini" },
-  { id: "ac_evo_vw_golf_gti_mk1", gameId: "ac_evo", categoryId: "road_entry", name: "VW Golf GTI Mk1", brand: "Volkswagen" },
+  { id: "ac_evo_renault_5_gt_turbo", gameId: "ac_evo", categoryId: "road_entry", name: "Renault 5 GT Turbo", brand: "Renault", drivetrain: "fwd" },
+  { id: "ac_evo_mini_cooper_s", gameId: "ac_evo", categoryId: "road_entry", name: "Mini Cooper S (Mk VI)", brand: "Mini", drivetrain: "fwd" },
+  { id: "ac_evo_vw_golf_gti_mk1", gameId: "ac_evo", categoryId: "road_entry", name: "VW Golf GTI Mk1", brand: "Volkswagen", drivetrain: "fwd" },
   // Road - Sportscar
   { id: "ac_evo_porsche_911_turbo_964", gameId: "ac_evo", categoryId: "road_sport", name: "Porsche 911 Turbo 3.6 (964)", brand: "Porsche" },
   { id: "ac_evo_peugeot_205_t16", gameId: "ac_evo", categoryId: "road_sport", name: "Peugeot 205 T16", brand: "Peugeot" },
