@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { getGame } from "@/data/registry";
+import { loadGame } from "@/data/load-game";
 import { generateSetup, baseFor, effectiveParams } from "@/lib/engine";
 import { localize, useT } from "@/lib/i18n/context";
 import { cn } from "@/lib/cn";
 import { FfbPanel } from "@/components/ffb-panel";
 import type {
   ConditionInput,
+  GameData,
   ParameterDef,
   ParameterGroup,
   SetupResult,
@@ -66,12 +67,15 @@ function parseLapToMs(input: string): number | null {
 }
 
 export function Generator({ gameId }: { gameId: string }) {
-  const game = getGame(gameId);
   const { t } = useT();
 
+  // Carga perezosa del juego: solo bajamos los datos del sim pedido (no el
+  // catálogo de los 7), así que game arranca undefined hasta que resuelve.
+  const [game, setGame] = useState<GameData | undefined>(undefined);
+  const [loadingGame, setLoadingGame] = useState(true);
+
   // Estado de selección
-  const firstCategory = game?.categories[0]?.id ?? "";
-  const [categoryId, setCategoryId] = useState(firstCategory);
+  const [categoryId, setCategoryId] = useState("");
   const [carId, setCarId] = useState("");
   const [trackId, setTrackId] = useState("");
 
@@ -88,15 +92,40 @@ export function Generator({ gameId }: { gameId: string }) {
   const [view, setView] = useState<"beginner" | "advanced">("beginner");
   const [showError, setShowError] = useState(false);
 
+  useEffect(() => {
+    let alive = true;
+    setLoadingGame(true);
+    loadGame(gameId).then((g) => {
+      if (!alive) return;
+      setGame(g);
+      // Reseteamos la selección al juego recién cargado (categoría por defecto).
+      setCategoryId(g?.categories[0]?.id ?? "");
+      setCarId("");
+      setResult(null);
+      setLoadingGame(false);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [gameId]);
+
   const cars = useMemo(
     () => (game ? game.cars.filter((c) => c.categoryId === categoryId) : []),
     [game, categoryId],
   );
 
-  if (!game) {
+  if (loadingGame) {
     return (
       <div className="mx-auto max-w-md py-16 text-center">
         <h1 className="text-xl font-semibold">{t("common.loading")}</h1>
+      </div>
+    );
+  }
+
+  if (!game) {
+    return (
+      <div className="mx-auto max-w-md py-16 text-center">
+        <h1 className="text-xl font-semibold">{t("games.title")}</h1>
         <p className="mt-2 text-sm text-muted">{t("games.noData")}</p>
         <Link href="/app" className="mt-6 inline-block text-sm font-semibold text-brand">
           ← {t("games.title")}
@@ -346,6 +375,7 @@ export function Generator({ gameId }: { gameId: string }) {
         <section className="min-w-0">
           {result && car ? (
             <ResultPanel
+              game={game}
               gameId={gameId}
               result={result}
               carId={carId}
@@ -371,6 +401,7 @@ export function Generator({ gameId }: { gameId: string }) {
 /* ---------- Resultado ---------- */
 
 function ResultPanel({
+  game,
   gameId,
   result,
   carId,
@@ -380,6 +411,7 @@ function ResultPanel({
   view,
   setView,
 }: {
+  game: GameData;
   gameId: string;
   result: SetupResult;
   carId: string;
@@ -389,7 +421,6 @@ function ResultPanel({
   view: "beginner" | "advanced";
   setView: (v: "beginner" | "advanced") => void;
 }) {
-  const game = getGame(gameId)!;
   const { t, locale } = useT();
   const base = useMemo(() => baseFor(game, carId), [game, carId]);
   // Parámetros EFECTIVOS de este auto: el rango/paso/default puede diferir por
