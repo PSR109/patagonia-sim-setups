@@ -1,14 +1,41 @@
-import type { Car, Category } from "@/lib/types";
+import type { Car, Category, ParameterDef } from "@/lib/types";
+
+// 3.er canal de control de tracción de LMU (Power Cut). Existe en las clases con
+// TC (Hypercar/LMGT3/GTE) y NO en los prototipos LMP2/LMP3 (que corren sin TC).
+// Se modela como extraParam de clase: se muestra y explica en la tabla; las reglas
+// no lo tocan (aparece en su valor por defecto). Completa el trío TC + Slip Angle.
+const lmuTcPowerCut: ParameterDef = {
+  id: "tc_power_cut",
+  group: "electronics",
+  name: { es: "Corte de potencia del TC (Power Cut)", en: "TC Power Cut" },
+  unit: "",
+  min: 1,
+  max: 11,
+  step: 1,
+  default: 4,
+  whatItDoes: {
+    es: "Tercer canal del control de tracción de LMU: cuánta potencia corta el sistema cuando el patinaje supera el umbral del Slip Angle (escala 1-11). Junto con el nivel de TC y el Slip Angle completa la electrónica de tracción. Más alto = corta más potencia (más conservador).",
+    en: "LMU's third traction-control channel: how much power the system cuts once slip exceeds the Slip Angle threshold (1-11 scale). With the TC level and Slip Angle it completes the traction electronics. Higher = cuts more power (more conservative).",
+  },
+  increaseEffect: {
+    es: "Más Power Cut = corte más agresivo: más seguro en baja adherencia, a costa de aceleración.",
+    en: "More Power Cut = more aggressive cut: safer on low grip, at the cost of acceleration.",
+  },
+  decreaseEffect: {
+    es: "Menos Power Cut = corta menos al patinar: más aceleración y rotación, con más riesgo de patinar.",
+    en: "Less Power Cut = cuts less on slip: more acceleration and rotation, with more wheelspin risk.",
+  },
+};
 
 // Clases jugables de Le Mans Ultimate (temporada 2026). Hypercar y LMGT3 son las
 // principales; LMP2/LMP3 vienen de la European Le Mans Series y GTE es contenido
 // heredado del juego base 2023 (ya fuera del WEC actual).
 export const lmuCategories: Category[] = [
-  { id: "hypercar", gameId: "lmu", name: "Hypercar" },
-  { id: "lmgt3", gameId: "lmu", name: "LMGT3" },
+  { id: "hypercar", gameId: "lmu", name: "Hypercar", extraParams: [lmuTcPowerCut] },
+  { id: "lmgt3", gameId: "lmu", name: "LMGT3", extraParams: [lmuTcPowerCut] },
   { id: "lmp2", gameId: "lmu", name: "LMP2" },
   { id: "lmp3", gameId: "lmu", name: "LMP3" },
-  { id: "gte", gameId: "lmu", name: "GTE" },
+  { id: "gte", gameId: "lmu", name: "GTE", extraParams: [lmuTcPowerCut] },
 ];
 
 // Autos de la investigación (exampleCars de cada clase). La lista es PARCIAL:

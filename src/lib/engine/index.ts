@@ -40,17 +40,21 @@ function mergeParam(
 // según el coche o la clase.
 export function effectiveParams(game: GameData, carId: string): ParameterDef[] {
   const car = game.cars.find((c) => c.id === carId);
-  const catOv = car
-    ? game.categories.find((c) => c.id === car.categoryId)?.paramOverrides
+  const cat = car
+    ? game.categories.find((c) => c.id === car.categoryId)
     : undefined;
+  const catOv = cat?.paramOverrides;
   const carOv = car?.paramOverrides;
-  const extra = car?.extraParams;
-  if (!catOv && !carOv && !(extra && extra.length)) return game.parameters;
+  const catExtra = cat?.extraParams;
+  const carExtra = car?.extraParams;
+  const hasExtra = !!(catExtra?.length || carExtra?.length);
+  if (!catOv && !carOv && !hasExtra) return game.parameters;
   const base =
     catOv || carOv
       ? game.parameters.map((p) => mergeParam(p, catOv?.[p.id], carOv?.[p.id]))
       : game.parameters;
-  return extra && extra.length ? [...base, ...extra] : base;
+  if (!hasExtra) return base;
+  return [...base, ...(catExtra ?? []), ...(carExtra ?? [])];
 }
 
 // Parámetro efectivo único para un auto (conveniencia para validación/UI).

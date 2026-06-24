@@ -619,8 +619,8 @@ export const lmuParameters: ParameterDef[] = [
     step: 1,
     default: 4,
     whatItDoes: {
-      es: "Segundo canal del control de tracción de LMU (escala 1-11 en autos equipados): fija cuánto patinaje se permite antes de que el TC intervenga. Más bajo = interviene antes (más conservador). En prototipos sin TC (LMP2/LMP3) se deja en 0. (LMU tiene además un tercer canal, Power Cut, que esta app todavía no modela por separado.)",
-      en: "LMU's second traction-control channel (1-11 on equipped cars): sets how much wheelspin is allowed before TC intervenes. Lower = intervenes sooner (more conservative). On prototypes without TC (LMP2/LMP3) it stays at 0. (LMU also has a third channel, Power Cut, not yet modelled separately here.)",
+      es: "Segundo canal del control de tracción de LMU (escala 1-11 en autos equipados): fija cuánto patinaje se permite antes de que el TC intervenga. Más bajo = interviene antes (más conservador). En prototipos sin TC (LMP2/LMP3) se deja en 0. El tercer canal, Power Cut, aparece aparte en los autos con TC.",
+      en: "LMU's second traction-control channel (1-11 on equipped cars): sets how much wheelspin is allowed before TC intervenes. Lower = intervenes sooner (more conservative). On prototypes without TC (LMP2/LMP3) it stays at 0. The third channel, Power Cut, is shown separately on TC-equipped cars.",
     },
     increaseEffect: {
       es: "Más slip permitido = el TC deja patinar más antes de actuar: más potencia disponible pero menos red de seguridad.",

@@ -100,19 +100,20 @@ for (const game of implementedGames) {
   for (const cat of game.categories) checkOverrides(`clase "${cat.id}"`, cat.paramOverrides);
   for (const car of game.cars) checkOverrides(`auto "${car.id}"`, car.paramOverrides);
 
-  // extraParams por auto: su id NO debe chocar con un parámetro global del juego
-  // (sería ambiguo cuál gana) ni repetirse dentro del mismo auto.
-  for (const car of game.cars) {
-    if (!car.extraParams) continue;
+  // extraParams (por clase y por auto): su id NO debe chocar con un parámetro
+  // global del juego (sería ambiguo cuál gana) ni repetirse en el mismo contexto.
+  const checkExtra = (ctx: string, extra: { id: string }[] | undefined) => {
+    if (!extra) return;
     const seen = new Set<string>();
-    for (const ep of car.extraParams) {
+    for (const ep of extra) {
       if (paramIds.has(ep.id))
-        log(`[${id}] auto "${car.id}" extraParam "${ep.id}" choca con un parámetro global`);
-      if (seen.has(ep.id))
-        log(`[${id}] auto "${car.id}" extraParam "${ep.id}" duplicado`);
+        log(`[${id}] ${ctx} extraParam "${ep.id}" choca con un parámetro global`);
+      if (seen.has(ep.id)) log(`[${id}] ${ctx} extraParam "${ep.id}" duplicado`);
       seen.add(ep.id);
     }
-  }
+  };
+  for (const cat of game.categories) checkExtra(`clase "${cat.id}"`, cat.extraParams);
+  for (const car of game.cars) checkExtra(`auto "${car.id}"`, car.extraParams);
 
   // Rango efectivo por auto: coherente y con el valor base dentro del slider real
   // del auto (validamos el valor CRUDO de baseSetups, antes del clamp del motor).

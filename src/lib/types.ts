@@ -49,6 +49,11 @@ export interface Category {
   // Overrides de rango/valor que aplican a TODOS los autos de la clase. Se usan
   // cuando un parámetro tiene rangos distintos por clase (ej. muelles en EA WRC).
   paramOverrides?: Record<string, ParamRangeOverride>; // paramId -> override
+  // Parámetros que SOLO tienen los autos de esta clase, además de los del juego.
+  // Para ajustes presentes en una clase y no en otra (ej. el 3.er canal de TC
+  // "Power Cut" de LMU existe en Hypercar/LMGT3/GTE pero no en los prototipos
+  // LMP2/LMP3). Se muestran y explican; las reglas del juego no los tocan.
+  extraParams?: ParameterDef[];
 }
 
 export interface Car {
