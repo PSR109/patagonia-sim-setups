@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-import { verifyPassword } from "@/lib/auth/password";
+import { DUMMY_PASSWORD_HASH, verifyPassword } from "@/lib/auth/password";
 import {
   SESSION_COOKIE,
   isRequestSecure,
@@ -24,7 +24,14 @@ export async function POST(request: Request) {
   const email = parsed.data.email.toLowerCase();
 
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user || !(await verifyPassword(parsed.data.password, user.passwordHash))) {
+  // Siempre se corre la comparación bcrypt (contra un hash dummy si el email no
+  // existe) para que el tiempo de respuesta sea constante y no se pueda enumerar
+  // qué emails tienen cuenta midiendo la latencia.
+  const passwordOk = await verifyPassword(
+    parsed.data.password,
+    user?.passwordHash ?? DUMMY_PASSWORD_HASH,
+  );
+  if (!user || !passwordOk) {
     return NextResponse.json({ error: "invalid_credentials" }, { status: 401 });
   }
 

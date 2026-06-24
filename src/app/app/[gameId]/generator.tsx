@@ -296,6 +296,8 @@ export function Generator({ gameId }: { gameId: string }) {
             {availableSymptoms.map((s) => (
               <button
                 key={s}
+                type="button"
+                aria-pressed={symptoms.has(s)}
                 onClick={() => toggleSymptom(s)}
                 className={cn(
                   "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
@@ -533,6 +535,8 @@ function ResultPanel({
             {(["beginner", "advanced"] as const).map((v) => (
               <button
                 key={v}
+                type="button"
+                aria-pressed={view === v}
                 onClick={() => setView(v)}
                 className={cn(
                   "rounded px-2 py-1 transition-colors",
@@ -706,6 +710,7 @@ function SaveBar({
             value={noteBody}
             onChange={(e) => setNoteBody(e.target.value)}
             placeholder={t("garage.noteBody")}
+            aria-label={t("garage.noteBody")}
             rows={3}
             className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
           />
