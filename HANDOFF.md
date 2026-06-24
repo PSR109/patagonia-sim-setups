@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 4: branding oficial + roster ACC — ver §3e; iteración 3 deltas en §3d).
+> Última actualización: 2026-06-24 (iteración 5: loop "5 pendientes" — McLaren TC2, LMU/marchas, estado #3 — ver §3f; iteración 4 branding+ACC en §3e).
 
 ---
 
@@ -163,6 +163,23 @@ Se atacó el **pendiente #2/(c)**: tras los reescalados del 2026-06-23, las magn
 - **Cosmético FWD (#4b) — HECHO.** La nota FWD del motor ahora aclara que si una explicación menciona el diferencial, ese ajuste no se aplicó (fix en un solo lugar, sin reescribir 22 reasons).
 - **Commits:** `9893b29` (ACC roster), `a364602` (branding + FWD), pusheados a `main`.
 - **Sobre #1 (resto):** ACC era EL gran hueco (estaba ~22%). Los demás juegos están en cobertura razonable o son scope intencional: iRacing 46 (subset curado de road racing — el juego tiene cientos), LMU 33, F1 25 23, EA WRC 57 (roster completo). AC EVO 37 y AC Rally 12 son **early access** (blanco móvil, best-effort). O sea #1 queda sustancialmente cubierto; el resto es afinado incremental.
+
+## 3f. COMPLETADA (iteración 5) — Loop "termina las 5 pendientes" (2026-06-24)
+
+Patricio pidió por `/loop` terminar las 5 pendientes. Estado final:
+1. **Listas autos/pistas — HECHO (ACC).** Ver §3e. El resto es scope intencional o early-access.
+2. **TC doble McLaren 720S Evo — HECHO.** Commit `c221b40`. Nuevo mecanismo `Car.extraParams` (params que solo tiene un auto, además de los del juego; `effectiveParams` los agrega, las reglas no los tocan). El McLaren expone `tc2` (TC1 = el slider TC global que ajustan las reglas; TC2 = capa extra educativa). Reutilizable para futuros casos.
+3. **Rangos por-auto/clase — PARCIAL (arquitectura + alta confianza HECHO; resto necesita el juego).** La arquitectura (`paramOverrides`) existe desde iteración 2 y los valores confirmables ya se aplicaron (ACC BMW M4 ala 0-8, Merc GT4 0-7, GT4 barras 0-2; EA WRC muelles por clase). El `review` del `wsmr38qmm` dejó el resto marcado como **no confirmable desde fuentes públicas** (los verificadores se contradecían o dependían de setups de usuarios). Como Patricio TIENE los juegos, lo correcto es que lea los topes reales del garaje y los pase (ver lista abajo), en vez de inventarlos.
+4. **Branding — HECHO.** Ver §3e.
+5. **LMU TC + marchas — HECHO (hasta donde permiten las fuentes).** Commit `cfc96b3`. LMU `tc_slip`→rótulo real "TC Slip Angle" (NO "Power Cut": habría invertido la física de la regla grip_green); F1 25 confirmado sin marchas ajustables; EA WRC texto de marchas aclarado. Quedan dos datos que necesitan el juego: el 3er canal de TC de LMU (Power Cut) y el rango real del final drive de EA WRC.
+
+### ⏳ Datos para que Patricio capture EN EL JUEGO (y los aplico)
+Esto desbloquea #3 y los flecos de #5 sin inventar nada:
+- **ACC** (garaje de cada auto): tope real del **ala trasera** (clicks), rango de **camber** del/tras, rango de **altura** del/tras — por coche o por familia. Hoy usamos un rango global representativo salvo los pocos verificados.
+- **ACC McLaren 720S Evo**: rango real de **TC2** (hoy 0-11 asumido).
+- **LMU**: ¿el garaje muestra un tercer canal **TC Power Cut** además de TC y Slip Angle? Rango. Y confirmar si power/coast del diferencial van en **% o en grados de rampa**.
+- **EA WRC**: rango/unidad real del **final drive** (hoy `0-20` representativo, marcado PENDIENTE en el código) y si conviene exponer las marchas individuales.
+- **AC EVO / AC Rally** (early access): cuando estabilicen, confirmar listas de autos/pistas y topes de sliders.
 
 ---
 
