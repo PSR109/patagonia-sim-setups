@@ -1,7 +1,7 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 9: afinar + ampliar FFB vía auditoría adversarial, ver §3i; iteración 7 en §3h). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
+> Última actualización: 2026-06-24 (iteración 10: auditoría adversarial de código/seguridad/UX-a11y/i18n/Next16 — 5 bugs reales corregidos, ver §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
 
 ---
 
@@ -236,6 +236,25 @@ Patricio eligió "afinar y ampliar FFB" (el diferenciador de mercado central). W
 5. **iRacing:** `Intensity` (slider del Auto, 2023) — existencia no confirmada con certeza; sin aplicar.
 
 **Re-iterar FFB:** `Workflow({ scriptPath: "<script de wf_da4ad691-680>", resumeFromRunId: "wf_da4ad691-680" })` para cachear lo ya corrido. Lo que falta son sobre todo confirmaciones in-game (igual que los rangos de sliders del §3h).
+
+## 3j. COMPLETADA (iteración 10) — Auditoría adversarial de código/seguridad/UX (2026-06-24)
+
+Las 9 iteraciones previas fueron casi todas exactitud-de-datos + FFB. Esta apuntó a las dimensiones **poco exprimidas y que NO dependen de datos in-game**: código, seguridad, API, i18n, UX/a11y, Next 16. Workflow `wf_f82bff3a-4ae` (Task `wpc7empho`, 68 agentes): 6 auditores (1 por dimensión) → 2 verificadores escépticos refutadores por hallazgo (≥2 votos reales para confirmar). **31 hallazgos, 5 confirmados** (resto refutado/preferencia/out-of-scope-data). Commit `7504103`, pusheado. *(Nota: varios verificadores de `ux`/`i18n` cayeron por rate-limit del servidor; la dimensión i18n se reauditó a mano.)*
+
+**APLICADO (5 bugs reales):**
+- **🔴 CRÍTICO — `lib/auth/session.ts`: fallback hardcodeado de `AUTH_SECRET` eliminado.** El secreto HMAC caía a `"dev-insecure-secret-change-me"` si faltaba el env → un atacante podía forjar un JWT HS256 con cualquier `sub`/`role` (incluido admin) y tomar cualquier cuenta. Ahora `getSessionSecret()` resuelve perezoso y **lanza** si el secreto falta, es `<32` chars o es un placeholder inseguro conocido (incluye el del `.env.example`). Verificado: login correcto sigue 200 (el `AUTH_SECRET` local real es de 64 chars).
+- **🟡 MEDIO — `api/auth/login/route.ts`: side-channel de timing → enumeración de emails.** El `||` cortocircuitaba el `bcrypt.compare` cuando el email no existía (respuesta casi instantánea) vs ~65ms si existía. Ahora **siempre** se compara contra `DUMMY_PASSWORD_HASH` (const nueva en `password.ts`). Verificado en vivo: 401 email-inexistente 64ms ≈ 401 pass-mala 67ms.
+- **🟠 ALTO — `generator.tsx` chips de síntoma:** estado seleccionado era **solo color** (sin `aria-pressed`/role) → invisible a lectores de pantalla (WCAG 1.4.1 + 4.1.2). Agregado `aria-pressed`.
+- **🟡 MEDIO — `generator.tsx` toggle principiante/avanzado:** mismo defecto, agregado `aria-pressed`.
+- **🟡 MEDIO — `generator.tsx` textarea de nota:** sin nombre accesible (solo `placeholder`, que desaparece al enfocar; WCAG 3.3.2). Agregado `aria-label`.
+
+**Auditado y LIMPIO (no se tocó):**
+- **i18n:** paridad ES/EN perfecta (**154 = 154** claves), 0 claves usadas-pero-faltantes, 0 voseo/usted. Confirmado con script determinístico (flatten dicts + grep de `t("…")`).
+- **Motor, API, Next 16:** los hallazgos de esas dimensiones fueron refutados por los escépticos (falsos positivos o preferencias). El motor/API/auth-restante quedaron sólidos.
+
+**Verificado:** `tsc` 0 · `validate-engine` 0 · `npm run build` verde · login en vivo (200/401/401 con timing igualado) · preview sin errores de consola.
+
+**Re-iterar esta dimensión:** `Workflow({ scriptPath: "<script de wf_f82bff3a-4ae>", resumeFromRunId: "wf_f82bff3a-4ae" })`. Sigue siendo terreno fértil sin tocar datos: un pase futuro podría cubrir performance, manejo de errores en el cliente, y los hallazgos `ux` que el rate-limit dejó sin verificar.
 
 ---
 
