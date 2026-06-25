@@ -70,7 +70,7 @@ export function Generator({ gameId }: { gameId: string }) {
   const { t } = useT();
 
   // Carga perezosa del juego: solo bajamos los datos del sim pedido (no el
-  // catálogo de los 7), así que game arranca undefined hasta que resuelve.
+  // catálogo de los 5), así que game arranca undefined hasta que resuelve.
   const [game, setGame] = useState<GameData | undefined>(undefined);
   const [loadingGame, setLoadingGame] = useState(true);
 

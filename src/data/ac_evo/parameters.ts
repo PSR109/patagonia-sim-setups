@@ -1,10 +1,18 @@
 import type { ParameterDef } from "@/lib/types";
 
-// Parámetros de setup de Assetto Corsa EVO con su capa educativa. Cada parámetro
-// explica qué hace y qué pasa al subir/bajar el valor. AC EVO está en Early Access
-// y los rangos exactos varían fuertemente por auto (un hot hatch de calle tiene
-// muchas menos opciones que un GT3); los min/max/step de abajo son rangos típicos
-// representativos del editor del juego, ajustables/expandibles sin tocar el motor.
+// Parámetros de setup de Assetto Corsa EVO (Early Access v0.7.1) con su capa
+// educativa. RECONSTRUIDO 1:1 contra una captura in-game del editor real (modo
+// Carrera, Porsche 992 GT3 R, preset de fábrica). El editor de AC EVO tiene SOLO
+// 6 pestañas: Neumáticos, Electrónica, Combustible y Estrategia, Suspensión,
+// Amortiguadores y Aero. NO hay pestaña de caja de cambios ni de frenos aparte
+// (la frenada vive en Suspensión como "Distribución de Frenada"). Por eso este
+// set NO incluye final drive, diff power/coast, presión/ductos de freno ni
+// splitter delantero: ese coche/juego no los expone. Los amortiguadores son SOLO
+// lentos (compresión/extensión), sin canales rápidos. Defaults = valores exactos
+// de la captura. Los min/max son ESTIMADOS (el editor no muestra los topes en
+// pantalla), elegidos para dejar el default holgado, ser plausibles para la clase
+// y no recortar los deltas de las reglas. Unidades exactas del juego: muelle en
+// N/m, índice de tope en N, amplitud de tope en mm, presión en psi, ángulos en °.
 export const ac_evoParameters: ParameterDef[] = [
   {
     id: "tyre_pressure_front",
@@ -36,7 +44,7 @@ export const ac_evoParameters: ParameterDef[] = [
     min: 18.0,
     max: 35.0,
     step: 0.1,
-    default: 26.0,
+    default: 25.5,
     whatItDoes: {
       es: "Igual que adelante pero en el tren trasero: afecta tracción y estabilidad de la cola. Usa la guía de color del HUD para llegar al objetivo en caliente.",
       en: "Same as front but on the rear axle: affects traction and rear stability. Use the HUD colour guide to hit the hot target.",
@@ -55,10 +63,10 @@ export const ac_evoParameters: ParameterDef[] = [
     group: "alignment",
     name: { es: "Caída (camber) delantera", en: "Front camber" },
     unit: "°",
-    min: -4.0,
+    min: -5.0,
     max: -1.0,
     step: 0.1,
-    default: -3.0,
+    default: -4.0,
     whatItDoes: {
       es: "Inclinación de la rueda vista de frente. Más negativo apoya mejor el neumático cuando el auto rola en curva, dando más agarre lateral.",
       en: "Wheel lean seen from the front. More negative loads the tyre better as the car rolls in a corner, giving more lateral grip.",
@@ -77,10 +85,10 @@ export const ac_evoParameters: ParameterDef[] = [
     group: "alignment",
     name: { es: "Caída (camber) trasera", en: "Rear camber" },
     unit: "°",
-    min: -3.5,
+    min: -4.5,
     max: -1.0,
     step: 0.1,
-    default: -2.5,
+    default: -3.5,
     whatItDoes: {
       es: "Caída del tren trasero: controla cuánto agarre lateral tiene la cola en curva. El balance entre caída delantera y trasera afecta el sub/sobreviraje.",
       en: "Rear axle camber: controls how much lateral grip the rear has in corners. The front/rear camber balance affects under/oversteer.",
@@ -99,13 +107,13 @@ export const ac_evoParameters: ParameterDef[] = [
     group: "alignment",
     name: { es: "Avance (caster)", en: "Caster" },
     unit: "°",
-    min: 3.0,
-    max: 12.0,
-    step: 0.1,
-    default: 7.0,
+    min: 1.0,
+    max: 9.0,
+    step: 0.5,
+    default: 3.0,
     whatItDoes: {
-      es: "Inclinación del eje de dirección. Más caster genera más caída dinámica al girar (más agarre en curva) y mejora el autocentrado y el feedback del volante.",
-      en: "Steering-axis tilt. More caster generates more dynamic camber when turning (more cornering grip) and improves self-centering and wheel feedback.",
+      es: "Inclinación del eje de dirección (en el editor: 'Ángulo de avance'). Más caster genera más caída dinámica al girar (más agarre en curva) y mejora el autocentrado y el feedback del volante.",
+      en: "Steering-axis tilt (in the editor: 'caster angle'). More caster generates more dynamic camber when turning (more cornering grip) and improves self-centering and wheel feedback.",
     },
     increaseEffect: {
       es: "Más agarre en apoyo y dirección más estable con mejor feedback, a costa de un volante más pesado.",
@@ -121,13 +129,13 @@ export const ac_evoParameters: ParameterDef[] = [
     group: "alignment",
     name: { es: "Convergencia (toe) delantera", en: "Front toe" },
     unit: "°",
-    min: -0.3,
-    max: 0.3,
-    step: 0.01,
-    default: -0.05,
+    min: -0.5,
+    max: 0.5,
+    step: 0.05,
+    default: -0.10,
     whatItDoes: {
-      es: "Hacia dónde apuntan las ruedas vistas desde arriba. Negativo (toe-out) = más reactivo al doblar; positivo (toe-in) = más estable.",
-      en: "Where the wheels point seen from above. Negative (toe-out) = sharper turn-in; positive (toe-in) = more stable.",
+      es: "Hacia dónde apuntan las ruedas vistas desde arriba (en el editor: 'Alineación'). Negativo (toe-out) = más reactivo al doblar; positivo (toe-in) = más estable.",
+      en: "Where the wheels point seen from above (in the editor: 'alignment'). Negative (toe-out) = sharper turn-in; positive (toe-in) = more stable.",
     },
     increaseEffect: {
       es: "Hacia toe-in (positivo) da más estabilidad en recta pero entra más perezoso a la curva.",
@@ -143,10 +151,10 @@ export const ac_evoParameters: ParameterDef[] = [
     group: "alignment",
     name: { es: "Convergencia (toe) trasera", en: "Rear toe" },
     unit: "°",
-    min: 0.0,
+    min: -0.3,
     max: 0.5,
-    step: 0.01,
-    default: 0.15,
+    step: 0.05,
+    default: 0.10,
     whatItDoes: {
       es: "Convergencia del tren trasero. Más toe-in da mucha estabilidad y tracción en salida; toe-out trasero vuelve el auto muy nervioso.",
       en: "Rear axle toe. More toe-in gives strong stability and exit traction; rear toe-out makes the car very twitchy.",
@@ -161,56 +169,12 @@ export const ac_evoParameters: ParameterDef[] = [
     },
   },
   {
-    id: "spring_rate_front",
-    group: "suspension",
-    name: { es: "Dureza de muelle delantero", en: "Front spring rate" },
-    unit: "N/mm",
-    min: 40,
-    max: 250,
-    step: 1,
-    default: 120,
-    whatItDoes: {
-      es: "Rigidez del resorte delantero. Muelles más duros dan menos balanceo y respuesta más directa, pero menos agarre mecánico sobre baches y pianos.",
-      en: "Front spring stiffness. Stiffer springs give less roll and a more direct response, but less mechanical grip over bumps and kerbs.",
-    },
-    increaseEffect: {
-      es: "Más duro adelante = plataforma más firme y respuesta más rápida, pero tiende a subviraje y copia peor el piso.",
-      en: "Stiffer front = firmer platform and quicker response, but tends to understeer and follows the road worse.",
-    },
-    decreaseEffect: {
-      es: "Más blando adelante = más agarre mecánico y rotación en el frente, con más balanceo y hundimiento en frenada.",
-      en: "Softer front = more mechanical grip and front rotation, with more roll and dive under braking.",
-    },
-  },
-  {
-    id: "spring_rate_rear",
-    group: "suspension",
-    name: { es: "Dureza de muelle trasero", en: "Rear spring rate" },
-    unit: "N/mm",
-    min: 40,
-    max: 250,
-    step: 1,
-    default: 130,
-    whatItDoes: {
-      es: "Rigidez del resorte trasero. Define cuánto trabaja el tren trasero y cómo se reparte el peso en transiciones.",
-      en: "Rear spring stiffness. Sets how much the rear axle works and how weight transfers in transitions.",
-    },
-    increaseEffect: {
-      es: "Más duro atrás = más rotación/sobreviraje y mejor respuesta, pero menos tracción sobre superficies irregulares.",
-      en: "Stiffer rear = more rotation/oversteer and sharper response, but less traction over uneven surfaces.",
-    },
-    decreaseEffect: {
-      es: "Más blando atrás = más agarre y tracción de la cola, con más balanceo y cuclillas en aceleración.",
-      en: "Softer rear = more rear grip and traction, with more roll and squat on acceleration.",
-    },
-  },
-  {
     id: "arb_front",
     group: "suspension",
     name: { es: "Barra estabilizadora delantera", en: "Front anti-roll bar" },
     unit: "",
     min: 0,
-    max: 10,
+    max: 15,
     step: 1,
     default: 4,
     whatItDoes: {
@@ -232,9 +196,9 @@ export const ac_evoParameters: ParameterDef[] = [
     name: { es: "Barra estabilizadora trasera", en: "Rear anti-roll bar" },
     unit: "",
     min: 0,
-    max: 10,
+    max: 15,
     step: 1,
-    default: 3,
+    default: 5,
     whatItDoes: {
       es: "Resistencia al balanceo del eje trasero. Se usa junto con la delantera para ajustar el balance lateral del auto.",
       en: "Rear axle roll resistance. Used together with the front to tune the car's lateral balance.",
@@ -249,17 +213,61 @@ export const ac_evoParameters: ParameterDef[] = [
     },
   },
   {
-    id: "bumpstop_rate",
+    id: "spring_rate_front",
     group: "suspension",
-    name: { es: "Dureza del tope (bumpstop rate)", en: "Bumpstop rate" },
-    unit: "",
-    min: 0,
-    max: 10,
-    step: 1,
-    default: 3,
+    name: { es: "Dureza de muelle delantero", en: "Front spring rate" },
+    unit: "N/m",
+    min: 120000,
+    max: 420000,
+    step: 1000,
+    default: 340000,
     whatItDoes: {
-      es: "Rigidez al final del recorrido de la suspensión. Controla qué tan brusca es la transición cuando la suspensión toca el tope; clave para autos con efecto suelo.",
-      en: "Stiffness at the end of suspension travel. Controls how abrupt the transition is when the suspension hits the stop; key for ground-effect cars.",
+      es: "Rigidez del resorte delantero (en el editor: 'Tasa de suspensión'). Muelles más duros dan menos balanceo y respuesta más directa, pero menos agarre mecánico sobre baches y pianos.",
+      en: "Front spring stiffness (in the editor: 'suspension rate'). Stiffer springs give less roll and a more direct response, but less mechanical grip over bumps and kerbs.",
+    },
+    increaseEffect: {
+      es: "Más duro adelante = plataforma más firme y respuesta más rápida, pero tiende a subviraje y copia peor el piso.",
+      en: "Stiffer front = firmer platform and quicker response, but tends to understeer and follows the road worse.",
+    },
+    decreaseEffect: {
+      es: "Más blando adelante = más agarre mecánico y rotación en el frente, con más balanceo y hundimiento en frenada.",
+      en: "Softer front = more mechanical grip and front rotation, with more roll and dive under braking.",
+    },
+  },
+  {
+    id: "spring_rate_rear",
+    group: "suspension",
+    name: { es: "Dureza de muelle trasero", en: "Rear spring rate" },
+    unit: "N/m",
+    min: 120000,
+    max: 420000,
+    step: 1000,
+    default: 360000,
+    whatItDoes: {
+      es: "Rigidez del resorte trasero. Define cuánto trabaja el tren trasero y cómo se reparte el peso en transiciones.",
+      en: "Rear spring stiffness. Sets how much the rear axle works and how weight transfers in transitions.",
+    },
+    increaseEffect: {
+      es: "Más duro atrás = más rotación/sobreviraje y mejor respuesta, pero menos tracción sobre superficies irregulares.",
+      en: "Stiffer rear = more rotation/oversteer and sharper response, but less traction over uneven surfaces.",
+    },
+    decreaseEffect: {
+      es: "Más blando atrás = más agarre y tracción de la cola, con más balanceo y cuclillas en aceleración.",
+      en: "Softer rear = more rear grip and traction, with more roll and squat on acceleration.",
+    },
+  },
+  {
+    id: "bumpstop_rate_front",
+    group: "suspension",
+    name: { es: "Dureza del tope delantero", en: "Front bumpstop rate" },
+    unit: "N",
+    min: 0,
+    max: 8000,
+    step: 100,
+    default: 4000,
+    whatItDoes: {
+      es: "Rigidez al final del recorrido de la suspensión delantera (en el editor: 'Índice del tope'). Controla qué tan brusca es la transición cuando la suspensión toca el tope; clave para autos con efecto suelo.",
+      en: "Front suspension end-of-travel stiffness (in the editor: 'bumpstop index'). Controls how abrupt the transition is when the suspension hits the stop; key for ground-effect cars.",
     },
     increaseEffect: {
       es: "Tope más duro = plataforma más firme cerca del tope, pero golpe más brusco que puede desestabilizar.",
@@ -271,135 +279,69 @@ export const ac_evoParameters: ParameterDef[] = [
     },
   },
   {
-    id: "bumpstop_range",
+    id: "bumpstop_rate_rear",
     group: "suspension",
-    name: { es: "Recorrido hasta el tope (bumpstop range)", en: "Bumpstop range" },
+    name: { es: "Dureza del tope trasero", en: "Rear bumpstop rate" },
+    unit: "N",
+    min: 0,
+    max: 8000,
+    step: 100,
+    default: 4000,
+    whatItDoes: {
+      es: "Igual que el tope delantero pero en el tren trasero: rigidez al final del recorrido de la suspensión trasera.",
+      en: "Same as the front bumpstop but on the rear axle: end-of-travel stiffness of the rear suspension.",
+    },
+    increaseEffect: {
+      es: "Tope más duro = plataforma trasera más firme cerca del tope, con golpe más brusco.",
+      en: "Stiffer stop = firmer rear platform near the limit, with a harsher hit.",
+    },
+    decreaseEffect: {
+      es: "Tope más blando = transición trasera más suave al final del recorrido, con menos control de plataforma.",
+      en: "Softer stop = smoother rear transition at the end of travel, with less platform control.",
+    },
+  },
+  {
+    id: "bumpstop_range_front",
+    group: "suspension",
+    name: { es: "Recorrido hasta el tope delantero", en: "Front bumpstop range" },
     unit: "mm",
     min: 0,
-    max: 60,
+    max: 50,
     step: 1,
-    default: 30,
+    default: 15,
     whatItDoes: {
-      es: "Cuánto comprime la suspensión antes de tocar el tope. Menos rango = el auto 'aterriza' antes sobre el tope (plataforma más firme); más rango = más viaje libre.",
-      en: "How far the suspension compresses before hitting the stop. Less range = the car 'lands' on the stop sooner (firmer platform); more range = more free travel.",
+      es: "Cuánto comprime la suspensión delantera antes de tocar el tope (en el editor: 'Amplitud del tope'). Menos rango = el auto 'aterriza' antes sobre el tope (plataforma más firme); más rango = más viaje libre.",
+      en: "How far the front suspension compresses before hitting the stop (in the editor: 'bumpstop range'). Less range = the car 'lands' on the stop sooner (firmer platform); more range = more free travel.",
     },
     increaseEffect: {
       es: "Más rango = más recorrido libre y suspensión que trabaja más antes del tope; mejor sobre baches.",
       en: "More range = more free travel and suspension working longer before the stop; better over bumps.",
     },
     decreaseEffect: {
-      es: "Menos rango = el auto se apoya antes en el tope, dando plataforma firme para cargar aero, con riesgo de brusquedad.",
-      en: "Less range = the car rests on the stop sooner, giving a firm platform to load aero, with a risk of harshness.",
+      es: "Menos rango = el frente se apoya antes en el tope, dando plataforma firme para cargar aero, con riesgo de brusquedad.",
+      en: "Less range = the front rests on the stop sooner, giving a firm platform to load aero, with a risk of harshness.",
     },
   },
   {
-    id: "steering_ratio",
+    id: "bumpstop_range_rear",
     group: "suspension",
-    name: { es: "Relación de dirección (steering ratio)", en: "Steering ratio" },
-    unit: "",
-    min: 8,
-    max: 20,
-    step: 1,
-    default: 13,
-    whatItDoes: {
-      es: "Relación entre el giro del volante y el giro de las ruedas. Ratio más bajo = dirección más rápida y directa; más alto = más lenta y suave.",
-      en: "Ratio between wheel rotation and the wheels turning. A lower ratio = quicker, more direct steering; higher = slower and smoother.",
-    },
-    increaseEffect: {
-      es: "Ratio más alto = dirección más lenta; útil con poco ángulo de giro en el volante físico.",
-      en: "Higher ratio = slower steering; useful with limited physical wheel rotation.",
-    },
-    decreaseEffect: {
-      es: "Ratio más bajo = dirección más rápida y nerviosa; cuidado con sobrecorregir.",
-      en: "Lower ratio = quicker, twitchier steering; watch out for over-correcting.",
-    },
-  },
-  {
-    id: "damper_slow_bump",
-    group: "dampers",
-    name: { es: "Compresión lenta (slow bump)", en: "Slow bump" },
-    unit: "",
+    name: { es: "Recorrido hasta el tope trasero", en: "Rear bumpstop range" },
+    unit: "mm",
     min: 0,
-    max: 30,
+    max: 50,
     step: 1,
-    default: 10,
+    default: 5,
     whatItDoes: {
-      es: "Velocidad de compresión del amortiguador en movimientos lentos: transferencia de peso en frenada, aceleración y giro.",
-      en: "Damper compression speed in slow movements: weight transfer under braking, acceleration and cornering.",
+      es: "Cuánto comprime la suspensión trasera antes de tocar el tope. Menos rango fija antes la plataforma trasera; más rango da más viaje libre atrás.",
+      en: "How far the rear suspension compresses before hitting the stop. Less range fixes the rear platform sooner; more range gives more free rear travel.",
     },
     increaseEffect: {
-      es: "Más firme = respuesta más inmediata en transiciones, pero menos agarre y plataforma más nerviosa.",
-      en: "Stiffer = more immediate response in transitions, but less grip and a twitchier platform.",
+      es: "Más rango = más recorrido libre atrás; mejor sobre baches y pianos.",
+      en: "More range = more free rear travel; better over bumps and kerbs.",
     },
     decreaseEffect: {
-      es: "Más blando = transferencia de peso más progresiva y más agarre, pero el auto se siente más perezoso.",
-      en: "Softer = smoother weight transfer and more grip, but the car feels lazier.",
-    },
-  },
-  {
-    id: "damper_slow_rebound",
-    group: "dampers",
-    name: { es: "Extensión lenta (slow rebound)", en: "Slow rebound" },
-    unit: "",
-    min: 0,
-    max: 30,
-    step: 1,
-    default: 12,
-    whatItDoes: {
-      es: "Velocidad de extensión del amortiguador tras comprimir. Controla cómo el auto recupera la plataforma al soltar carga.",
-      en: "Damper extension speed after compressing. Controls how the car recovers its platform when load is released.",
-    },
-    increaseEffect: {
-      es: "Más firme retiene la transferencia de peso más tiempo: más estable pero puede dar nerviosismo si te pasás.",
-      en: "Stiffer holds the weight transfer longer: more stable but can get nervous if overdone.",
-    },
-    decreaseEffect: {
-      es: "Más blando deja que el auto recupere rápido; puede 'flotar' y perder control de la plataforma.",
-      en: "Softer lets the car recover quickly; it can 'float' and lose platform control.",
-    },
-  },
-  {
-    id: "damper_fast_bump",
-    group: "dampers",
-    name: { es: "Compresión rápida (fast bump)", en: "Fast bump" },
-    unit: "",
-    min: 0,
-    max: 30,
-    step: 1,
-    default: 8,
-    whatItDoes: {
-      es: "Actúa sobre impactos bruscos: pianos, baches y golpes fuertes. Determina cuánto absorbe la suspensión los impactos rápidos.",
-      en: "Acts on sharp impacts: kerbs, bumps and hard hits. Sets how much the suspension absorbs fast impacts.",
-    },
-    increaseEffect: {
-      es: "Más firme mantiene la plataforma pero salta sobre los pianos en vez de absorberlos.",
-      en: "Stiffer keeps the platform but skips over kerbs instead of absorbing them.",
-    },
-    decreaseEffect: {
-      es: "Más blando absorbe mejor pianos y baches, dando más agarre sobre superficies irregulares.",
-      en: "Softer absorbs kerbs and bumps better, giving more grip on uneven surfaces.",
-    },
-  },
-  {
-    id: "damper_fast_rebound",
-    group: "dampers",
-    name: { es: "Extensión rápida (fast rebound)", en: "Fast rebound" },
-    unit: "",
-    min: 0,
-    max: 30,
-    step: 1,
-    default: 8,
-    whatItDoes: {
-      es: "Velocidad de recuperación tras un golpe grande. Bien ajustado evita que el auto rebote o se descontrole tras pianos altos.",
-      en: "Recovery speed after a big hit. Well set, it stops the car from bouncing or losing control after high kerbs.",
-    },
-    increaseEffect: {
-      es: "Más firme controla mejor el rebote, pero un valor muy alto puede hacer saltar la rueda tras el golpe.",
-      en: "Stiffer controls rebound better, but too high can make the wheel hop after the hit.",
-    },
-    decreaseEffect: {
-      es: "Más blando deja que la rueda vuelva al piso suavemente, pero con menos control tras impactos fuertes.",
-      en: "Softer lets the wheel return to the road smoothly, but with less control after hard impacts.",
+      es: "Menos rango = la cola se apoya antes en el tope, dando plataforma firme para cargar aero, con riesgo de brusquedad.",
+      en: "Less range = the rear rests on the stop sooner, giving a firm platform to load aero, with a risk of harshness.",
     },
   },
   {
@@ -408,7 +350,7 @@ export const ac_evoParameters: ParameterDef[] = [
     name: { es: "Altura delantera", en: "Front ride height" },
     unit: "mm",
     min: 40,
-    max: 120,
+    max: 100,
     step: 1,
     default: 60,
     whatItDoes: {
@@ -430,7 +372,7 @@ export const ac_evoParameters: ParameterDef[] = [
     name: { es: "Altura trasera", en: "Rear ride height" },
     unit: "mm",
     min: 50,
-    max: 140,
+    max: 120,
     step: 1,
     default: 75,
     whatItDoes: {
@@ -447,25 +389,113 @@ export const ac_evoParameters: ParameterDef[] = [
     },
   },
   {
-    id: "front_wing",
-    group: "aero",
-    name: { es: "Ala delantera / splitter", en: "Front wing / splitter" },
+    id: "steering_ratio",
+    group: "suspension",
+    name: { es: "Relación de giro del volante", en: "Steering ratio" },
     unit: "",
-    min: 0,
-    max: 12,
+    min: 8,
+    max: 20,
     step: 1,
-    default: 4,
+    default: 15,
     whatItDoes: {
-      es: "Ángulo del ala/splitter delantero: genera carga aerodinámica adelante. Sólo en autos con aero ajustable (GT/carrera). Más ala = mejor giro, menos punta.",
-      en: "Front wing/splitter angle: makes downforce at the front. Only on cars with adjustable aero (GT/race). More wing = better turn-in, less top speed.",
+      es: "Relación entre el giro del volante y el giro de las ruedas. Ratio más bajo = dirección más rápida y directa; más alto = más lenta y suave.",
+      en: "Ratio between wheel rotation and the wheels turning. A lower ratio = quicker, more direct steering; higher = slower and smoother.",
     },
     increaseEffect: {
-      es: "Más ala delantera = más carga al frente = menos subviraje y mejor giro, a costa de resistencia (drag) y velocidad punta.",
-      en: "More front wing = more front load = less understeer and better turn-in, costing drag and top speed.",
+      es: "Ratio más alto = dirección más lenta; útil con poco ángulo de giro en el volante físico.",
+      en: "Higher ratio = slower steering; useful with limited physical wheel rotation.",
     },
     decreaseEffect: {
-      es: "Menos ala delantera = más velocidad punta y menos drag, pero el frente agarra menos en curva.",
-      en: "Less front wing = more top speed and less drag, but the front grips less in corners.",
+      es: "Ratio más bajo = dirección más rápida y nerviosa; cuidado con sobrecorregir.",
+      en: "Lower ratio = quicker, twitchier steering; watch out for over-correcting.",
+    },
+  },
+  {
+    id: "damper_slow_bump_front",
+    group: "dampers",
+    name: { es: "Compresión lenta delantera", en: "Front slow bump" },
+    unit: "",
+    min: 0,
+    max: 20,
+    step: 1,
+    default: 6,
+    whatItDoes: {
+      es: "Velocidad de compresión del amortiguador delantero en movimientos lentos: transferencia de peso en frenada, aceleración y giro. (AC EVO sólo expone amortiguación lenta.)",
+      en: "Front damper compression speed in slow movements: weight transfer under braking, acceleration and cornering. (AC EVO only exposes slow damping.)",
+    },
+    increaseEffect: {
+      es: "Más firme = respuesta más inmediata en transiciones, pero menos agarre y plataforma más nerviosa adelante.",
+      en: "Stiffer = more immediate response in transitions, but less front grip and a twitchier platform.",
+    },
+    decreaseEffect: {
+      es: "Más blando = transferencia de peso más progresiva y más agarre adelante, pero el auto se siente más perezoso.",
+      en: "Softer = smoother weight transfer and more front grip, but the car feels lazier.",
+    },
+  },
+  {
+    id: "damper_slow_bump_rear",
+    group: "dampers",
+    name: { es: "Compresión lenta trasera", en: "Rear slow bump" },
+    unit: "",
+    min: 0,
+    max: 20,
+    step: 1,
+    default: 7,
+    whatItDoes: {
+      es: "Velocidad de compresión del amortiguador trasero en movimientos lentos: gobierna la transferencia de peso a la cola y la tracción en salida.",
+      en: "Rear damper compression speed in slow movements: governs weight transfer onto the rear and exit traction.",
+    },
+    increaseEffect: {
+      es: "Más firme atrás = respuesta más inmediata, pero menos tracción y cola más nerviosa en transiciones.",
+      en: "Stiffer rear = more immediate response, but less traction and a twitchier rear in transitions.",
+    },
+    decreaseEffect: {
+      es: "Más blando atrás = más tracción y agarre de la cola, con respuesta más lenta.",
+      en: "Softer rear = more rear traction and grip, with a slower response.",
+    },
+  },
+  {
+    id: "damper_slow_rebound_front",
+    group: "dampers",
+    name: { es: "Extensión lenta delantera", en: "Front slow rebound" },
+    unit: "",
+    min: 0,
+    max: 20,
+    step: 1,
+    default: 7,
+    whatItDoes: {
+      es: "Velocidad de extensión del amortiguador delantero tras comprimir. Controla cómo el frente recupera la plataforma al soltar carga.",
+      en: "Front damper extension speed after compressing. Controls how the front recovers its platform when load is released.",
+    },
+    increaseEffect: {
+      es: "Más firme retiene la transferencia de peso más tiempo: frente más estable pero puede dar nerviosismo si te pasás.",
+      en: "Stiffer holds the weight transfer longer: more stable front but can get nervous if overdone.",
+    },
+    decreaseEffect: {
+      es: "Más blando deja que el frente recupere rápido; puede 'flotar' y perder control de la plataforma.",
+      en: "Softer lets the front recover quickly; it can 'float' and lose platform control.",
+    },
+  },
+  {
+    id: "damper_slow_rebound_rear",
+    group: "dampers",
+    name: { es: "Extensión lenta trasera", en: "Rear slow rebound" },
+    unit: "",
+    min: 0,
+    max: 20,
+    step: 1,
+    default: 8,
+    whatItDoes: {
+      es: "Velocidad de extensión del amortiguador trasero tras comprimir. Controla cómo la cola recupera la plataforma al soltar carga; clave para la tracción en salida.",
+      en: "Rear damper extension speed after compressing. Controls how the rear recovers its platform when load is released; key for exit traction.",
+    },
+    increaseEffect: {
+      es: "Más firme retiene la carga atrás más tiempo: cola más estable, con riesgo de nerviosismo si te pasás.",
+      en: "Stiffer holds rear load longer: more stable rear, with a risk of nervousness if overdone.",
+    },
+    decreaseEffect: {
+      es: "Más blando deja que la cola recupere rápido; puede 'flotar' y perder tracción tras baches.",
+      en: "Softer lets the rear recover quickly; it can 'float' and lose traction after bumps.",
     },
   },
   {
@@ -476,10 +506,10 @@ export const ac_evoParameters: ParameterDef[] = [
     min: 0,
     max: 14,
     step: 1,
-    default: 6,
+    default: 11,
     whatItDoes: {
-      es: "Ángulo del alerón trasero: genera carga aerodinámica atrás. Es la herramienta principal de balance aero contra el ala delantera. Más ala = más agarre, menos punta.",
-      en: "Rear wing angle: makes downforce at the rear. It's the main aero-balance tool against the front wing. More wing = more grip, less top speed.",
+      es: "Ángulo del alerón trasero (en el editor: 'Ángulo del alerón trasero'): genera carga aerodinámica atrás. Es la herramienta principal de balance aero. Más ala = más agarre, menos punta. En autos de calle sin alerón ajustable, ponelo en 0.",
+      en: "Rear wing angle (in the editor: 'rear wing angle'): makes downforce at the rear. It's the main aero-balance tool. More wing = more grip, less top speed. On road cars without an adjustable wing, set it to 0.",
     },
     increaseEffect: {
       es: "Más ala estabiliza la cola en curvas rápidas y frenada, a costa de velocidad en recta.",
@@ -493,15 +523,15 @@ export const ac_evoParameters: ParameterDef[] = [
   {
     id: "brake_bias",
     group: "brakes",
-    name: { es: "Reparto de frenada", en: "Brake bias" },
+    name: { es: "Distribución de frenada (delantero)", en: "Brake bias (front)" },
     unit: "%",
     min: 50,
     max: 70,
     step: 0.2,
-    default: 58.0,
+    default: 60.0,
     whatItDoes: {
-      es: "Porcentaje de freno que va al eje delantero. Más alto = más freno adelante. Ajuste clave para la entrada de curva.",
-      en: "Percentage of braking sent to the front axle. Higher = more front brake. Key adjustment for corner entry.",
+      es: "Porcentaje de freno que va al eje delantero (en el editor vive en la pestaña Suspensión como 'Distribución de Frenada Delantero'). Más alto = más freno adelante. Ajuste clave para la entrada de curva.",
+      en: "Percentage of braking sent to the front axle (in the editor it lives in the Suspension tab as 'front brake distribution'). Higher = more front brake. Key adjustment for corner entry.",
     },
     increaseEffect: {
       es: "Más adelante = frenada más estable, pero más riesgo de bloquear las delanteras y subvirar al frenar.",
@@ -513,50 +543,6 @@ export const ac_evoParameters: ParameterDef[] = [
     },
   },
   {
-    id: "brake_pressure",
-    group: "brakes",
-    name: { es: "Presión / fuerza de frenada", en: "Brake pressure" },
-    unit: "%",
-    min: 70,
-    max: 100,
-    step: 1,
-    default: 100,
-    whatItDoes: {
-      es: "Limita la fuerza máxima de frenado. Menos presión da más modulación y menos bloqueos; más presión da máxima potencia de frenado.",
-      en: "Limits the maximum braking force. Less pressure gives more modulation and fewer lock-ups; more pressure gives maximum braking power.",
-    },
-    increaseEffect: {
-      es: "Más presión = frenadas más fuertes y cortas, pero más fáciles de bloquear si pisas de golpe.",
-      en: "More pressure = stronger, shorter braking, but easier to lock if you stab the pedal.",
-    },
-    decreaseEffect: {
-      es: "Menos presión = más control y modulación del freno, con frenada algo más larga.",
-      en: "Less pressure = more brake control and modulation, with slightly longer braking.",
-    },
-  },
-  {
-    id: "brake_ducts",
-    group: "brakes",
-    name: { es: "Refrigeración de frenos (brake ducts)", en: "Brake ducts" },
-    unit: "",
-    min: 0,
-    max: 6,
-    step: 1,
-    default: 3,
-    whatItDoes: {
-      es: "Cuánto aire refrigera los frenos. Mantiene la temperatura en stints largos pero añade algo de resistencia (drag). Sólo en autos de carrera.",
-      en: "How much air cools the brakes. Keeps temperature in check over long stints but adds some drag. Race cars only.",
-    },
-    increaseEffect: {
-      es: "Más refrigeración mantiene los frenos en temperatura en carreras largas, a costa de algo de drag.",
-      en: "More cooling keeps brakes in temperature over long races, costing some drag.",
-    },
-    decreaseEffect: {
-      es: "Menos refrigeración retiene calor (útil en clima frío o pistas con poca frenada), con riesgo de sobrecalentar en stints largos.",
-      en: "Less cooling retains heat (useful in cold weather or low-braking tracks), with a risk of overheating over long stints.",
-    },
-  },
-  {
     id: "diff_preload",
     group: "differential",
     name: { es: "Precarga del diferencial", en: "Differential preload" },
@@ -564,10 +550,10 @@ export const ac_evoParameters: ParameterDef[] = [
     min: 0,
     max: 300,
     step: 5,
-    default: 80,
+    default: 100,
     whatItDoes: {
-      es: "Cuánto se resisten a girar diferente las dos ruedas motrices antes de que actúe el LSD. Afecta cómo reacciona la cola en transiciones suaves de acelerador.",
-      en: "How much the two driven wheels resist turning at different speeds before the LSD acts. Affects how the rear reacts in gentle throttle transitions.",
+      es: "Cuánto se resisten a girar diferente las dos ruedas motrices antes de que actúe el LSD (en el editor: 'Precarga del Diferencial', en la pestaña Suspensión). Afecta cómo reacciona la cola en transiciones suaves de acelerador.",
+      en: "How much the two driven wheels resist turning at different speeds before the LSD acts (in the editor: 'differential preload', in the Suspension tab). Affects how the rear reacts in gentle throttle transitions.",
     },
     increaseEffect: {
       es: "Más precarga = comportamiento más bloqueado y estable, pero menos ágil en entrada (algo de subviraje).",
@@ -579,69 +565,47 @@ export const ac_evoParameters: ParameterDef[] = [
     },
   },
   {
-    id: "diff_power",
-    group: "differential",
-    name: { es: "Diferencial en aceleración (power)", en: "Differential power" },
-    unit: "%",
-    min: 0,
-    max: 100,
-    step: 5,
-    default: 50,
-    whatItDoes: {
-      es: "Cuánto bloquea el diferencial al acelerar. Sólo en autos de carrera con LSD ajustable. Controla la tracción y el balance en salida de curva.",
-      en: "How much the diff locks under acceleration. Race cars with an adjustable LSD only. Controls traction and balance on corner exit.",
-    },
-    increaseEffect: {
-      es: "Más alto = más tracción y estabilidad en salida, pero más subviraje al poner gas.",
-      en: "Higher = more traction and stability on exit, but more understeer when applying throttle.",
-    },
-    decreaseEffect: {
-      es: "Más bajo = más rotación al acelerar, pero puede patinar una rueda y perder tracción.",
-      en: "Lower = more rotation on power, but one wheel can spin and lose traction.",
-    },
-  },
-  {
-    id: "diff_coast",
-    group: "differential",
-    name: { es: "Diferencial en deceleración (coast)", en: "Differential coast" },
-    unit: "%",
-    min: 0,
-    max: 100,
-    step: 5,
-    default: 30,
-    whatItDoes: {
-      es: "Cuánto bloquea el diferencial al levantar el pie o frenar (freno motor). Afecta la estabilidad en entrada de curva.",
-      en: "How much the diff locks when lifting off or braking (engine braking). Affects stability on corner entry.",
-    },
-    increaseEffect: {
-      es: "Más alto = más estabilidad en entrada bajo freno motor, con menos libertad para rotar.",
-      en: "Higher = more entry stability under engine braking, with less freedom to rotate.",
-    },
-    decreaseEffect: {
-      es: "Más bajo = más libertad de rotación en entrada, pero puede inestabilizar la cola al levantar gas.",
-      en: "Lower = more rotation freedom on entry, but can destabilise the rear when lifting off.",
-    },
-  },
-  {
-    id: "final_drive",
-    group: "gearing",
-    name: { es: "Relación final (final drive)", en: "Final drive" },
+    id: "tc",
+    group: "electronics",
+    name: { es: "Control de tracción 1 (TC1)", en: "Traction control 1 (TC1)" },
     unit: "",
-    min: 2.5,
-    max: 5.5,
-    step: 0.01,
-    default: 3.8,
+    min: 0,
+    max: 11,
+    step: 1,
+    default: 5,
     whatItDoes: {
-      es: "Escala todas las marchas a la vez. Se ajusta al trazado: más corta en circuitos lentos, más larga en circuitos rápidos. Sólo en autos con caja ajustable.",
-      en: "Scales all gears at once. Tuned to the track: shorter on slow circuits, longer on fast ones. Only on cars with an adjustable gearbox.",
+      es: "Cuánto limita el patinaje de las ruedas al acelerar (TC1, el control principal). Más alto = interviene antes. Muchos GT dependen de él.",
+      en: "How much it limits wheelspin on throttle (TC1, the main control). Higher = intervenes earlier. Many GT cars rely on it.",
     },
     increaseEffect: {
-      es: "Número mayor = relación más CORTA = mejor aceleración saliendo de curvas, pero menos velocidad punta (circuitos lentos).",
-      en: "Higher number = SHORTER ratio = better acceleration out of corners, but less top speed (slow circuits).",
+      es: "Más TC = más seguro y estable en salida (sobre todo en mojado), pero limita la aceleración en seco.",
+      en: "More TC = safer and more stable on exit (especially in the wet), but limits acceleration in the dry.",
     },
     decreaseEffect: {
-      es: "Número menor = relación más LARGA = más velocidad punta, pero peor aceleración (circuitos rápidos).",
-      en: "Lower number = LONGER ratio = more top speed, but worse acceleration (fast circuits).",
+      es: "Menos TC = más aceleración pura si sabes dosificar; más riesgo de irte de cola.",
+      en: "Less TC = more raw acceleration if you can modulate; more risk of the rear stepping out.",
+    },
+  },
+  {
+    id: "tc2",
+    group: "electronics",
+    name: { es: "Control de tracción 2 (TC2)", en: "Traction control 2 (TC2)" },
+    unit: "",
+    min: 0,
+    max: 11,
+    step: 1,
+    default: 3,
+    whatItDoes: {
+      es: "Segundo control de tracción (TC2): gestiona el deslizamiento más fino / la fase de corte tras el TC1. Ajusta cuán agresivo es el sistema una vez que ya detectó patinaje.",
+      en: "Second traction-control stage (TC2): manages finer slip / the cut phase after TC1. Tunes how aggressive the system is once it has already detected wheelspin.",
+    },
+    increaseEffect: {
+      es: "Más TC2 = corte más suave y progresivo del patinaje; más seguro pero limita un poco más la salida.",
+      en: "More TC2 = smoother, more progressive slip cut; safer but limits exit a touch more.",
+    },
+    decreaseEffect: {
+      es: "Menos TC2 = corte más permisivo; más libertad para acelerar al límite con algo más de riesgo.",
+      en: "Less TC2 = more permissive cut; more freedom to accelerate at the limit with a bit more risk.",
     },
   },
   {
@@ -667,39 +631,17 @@ export const ac_evoParameters: ParameterDef[] = [
     },
   },
   {
-    id: "tc",
-    group: "electronics",
-    name: { es: "Control de tracción (TC)", en: "Traction control (TC)" },
-    unit: "",
-    min: 0,
-    max: 11,
-    step: 1,
-    default: 4,
-    whatItDoes: {
-      es: "Cuánto limita el patinaje de las ruedas al acelerar. Más alto = interviene antes. Muchos GT dependen de él.",
-      en: "How much it limits wheelspin on throttle. Higher = intervenes earlier. Many GT cars rely on it.",
-    },
-    increaseEffect: {
-      es: "Más TC = más seguro y estable en salida (sobre todo en mojado), pero limita la aceleración en seco.",
-      en: "More TC = safer and more stable on exit (especially in the wet), but limits acceleration in the dry.",
-    },
-    decreaseEffect: {
-      es: "Menos TC = más aceleración pura si sabes dosificar; más riesgo de irte de cola.",
-      en: "Less TC = more raw acceleration if you can modulate; more risk of the rear stepping out.",
-    },
-  },
-  {
     id: "engine_map",
     group: "electronics",
-    name: { es: "Mapa de motor (engine map)", en: "Engine map" },
+    name: { es: "Mapa de motor", en: "Engine map" },
     unit: "",
     min: 1,
-    max: 12,
+    max: 8,
     step: 1,
-    default: 6,
+    default: 3,
     whatItDoes: {
-      es: "Cambia la entrega de potencia y el consumo (cuando el auto lo permite). Mapas más suaves ahorran combustible y dan mejor tracción en mojado.",
-      en: "Changes power delivery and fuel consumption (when the car allows it). Softer maps save fuel and give better wet traction.",
+      es: "Cambia la entrega de potencia y el consumo (en el editor: 'Mapa Motor'). Mapas más suaves ahorran combustible y dan mejor tracción en mojado.",
+      en: "Changes power delivery and fuel consumption (in the editor: 'engine map'). Softer maps save fuel and give better wet traction.",
     },
     increaseEffect: {
       es: "Mapa más agresivo = más potencia y respuesta, a costa de más consumo y entrega más brusca.",
@@ -708,28 +650,6 @@ export const ac_evoParameters: ParameterDef[] = [
     decreaseEffect: {
       es: "Mapa más suave = menos consumo y entrega más manejable; útil en mojado o para estirar el combustible.",
       en: "Softer map = lower consumption and more manageable delivery; useful in the wet or to stretch fuel.",
-    },
-  },
-  {
-    id: "fuel",
-    group: "other",
-    name: { es: "Carga de combustible", en: "Fuel load" },
-    unit: "L",
-    min: 2,
-    max: 120,
-    step: 1,
-    default: 30,
-    whatItDoes: {
-      es: "Litros de combustible al inicio. Más combustible = más peso (auto más lento y peor balance al comienzo); se ajusta a la duración de la carrera.",
-      en: "Litres of fuel at the start. More fuel = more weight (slower car and worse early balance); tune it to race length.",
-    },
-    increaseEffect: {
-      es: "Más combustible = más autonomía pero más peso, sobre todo sobre el tren trasero al inicio.",
-      en: "More fuel = more range but more weight, especially on the rear axle early on.",
-    },
-    decreaseEffect: {
-      es: "Menos combustible = auto más liviano y rápido, pero menos vueltas antes de repostar.",
-      en: "Less fuel = lighter, faster car, but fewer laps before refuelling.",
     },
   },
 ];

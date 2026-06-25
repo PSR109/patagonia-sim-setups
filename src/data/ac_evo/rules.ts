@@ -1,9 +1,11 @@
 import type { ConditionRule, SymptomRule } from "@/lib/types";
 
 // Reglas por CONDICIONES para AC EVO. `delta` está en pasos (se multiplica por el
-// step del parámetro). AC EVO tiene clima dinámico y localizado por sectores y un
-// modelo de neumáticos avanzado con guía de presión por color en el HUD. Cada
-// regla lleva su explicación educativa bilingüe.
+// step del parámetro). Reconstruidas para el set REAL del editor (6 pestañas, sin
+// caja de cambios ni diff power/coast ni amortiguación rápida): sólo referencian
+// parámetros que el juego expone. AC EVO tiene clima dinámico y localizado por
+// sectores y un modelo de neumáticos avanzado con guía de presión por color en el
+// HUD. Cada regla lleva su explicación educativa bilingüe.
 export const ac_evoConditionRules: ConditionRule[] = [
   {
     id: "wet",
@@ -12,7 +14,6 @@ export const ac_evoConditionRules: ConditionRule[] = [
       { paramId: "ride_height_front", delta: 4 },
       { paramId: "ride_height_rear", delta: 4 },
       { paramId: "rear_wing", delta: 2 },
-      { paramId: "front_wing", delta: 1 },
       { paramId: "tc", delta: 3 },
       { paramId: "abs", delta: 2 },
       { paramId: "brake_bias", delta: -3 },
@@ -45,11 +46,10 @@ export const ac_evoConditionRules: ConditionRule[] = [
     adjust: [
       { paramId: "tyre_pressure_front", delta: -5 },
       { paramId: "tyre_pressure_rear", delta: -5 },
-      { paramId: "brake_ducts", delta: 1 },
     ],
     reason: {
-      es: "Pista caliente: la presión sube sola con el calor, así que arrancamos con presiones en frío más bajas para caer en la zona verde del HUD en caliente, y abrimos algo la refrigeración de frenos.",
-      en: "Hot track: pressure rises on its own with heat, so we start with lower cold pressures to land in the HUD's green zone when hot, and open the brake cooling a touch.",
+      es: "Pista caliente: la presión sube sola con el calor, así que arrancamos con presiones en frío más bajas para caer en la zona verde del HUD en caliente.",
+      en: "Hot track: pressure rises on its own with heat, so we start with lower cold pressures to land in the HUD's green zone when hot.",
     },
   },
   {
@@ -58,11 +58,10 @@ export const ac_evoConditionRules: ConditionRule[] = [
     adjust: [
       { paramId: "tyre_pressure_front", delta: 5 },
       { paramId: "tyre_pressure_rear", delta: 5 },
-      { paramId: "brake_ducts", delta: -1 },
     ],
     reason: {
-      es: "Pista fría: cuesta llegar a la presión y a la temperatura objetivo, así que arrancamos con presiones en frío más altas y cerramos algo la refrigeración de frenos para retener calor.",
-      en: "Cold track: harder to reach target pressure and temperature, so we start with higher cold pressures and close the brake cooling a bit to retain heat.",
+      es: "Pista fría: cuesta llegar a la presión y a la temperatura objetivo, así que arrancamos con presiones en frío más altas para caer en la zona verde del HUD.",
+      en: "Cold track: harder to reach target pressure and temperature, so we start with higher cold pressures to land in the HUD's green zone.",
     },
   },
   {
@@ -82,29 +81,31 @@ export const ac_evoConditionRules: ConditionRule[] = [
     id: "fuel_high",
     when: (c) => c.fuelLoad === "high",
     adjust: [
-      { paramId: "fuel", delta: 30 },
       { paramId: "ride_height_rear", delta: 2 },
       { paramId: "tyre_pressure_rear", delta: 1 },
     ],
     reason: {
-      es: "Carrera larga (mucho combustible): cargamos el tanque y el peso extra hunde la cola; subimos un poco la altura trasera y la presión para compensar el balance inicial.",
-      en: "Long race (heavy fuel): fill the tank and the extra weight squats the rear; raise rear height and pressure slightly to compensate the early balance.",
+      es: "Carrera larga (mucho combustible): el peso extra del tanque lleno hunde la cola; subimos un poco la altura trasera y la presión para compensar el balance inicial.",
+      en: "Long race (heavy fuel): the extra weight of a full tank squats the rear; raise rear height and pressure slightly to compensate the early balance.",
     },
   },
 ];
 
-// Reglas por SÍNTOMA (lo que el piloto siente en pista). Calibradas para AC EVO.
+// Reglas por SÍNTOMA (lo que el piloto siente en pista). Calibradas para AC EVO y
+// limitadas al set real del editor: el único ajuste de diferencial es la PRECARGA
+// (no hay power/coast), así que la rotación bajo gas/freno motor se trabaja con la
+// precarga, las barras y la convergencia.
 export const ac_evoSymptomRules: SymptomRule[] = [
   {
     symptom: "understeer_entry",
     adjust: [
       { paramId: "brake_bias", delta: -3 },
       { paramId: "arb_front", delta: -1 },
-      { paramId: "diff_coast", delta: -2, excludeDrivetrains: ["fwd"] },
+      { paramId: "diff_preload", delta: -2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Subviraje al entrar: atrasamos un poco la frenada para que la cola ayude a girar, ablandamos la barra delantera para dar más agarre al frente y bajamos el coast del diferencial para liberar rotación al levantar gas.",
-      en: "Entry understeer: move brake bias slightly rearward so the rear helps rotate, soften the front bar for more front grip and lower diff coast to free off-throttle rotation.",
+      es: "Subviraje al entrar: atrasamos un poco la frenada para que la cola ayude a girar, ablandamos la barra delantera para dar más agarre al frente y bajamos la precarga del diferencial para liberar rotación al levantar gas.",
+      en: "Entry understeer: move brake bias slightly rearward so the rear helps rotate, soften the front bar for more front grip and lower diff preload to free off-throttle rotation.",
     },
   },
   {
@@ -113,23 +114,21 @@ export const ac_evoSymptomRules: SymptomRule[] = [
       { paramId: "arb_front", delta: -1 },
       { paramId: "arb_rear", delta: 1 },
       { paramId: "camber_front", delta: -2 },
-      { paramId: "front_wing", delta: 1 },
     ],
     reason: {
-      es: "Subviraje en el medio: pasamos balance al frente (barra delantera más blanda, trasera más dura), agregamos caída delantera para más agarre lateral y sumamos ala delantera.",
-      en: "Mid-corner understeer: shift balance forward (softer front bar, stiffer rear), add front camber for more lateral grip and add front wing.",
+      es: "Subviraje en el medio: pasamos balance al frente (barra delantera más blanda, trasera más dura) y agregamos caída delantera para más agarre lateral.",
+      en: "Mid-corner understeer: shift balance forward (softer front bar, stiffer rear) and add front camber for more lateral grip.",
     },
   },
   {
     symptom: "understeer_exit",
     adjust: [
-      { paramId: "diff_power", delta: -2, excludeDrivetrains: ["fwd"] },
       { paramId: "diff_preload", delta: -2, excludeDrivetrains: ["fwd"] },
       { paramId: "arb_rear", delta: 1 },
     ],
     reason: {
-      es: "Subviraje al salir: bajamos el bloqueo en aceleración (power) y la precarga del diferencial para liberar rotación al poner gas, y endurecemos algo la barra trasera.",
-      en: "Exit understeer: lower the power-side lock and diff preload to free rotation on throttle, and stiffen the rear bar a touch.",
+      es: "Subviraje al salir: bajamos la precarga del diferencial para liberar rotación al poner gas y endurecemos algo la barra trasera.",
+      en: "Exit understeer: lower diff preload to free rotation on throttle and stiffen the rear bar a touch.",
     },
   },
   {
@@ -137,11 +136,11 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "brake_bias", delta: 3 },
       { paramId: "toe_rear", delta: 2 },
-      { paramId: "diff_coast", delta: 2, excludeDrivetrains: ["fwd"] },
+      { paramId: "diff_preload", delta: 2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Sobreviraje al entrar: adelantamos la frenada para calmar la cola, sumamos convergencia trasera y subimos el coast del diferencial para estabilizar bajo freno motor.",
-      en: "Entry oversteer: move brake bias forward to calm the rear, add rear toe-in and raise diff coast to stabilise under engine braking.",
+      es: "Sobreviraje al entrar: adelantamos la frenada para calmar la cola, sumamos convergencia trasera y subimos la precarga del diferencial para estabilizar bajo freno motor.",
+      en: "Entry oversteer: move brake bias forward to calm the rear, add rear toe-in and raise diff preload to stabilise under engine braking.",
     },
   },
   {
@@ -161,11 +160,11 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "tc", delta: 1 },
       { paramId: "toe_rear", delta: 2 },
-      { paramId: "diff_power", delta: 2, excludeDrivetrains: ["fwd"] },
+      { paramId: "diff_preload", delta: -2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Sobreviraje al salir (al acelerar): sumamos TC, convergencia trasera y bloqueo en aceleración (power) para que la cola no se suelte al poner gas.",
-      en: "Exit oversteer (on power): add TC, rear toe-in and power-side lock so the rear doesn't snap on throttle.",
+      es: "Sobreviraje al salir (al acelerar): sumamos TC y convergencia trasera, y bajamos la precarga del diferencial para que la cola no se suelte de golpe al poner gas.",
+      en: "Exit oversteer (on power): add TC and rear toe-in, and lower diff preload so the rear doesn't snap loose on throttle.",
     },
   },
   {
@@ -173,11 +172,11 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "brake_bias", delta: 3 },
       { paramId: "abs", delta: 1 },
-      { paramId: "diff_coast", delta: 2, excludeDrivetrains: ["fwd"] },
+      { paramId: "diff_preload", delta: 2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Inestable al frenar: adelantamos el reparto de frenada, subimos un punto de ABS y aumentamos el coast del diferencial para que la cola no se cruce.",
-      en: "Unstable braking: move brake bias forward, add one ABS step and raise diff coast so the rear stays in line.",
+      es: "Inestable al frenar: adelantamos el reparto de frenada, subimos un punto de ABS y aumentamos la precarga del diferencial para que la cola no se cruce bajo freno motor.",
+      en: "Unstable braking: move brake bias forward, add one ABS step and raise diff preload so the rear stays in line under engine braking.",
     },
   },
   {
@@ -186,11 +185,10 @@ export const ac_evoSymptomRules: SymptomRule[] = [
       { paramId: "arb_rear", delta: -1 },
       { paramId: "tc", delta: 1 },
       { paramId: "toe_rear", delta: 1 },
-      { paramId: "diff_power", delta: 1, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Falta de tracción: ablandamos la barra trasera para que las ruedas copien mejor el piso, sumamos algo de TC y convergencia trasera, y subimos el bloqueo en aceleración.",
-      en: "Poor traction: soften the rear bar so the wheels follow the road better, add some TC and rear toe-in, and raise the power-side lock.",
+      es: "Falta de tracción: ablandamos la barra trasera para que las ruedas copien mejor el piso, y sumamos algo de TC y convergencia trasera.",
+      en: "Poor traction: soften the rear bar so the wheels follow the road better, and add some TC and rear toe-in.",
     },
   },
   {
@@ -222,10 +220,11 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "ride_height_front", delta: 3 },
       { paramId: "ride_height_rear", delta: 3 },
-      { paramId: "bumpstop_range", delta: 3 },
+      { paramId: "bumpstop_range_front", delta: 3 },
+      { paramId: "bumpstop_range_rear", delta: 3 },
     ],
     reason: {
-      es: "El auto rebota / toca fondo: subimos la altura para darle recorrido y abrimos el rango del tope para que el piso no golpee el asfalto.",
+      es: "El auto rebota / toca fondo: subimos la altura para darle recorrido y abrimos el rango de los topes para que el piso no golpee el asfalto.",
       en: "The car bounces / bottoms out: raise ride height to give travel and open the bumpstop range so the floor doesn't hit the track.",
     },
   },
@@ -234,14 +233,16 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "arb_front", delta: -1 },
       { paramId: "arb_rear", delta: -1 },
-      { paramId: "damper_fast_bump", delta: -2 },
-      { paramId: "damper_fast_rebound", delta: -2 },
+      { paramId: "damper_slow_bump_front", delta: -2 },
+      { paramId: "damper_slow_bump_rear", delta: -2 },
+      { paramId: "damper_slow_rebound_front", delta: -1 },
+      { paramId: "damper_slow_rebound_rear", delta: -1 },
       { paramId: "ride_height_front", delta: 2 },
       { paramId: "ride_height_rear", delta: 2 },
     ],
     reason: {
-      es: "Inestable en los pianos: ablandamos las barras y los amortiguadores rápidos (fast bump/rebound) y subimos la altura para que el auto absorba el piano en vez de saltar.",
-      en: "Unstable over kerbs: soften the bars and the fast dampers (fast bump/rebound) and raise ride height so the car absorbs the kerb instead of jumping.",
+      es: "Inestable en los pianos: ablandamos las barras y la amortiguación lenta (compresión y extensión) y subimos la altura para que el auto absorba el piano en vez de saltar. (AC EVO no expone canales rápidos de amortiguador.)",
+      en: "Unstable over kerbs: soften the bars and the slow damping (compression and rebound) and raise ride height so the car absorbs the kerb instead of jumping. (AC EVO doesn't expose fast damper channels.)",
     },
   },
 ];

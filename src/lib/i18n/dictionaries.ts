@@ -34,9 +34,9 @@ export const dictionaries = {
         "Elige tu auto, tu pista y las condiciones, o cuéntanos qué te pasa en pista. Te damos el ajuste y te explicamos el porqué de cada cambio para que aprendas a setear tú mismo.",
       ctaPrimary: "Empezar gratis",
       ctaSecondary: "Ya tengo cuenta",
-      feature1Title: "7 simuladores",
+      feature1Title: "5 simuladores",
       feature1Body:
-        "F1 25, Le Mans Ultimate, ACC, Assetto Corsa EVO, Assetto Corsa Rally, EA Sports WRC e iRacing.",
+        "Le Mans Ultimate, ACC, Assetto Corsa EVO, Assetto Corsa Rally y EA Sports WRC.",
       feature2Title: "Generador + profesor",
       feature2Body:
         "No solo te da los valores: te explica qué hace cada parámetro y por qué se ajusta.",
@@ -209,9 +209,9 @@ export const dictionaries = {
         "Pick your car, track and conditions, or tell us what the car is doing. We give you the adjustment and explain the why behind every change so you learn to tune it yourself.",
       ctaPrimary: "Start free",
       ctaSecondary: "I already have an account",
-      feature1Title: "7 simulators",
+      feature1Title: "5 simulators",
       feature1Body:
-        "F1 25, Le Mans Ultimate, ACC, Assetto Corsa EVO, Assetto Corsa Rally, EA Sports WRC and iRacing.",
+        "Le Mans Ultimate, ACC, Assetto Corsa EVO, Assetto Corsa Rally and EA Sports WRC.",
       feature2Title: "Generator + coach",
       feature2Body:
         "It doesn't just give you values: it explains what each parameter does and why it's adjusted.",

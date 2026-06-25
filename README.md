@@ -74,9 +74,9 @@ sin cambios.
 
 - ✅ App completa y verificada (auth, i18n, motor, generador, garaje).
 - ✅ **ACC** implementado de punta a punta como referencia.
-- ⏳ Datos de los otros 6 juegos (F1 25, Le Mans Ultimate, AC EVO, AC Rally,
-  EA WRC, iRacing): se cargan desde la investigación verificada, siguiendo la
-  misma plantilla.
+- ✅ Datos de los otros 4 juegos (Le Mans Ultimate, AC EVO, AC Rally, EA WRC)
+  reconstruidos 1:1 contra el editor real de cada sim. (F1 25 e iRacing quedaron
+  fuera del alcance.)
 
 ## Branding
 

@@ -1,21 +1,21 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 13: EA WRC reconstruido contra captura in-game (Ford Puma Rally1, 33 params, rangos exactos); iteración 12: AC Rally reconstruido (i20 N Rally2, 36 params, rangos estimados); iteración 11: 2º pase adversarial perf/errores/UX — 7 fixes, §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
+> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 17: F1 25 e iRacing ELIMINADOS de la app (fuera de alcance; quedan 5 sims; commit+push hechos; ver §3o). Iteración 16: LMU reconstruido contra DOS capturas in-game (Hypercar Alpine A424 #35 + LMGT3 McLaren 720S Evo #59, Bahrain) → modelo de 2 clases: 45 params universales + extras solo-Hypercar (heave, muelle de goma, diff power/inercia, híbrido regen/mapa eléctrico, diff delantero) + extra solo-LMGT3 (ABS) + paramOverrides de clase LMGT3 (ala en grados, dampers 0-50, defaults del McLaren); ver §3n. Iteración 15: AC EVO reconstruido contra captura in-game (Porsche 992 GT3 R, modo Carrera, v0.7.1, 6 pestañas → 29 params, era 35; el editor REAL no expone caja/diff power-coast/freno aparte/dampers rápidos/splitter → se eliminaron; ver §3m); iteración 14: ACC reconstruido contra captura in-game (Ferrari 296 GT3, preset Seguridad, 6 pestañas → 39 params, era 16; ver §3l); iteración 13: EA WRC reconstruido contra captura in-game (Ford Puma Rally1, 33 params, rangos exactos); iteración 12: AC Rally reconstruido (i20 N Rally2, 36 params, rangos estimados); iteración 11: 2º pase adversarial perf/errores/UX — 7 fixes, §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). F1 25 e iRacing: ELIMINADOS de la app en iteración 17 (§3o).
 
 ---
 
 ## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-25)
 
-**SIGUIENTE JUEGO A RECONSTRUIR.** Patrón ya establecido (ver iter 12 y 13): Patricio
-manda **UNA** captura in-game de referencia de un auto por juego (todas las pestañas del
-editor) → yo reconstruyo `parameters.ts` → `rules.ts` → `cars.ts` 1:1 con el juego,
-estimando lo que no se vea (rangos si el editor no los muestra) y verifico (tsc 0 /
-`npx tsx scripts/validate-engine.ts` 0 / `npm run build` verde). Esperar a que Patricio
-mande la captura del próximo juego.
-- **Pendientes de reconstruir (4):** ACC, F1 25, LMU, AC EVO.
-- **iRacing:** DECIDIDO dejarlo como subset curado a propósito (NO reconstruir/expandir).
-- **Hechos:** AC Rally (i20 N Rally2, rangos estimados), EA WRC (Ford Puma Rally1, rangos exactos in-game).
+**ESTADO: los 5 sims en alcance están reconstruidos 1:1. NO hay juego pendiente.**
+F1 25 e iRacing se **ELIMINARON** de la app (iter 17, §3o). Si Patricio decide sumar un
+juego nuevo, el patrón está establecido (ver iter 12–16): manda **UNA** captura in-game
+de referencia por auto/clase (todas las pestañas del editor) → reconstruir
+`parameters.ts` → `rules.ts` → `cars.ts` 1:1, estimando lo que no se vea, y verificar
+(tsc 0 / `npx tsx scripts/validate-engine.ts` 0 / `npm run build` verde).
+- **Pendiente de reconstruir:** ninguno (F1 25 e iRacing fuera de alcance, §3o).
+- **Hechos:** AC Rally (i20 N Rally2, rangos estimados), EA WRC (Ford Puma Rally1, rangos exactos in-game), **ACC (Ferrari 296 GT3, rangos estimados salvo TC/ABS exactos de la tabla; ver §3l)**, **AC EVO (Porsche 992 GT3 R, 29 params; editor real solo 6 pestañas → se eliminaron caja/diff power-coast/freno-aparte/dampers rápidos/splitter; springs N/m; se agregó TC2; ver §3m)**, **LMU (DOS capturas: Hypercar Alpine A424 + LMGT3 McLaren 720S; 45 params universales + extras y overrides por clase; ver §3n)**.
+- **Variante de captura (LMU):** cuando un juego varía params por CLASE, Patricio puede mandar una captura POR clase (LMU = 2). El template del editor puede ser idéntico pero con campos N/D / Non-adjustable según clase → modelo de 2 clases (global = una clase, paramOverrides + extraParams para la otra).
 - **Opcional disponible:** workflow adversarial para auditar dirección física de reglas
   (AC Rally + EA WRC: dirección de bloqueo LSD trasero, signo del toe). Independiente de rangos.
 
@@ -165,7 +165,7 @@ si algo falla, rehacer hasta que funcione. Entregar la app lista para usar.
 2. **Gaps conocidos** (no son bugs): listas de autos parciales en juegos early access (AC EVO, AC Rally), rangos de parámetros "representativos" a afinar contra el juego, y nombres exactos de algunos settings de FFB in-game por confirmar. Detalle en el output del workflow `wzpdskj0t` (Fase 2).
 3. **Branding**: reemplazar logo en `src/components/brand.tsx` y colores en `globals.css` cuando lleguen.
 
-### ✅ Resultado: app funcional de punta a punta (7 juegos + FFB), build verde, QA pasado. Lista para usar con `npm run dev`.
+### ✅ Resultado: app funcional de punta a punta (5 juegos + FFB), build verde, QA pasado. Lista para usar con `npm run dev`.
 
 ### QA round-2 (2026-06-23) — 15 fixes aplicados + 9 decisiones de Patricio
 Workflow `wf_18afd77b-f31` (70 agentes). **Aplicado:** LMU brake_migration (semántica + regla); AC EVO presiones mojado (-6→+6) y ride_height group→suspension; AC Rally diff_power mojado (-2→+2), FFB (Damper real, quitados understeer/kerb effects inventados), nota SEN; iRacing "Ford GT GTE"; i18n (leyenda tabla, footer, ternarios→diccionario, games.noData); seguridad (registro P2002→409, favoritos payload ≤8KB). + UI por disciplina: label **Tramo** (rally) vs **Pista** (circuito) y síntomas filtrados por reglas del juego.
@@ -381,6 +381,193 @@ Continuación del loop sobre las dimensiones que el rate-limit de la iteración 
 - Datos de prueba creados durante la verificación **eliminados**; garaje limpio; consola sin errores. Sin cambios de código → sin commit (sólo verificación).
 
 **Re-iterar:** `Workflow({ scriptPath: "<script de wf_39830199-ce0>", resumeFromRunId: "wf_39830199-ce0" })`. Las dimensiones código/seguridad/UX/perf ya están bastante exprimidas; el terreno fértil restante sin datos in-game es escaso. Lo pendiente real sigue siendo la captura de datos in-game de Patricio (§3f–3i).
+
+---
+
+## 3l. COMPLETADA (iteración 14): ACC reconstruido contra captura IN-GAME (2026-06-25)
+
+Patricio pasó las **6 pestañas** del editor real de ACC (auto **Ferrari 296 GT3**,
+preset **"Preajuste de seguridad"**, modo Vuelta Rápida): Neumáticos, Electrónica,
+Combustible y Estrategia, Agarre Mecánico, Amortiguadores, Aero. La data previa de
+ACC era una plantilla **simplificada de 16 params** (de la investigación genérica) y
+NO espejaba el editor real. Reescrito 1:1 → **39 params**. tsc 0 / validate-engine 0
+(acc = 39 params) / build verde / **verificado EN VIVO** (Ferrari 296 muestra los 39
+params reales = preset Seguridad exacto; Mojado + Inestable-en-pianos mueve los
+sliders correctos, incluidos los amortiguadores nuevos).
+
+**Qué cambió (iteración 14):**
+- `acc/parameters.ts` → **39 params reales con unidades del juego**: presiones psi
+  por eje; **alineación** caída/convergencia/**ángulo de avance (caster, nuevo)** +
+  **relación de giro del volante (nuevo)**; **muelles "índice del volante" N/m**
+  (front 188964 / rear 136455), **topes de suspensión** (índice N + amplitud, nuevos),
+  barras; **8 amortiguadores** (badén/comp.rápida/extensión/ext.rápida × 2 ejes,
+  nuevos); aero altura del/tras + **ala** + **splitter (nuevo)**; frenos reparto +
+  **potencia de frenada (nuevo)** + **conductos del/tras (nuevos)** + **pastillas
+  del/tras (nuevas)**; **precarga del diferencial 70 Nm**; electrónica **TC 1-8 / ABS
+  1-12 (rangos EXACTOS de la tabla en pantalla)** + **ECU Map (nuevo)** + **TC2 (ahora
+  GLOBAL)**.
+- **Defaults = valores EXACTOS del preset Seguridad** del 296 (p. ej. caster 11.0°,
+  bias 59.0%, TC/ABS 5, ala 12, alturas 70/70, badén del 8/comp.rápida 4/extensión
+  7/ext.rápida 5, tras 5/6/8/7).
+- **Rangos:** exactos donde el juego los muestra (TC 1-8, ABS 1-12); el resto
+  **estimado** y marcado "(rango estimado)" (mismo criterio AC Rally/EA WRC), porque
+  el editor no muestra los topes de cada slider.
+- `rules.ts` → todos los paramIds previos siguen válidos y sus steps no cambiaron
+  (deltas siguen calibrados). Enriquecida `kerb_instability`: además de barras+altura
+  ahora baja **compresión rápida** del/tras (−2) — físicamente correcto y ejercita los
+  amortiguadores nuevos. TC/ABS deltas siguen OK con los rangos nuevos (1-8 / 1-12).
+- `cars.ts` → Ferrari 296 GT3 marcado como **auto de referencia** (hereda defaults =
+  preset, sin baseSetup propio). **Eliminado el extraParam TC2 del McLaren 720S Evo**:
+  el 296 también trae TC2 → TC2 pasó a param GLOBAL (el extraParam habría chocado con
+  el global y roto el validador). baseSetups por-auto previos siguen válidos.
+
+**Lo que FALTA para exactitud total en ACC (necesita más capturas in-game):**
+1. **Rangos min/max reales de los sliders estimados** (muelles N/m, topes de
+   suspensión, los 8 amortiguadores, caster, relación de giro, ECU Map, TC2, splitter,
+   potencia de frenada, conductos). Hoy estimados desde el preset del 296. Capturar los
+   topes leyendo el garaje si se quiere exactitud fina.
+2. **Convención de signo del toe** a confirmar (asumido: front negativo = toe-out).
+3. **Valores de preset por-auto.** Hoy todos los GT3/GT4 heredan los defaults del 296.
+   ACC NO es 100% uniforme: algunos autos no tienen TC2, y muelles/ala/caster varían por
+   coche. Estructura y direcciones ya están bien; faltan los **valores** por-auto
+   (capturar el garaje de cada uno cuando se pueda). Los overrides de `rear_wing`
+   (max 8/7/5/4) y de ARB de GT4 (0-2) ya existentes se mantuvieron.
+
+**Opcional ya disponible:** workflow adversarial para auditar la dirección física de
+las reglas de ACC con los params nuevos (sobre todo amortiguadores y precarga del
+diferencial). Independiente de los rangos. Pendiente de luz verde de Patricio.
+
+---
+
+## 3m. COMPLETADA (iteración 15): AC EVO reconstruido contra captura IN-GAME (2026-06-25)
+
+Patricio pasó las **6 pestañas** del editor real de AC EVO (auto **Porsche 992 GT3 R**,
+modo **Carrera**, build **v0.7.1**, preset de fábrica): Neumáticos, Electrónica,
+Combustible y Estrategia, Suspensión, Amortiguadores, Aero. La data previa era una
+plantilla genérica de **35 params** que NO espejaba el editor real. Reescrito 1:1 →
+**29 params**. tsc 0 / validate-engine 0 (ac_evo = 29 params) / build verde /
+**verificado EN VIVO** (Porsche 992 GT3 R muestra el preset exacto; Mojado mueve
+presión/altura/TC/ala, e Inestable-en-pianos mueve barras + los amortiguadores lentos
+nuevos por eje, sin NaN ni errores de consola).
+
+**Hallazgo clave — el editor de AC EVO es MÁS chico de lo que asumía la plantilla:**
+sólo tiene 6 pestañas y **NO** tiene pestaña de caja de cambios ni de frenos aparte (la
+frenada vive en Suspensión como "Distribución de Frenada"). Por eso se **ELIMINARON**
+del set: `final_drive`, `diff_power`, `diff_coast`, `brake_pressure`, `brake_ducts`,
+`front_wing` (este Porsche no tiene splitter ajustable), `fuel` (estrategia) y los
+**amortiguadores rápidos** (AC EVO sólo expone compresión/extensión LENTAS).
+
+**Qué cambió (iteración 15):**
+- `ac_evo/parameters.ts` (35 → **29 params**) con **unidades reales del juego**:
+  presión psi por eje (F 26 / R 25.5); alineación **caída** (F −4 / R −3.5°),
+  **convergencia** (F −0.1 / R 0.1°), **ángulo de avance/caster** (F 3°, default bajo);
+  **muelle "Tasa de suspensión" en N/m** (F 340000 / R 360000, era N/mm); **tope de
+  suspensión** dividido por eje (índice N 4000/4000 + amplitud mm F 15 / R 5);
+  barras F 4 / R 5; **4 amortiguadores LENTOS** por eje (comp. F 6 / R 7, ext. F 7 / R 8);
+  aero **sólo altura del 60 / tras 75 + ala trasera 11** (sin splitter); **distribución
+  de frenada 60%**; **precarga del diferencial 100 Nm**; electrónica **TC1 5 + TC2 3
+  (nuevo) + ABS 4 + Mapa Motor 3**.
+- **Defaults = valores EXACTOS de la captura** del 992 GT3 R.
+- **Rangos:** **estimados** (el editor no muestra topes), marcados en el comentario de
+  cabecera; mismo criterio que ACC/AC Rally.
+- `rules.ts` → purgados todos los paramIds que ya no existen: las reglas de
+  diferencial usan ahora sólo `diff_preload`; `wet`/temp sin front_wing/brake_ducts;
+  `fuel_high` sin `fuel`; `bouncing` usa bumpstop_range **F+R**; `kerb_instability`
+  ablanda los **amortiguadores lentos F+R** (antes los rápidos, que ya no existen).
+- `cars.ts` → **Porsche 992 GT3 R = auto de referencia** (hereda defaults, sin baseSetup
+  propio). Limpiados los baseSetups que referenciaban params eliminados (front_wing/
+  diff_power/diff_coast); los autos de calle FWD ahora ponen `rear_wing:0` + `tc2:0`.
+  Sin paramOverrides (no hay topes por-clase verificados todavía).
+
+**Lo que FALTA para exactitud total en AC EVO (necesita más capturas in-game):**
+1. **Rangos min/max reales** de los sliders (todo estimado desde el preset del 992).
+2. **Valores de preset por-auto** (hoy todos heredan los del 992 GT3 R; la lista de
+   autos sigue parcial — early access, blanco móvil).
+3. Confirmar si alguna **otra clase** (formula/road) expone params que el 992 GT3 R no
+   (p. ej. front wing en fórmula): si aparecen, se agregan como `Category.extraParams`.
+
+---
+
+## 3n. COMPLETADA (iteración 16): LMU reconstruido contra DOS capturas IN-GAME (2026-06-25)
+
+Patricio mandó **12 fotos** (3 tandas), las **6 pestañas** del editor real por cada
+clase: **Hypercar = Alpine A424 #35** y **LMGT3 = McLaren 720S LMGT3 Evo #59** (Racing
+Spirit of Léman, Bahrain). Pidió: *"revisa si son los mismos parámetros o cambian y
+ajusta acorde a eso."* La data previa de LMU era una plantilla genérica (basada en
+wiki/Coach Dave), no en captura. Reescrito 1:1. tsc 0 / validate-engine 0 (lmu = **45
+params**) / build verde / **verificado por motor** (base Alpine y McLaren = capturas
+exactas; reglas wet+pianos disparan en GT3 sin NaN).
+
+**Veredicto a la pregunta:** el **template del editor es el MISMO** para ambas clases (6
+pestañas, mismos campos), pero **~8 ajustes cambian** → modelo de 2 clases:
+
+| Área | Hypercar (global) | LMGT3 (override/extra) |
+|---|---|---|
+| 3.er resorte (heave) | activo (índice 5/6) | **N/D** → extra solo-HC |
+| Muelle de goma | Desacoplada | **N/D** → extra solo-HC |
+| ABS | **N/A** (sin ABS) | 9 → extra **solo-GT3** |
+| Híbrido (regen kW, mapa eléctrico kW) | 170 / 50 | 0 / 0 → extras solo-HC |
+| Diff Potencia/Inercia | 30% / 60% | **Non-adjustable** → extras solo-HC |
+| Ala trasera | pasos P (P13) | **grados** 0-15 (10.0°) → override |
+| Dampers | clicks 0-25 (10/4...) | **B##/R## 0-50** (19/41...) → override |
+| Mezcla motor | Full (6) | Race (4) → override |
+
+**Decisión de modelado (cars.ts):** GLOBAL = **Hypercar** (Alpine, defaults exactos);
+**LMGT3** = `paramOverrides` de clase (defaults exactos del McLaren + rangos donde la
+escala cambia: ala en grados, dampers 0-50). Extras: `lmuHypercarExtras` (heave F/R,
+muelle de goma F/R, diff power/inercia, diff delantero power/inercia/precarga, regen,
+mapa eléctrico) en la clase Hypercar; `lmuGt3Abs` en la clase LMGT3. Prototipos
+LMP2/LMP3 corren **sin TC** → `baseSetups` deja los 3 canales en 0. **45 params
+universales** (presión kPa, camber/toe grados, muelles índice, topes/alturas/discos cm,
+barras P, dampers lenta+rápida por eje, freno bias/migración/fuerza/ductos/discos,
+precarga Nm, dirección, 3 canales de TC, mezcla/limitador/radiadores, combustible,
+energía virtual, relación de cambio, difusor).
+
+**Eliminado vs la plantilla vieja:** `front_aero`/`packers`/`bump`/`rebound` genéricos,
+`diff_coast` (LMU no tiene coast: el diff es power/inercia/precarga), `final_drive`
+(es selector Short/Standard/Long → `gear_ratio`), `brake_pressure`→`brake_pedal_force`,
+`brake_ducts`→ductos F/R, `deployment_map`→`electric_map`. Springs N/mm→índice; ala única
+→ por clase; dampers únicos → lenta/rápida por eje.
+
+**Trampa de ingeniería resuelta:** el motor (`apply()` en engine/index.ts) ignora un
+delta sobre un paramId ausente, así que las reglas PODRÍAN tocar abs/diff_power. **PERO**
+`validate-engine.ts` chequea paramIds de reglas contra el set GLOBAL únicamente → falla
+si una regla referencia un extra de clase. Por eso las reglas usan **solo params
+universales**; ABS (GT3) y Power lock (Hypercar) se mencionan en el texto educativo de la
+regla como ajuste manual, pero los deltas no los tocan (misma convención que TC2 en ACC).
+
+**Lo que FALTA para exactitud total en LMU (necesita más capturas):**
+1. Rangos min/max reales de los sliders (estimados desde 2 presets; defaults exactos).
+2. Presets por-auto dentro de cada clase (hoy todos los Hypercar heredan el Alpine y
+   todos los LMGT3 el McLaren).
+3. Capturas de LMP2/LMP3/GTE (hoy heredan el set global Hypercar; solo se les apagó el TC).
+
+---
+
+## 3o. COMPLETADA (iteración 17): F1 25 e iRacing ELIMINADOS de la app (2026-06-25)
+
+Decisión de Patricio (verbatim): "ahora elimina todo lo del juego de F1 y iracing de la
+app, vamos a dejarlo fuera". Ambos juegos quedan **fuera del alcance** del producto.
+
+**Qué se borró/cambió:**
+- **Borrados** los directorios `src/data/f1_25/` y `src/data/iracing/` completos
+  (cars/tracks/parameters/rules/ffb/index) vía `git rm -r`.
+- `src/data/registry.ts` → quitados imports y entradas de `implementedGames` (de 7 →
+  **5 sims**: acc, lmu, ac_evo, ac_rally, ea_wrc). `gameCatalog`, `getGame()` e
+  `isImplemented()` ya no resuelven f1_25/iracing.
+- `src/data/load-game.ts` → quitados los loaders dinámicos de f1_25/iracing.
+- `src/lib/i18n/dictionaries.ts` → landing `feature1Title` "7 → 5 simuladores" (es+en)
+  y `feature1Body` sin "F1 25" ni "iRacing" (es+en, paridad mantenida).
+- `src/app/app/[gameId]/generator.tsx` y `README.md` → conteos/listas actualizados.
+- **NO se tocó** `src/data/hardware/fanatec.ts`: menciona "iRacing" solo como ejemplo
+  genérico de valores de FFB del volante (consejo de hardware, no claim de juego
+  soportado) → se deja.
+
+**Verificación:** tsc 0 / validate-engine 0 (5 juegos: acc 39, lmu 45, ac_evo 29,
+ac_rally 36, ea_wrc 33) / `npm run build` verde (16/16 estáticas). Commit + push hechos.
+
+**Pendiente tras esto:** ninguno de reconstrucción. La app queda con 5 sims. (Si se
+quiere re-sumar F1 25 o iRacing en el futuro, recuperar desde el historial de git.)
 
 ---
 

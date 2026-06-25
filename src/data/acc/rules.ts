@@ -219,10 +219,12 @@ export const accSymptomRules: SymptomRule[] = [
       { paramId: "arb_rear", delta: -1 },
       { paramId: "ride_height_front", delta: 2 },
       { paramId: "ride_height_rear", delta: 2 },
+      { paramId: "fast_bump_front", delta: -2 },
+      { paramId: "fast_bump_rear", delta: -2 },
     ],
     reason: {
-      es: "Inestable en los pianos: ablandamos las barras y subimos la altura para que el auto absorba el piano en vez de saltar.",
-      en: "Unstable over kerbs: soften the bars and raise ride height so the car absorbs the kerb instead of jumping.",
+      es: "Inestable en los pianos: ablandamos las barras, subimos la altura y bajamos la compresión rápida de los amortiguadores para que el auto absorba el impacto del piano en vez de saltar.",
+      en: "Unstable over kerbs: soften the bars, raise ride height and lower the dampers' fast bump so the car absorbs the kerb hit instead of jumping.",
     },
   },
 ];

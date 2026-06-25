@@ -56,6 +56,9 @@ export const ac_evoCars: Car[] = [
 
   // Race - GT3
   { id: "ac_evo_audi_r8_lms_gt3_evo2", gameId: "ac_evo", categoryId: "race_gt3", name: "Audi R8 LMS GT3 Evo II", brand: "Audi" },
+  // AUTO DE REFERENCIA: la captura in-game 2026-06-25 (modo Carrera, preset de
+  // fábrica) es de este coche. Hereda los defaults de parameters.ts, que SON los
+  // valores exactos de esa captura; por eso no lleva baseSetup propio.
   { id: "ac_evo_porsche_992_gt3r", gameId: "ac_evo", categoryId: "race_gt3", name: "Porsche 992 GT3 R", brand: "Porsche" },
   { id: "ac_evo_ferrari_296_gt3", gameId: "ac_evo", categoryId: "race_gt3", name: "Ferrari 296 GT3", brand: "Ferrari" },
   { id: "ac_evo_mercedes_amg_gt3", gameId: "ac_evo", categoryId: "race_gt3", name: "Mercedes-AMG GT3", brand: "Mercedes-AMG" },
@@ -117,18 +120,20 @@ export const ac_evoCars: Car[] = [
 // Pequeños ajustes de base por auto. La mayoría usa los defaults de los parámetros;
 // estos overrides reflejan rasgos conocidos (autos de calle con menos aero/electrónica,
 // motor trasero más estable con algo más de ala, hypercars con más carga).
+// Sólo referencian parámetros que existen en el set real del editor (sin
+// front_wing/diff_power/diff_coast). El Porsche 992 GT3 R es el auto de referencia:
+// hereda los defaults de la captura, por eso no aparece acá.
 export const ac_evoBaseSetups: Record<string, SetupValues> = {
-  // Autos de calle: aero mínima o nula, electrónica baja
-  ac_evo_mazda_mx5_nd: { front_wing: 0, rear_wing: 0, tc: 1, abs: 2, diff_power: 0, diff_coast: 0 },
-  ac_evo_honda_s2000_ap1: { front_wing: 0, rear_wing: 0, tc: 0, abs: 1 },
-  ac_evo_toyota_ae86: { front_wing: 0, rear_wing: 0, tc: 0, abs: 0, diff_power: 0, diff_coast: 0 },
-  ac_evo_vw_golf8_gti_clubsport: { front_wing: 0, rear_wing: 0, tc: 3, abs: 4 },
-  // GT3 con motor trasero: algo más de ala y bias más atrás
-  ac_evo_porsche_992_gt3r: { rear_wing: 7, ride_height_rear: 78, brake_bias: 56.8 },
-  ac_evo_ferrari_296_gt3: { rear_wing: 6, brake_bias: 58.0 },
-  // Hypercar de calle: más carga y electrónica intermedia
-  ac_evo_lamborghini_huracan_sto: { front_wing: 5, rear_wing: 8, tc: 3, abs: 3 },
-  ac_evo_ferrari_296_gtb: { front_wing: 3, rear_wing: 5, tc: 4, abs: 3 },
+  // Autos de calle: sin alerón ajustable (ala = 0) y electrónica baja
+  ac_evo_mazda_mx5_nd: { rear_wing: 0, tc: 1, abs: 2, tc2: 0 },
+  ac_evo_honda_s2000_ap1: { rear_wing: 0, tc: 0, abs: 1, tc2: 0 },
+  ac_evo_toyota_ae86: { rear_wing: 0, tc: 0, abs: 0, tc2: 0 },
+  ac_evo_vw_golf8_gti_clubsport: { rear_wing: 0, tc: 3, abs: 4, tc2: 0 },
+  // GT3 con motor central: algo menos de ala que el preset de referencia
+  ac_evo_ferrari_296_gt3: { rear_wing: 9, brake_bias: 58.0 },
+  // Hypercar de calle: carga moderada y electrónica intermedia
+  ac_evo_lamborghini_huracan_sto: { rear_wing: 8, tc: 3, abs: 3, tc2: 2 },
+  ac_evo_ferrari_296_gtb: { rear_wing: 5, tc: 4, abs: 3, tc2: 2 },
   // Cup / Challenge: aero de serie, electrónica de carrera
   ac_evo_porsche_911_gt3_cup: { rear_wing: 8, tc: 2, abs: 3, brake_bias: 56.4 },
 };
