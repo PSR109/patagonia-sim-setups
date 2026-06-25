@@ -78,7 +78,8 @@ function parseLapToMs(input: string): number | null {
   const min = m[1] ? parseInt(m[1], 10) : 0;
   const sec = parseInt(m[2], 10);
   const ms = m[3] ? parseInt(m[3].padEnd(3, "0"), 10) : 0;
-  if (sec >= 60) return null;
+  // 60+ s sólo inválido con minutos (1:75). Sin minutos, "83.456" = 1:23.456 válido.
+  if (m[1] && sec >= 60) return null;
   return (min * 60 + sec) * 1000 + ms;
 }
 
@@ -806,6 +807,9 @@ function SaveBar({
   const [noteBody, setNoteBody] = useState("");
   const [lapOpen, setLapOpen] = useState(false);
   const [lapInput, setLapInput] = useState("");
+  // Etiqueta opcional del setup con el que se hizo la vuelta (ej. "Base", "Más
+  // ala", "Qualy"). Habilita el A/B del comparador: qué setup fue más rápido.
+  const [lapSetup, setLapSetup] = useState("");
   const [busy, setBusy] = useState(false);
   const [favSaved, setFavSaved] = useState(false);
   const msgTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -899,10 +903,17 @@ function SaveBar({
       const res = await fetch("/api/laps", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gameId, carId, trackId, lapTimeMs: ms }),
+        body: JSON.stringify({
+          gameId,
+          carId,
+          trackId,
+          lapTimeMs: ms,
+          setupRef: lapSetup.trim() || null,
+        }),
       });
       if (res.ok) {
         setLapInput("");
+        setLapSetup("");
         setLapOpen(false);
         flash(t("common.saved"));
       } else {
@@ -969,6 +980,14 @@ function SaveBar({
             placeholder="1:23.456"
             aria-label={t("result.addLap")}
             className="field telemetry w-32"
+          />
+          <input
+            value={lapSetup}
+            onChange={(e) => setLapSetup(e.target.value)}
+            placeholder={locale === "es" ? "Setup usado (opcional)" : "Setup used (optional)"}
+            aria-label={locale === "es" ? "Setup usado" : "Setup used"}
+            maxLength={40}
+            className="field w-44"
           />
           <button onClick={saveLap} disabled={busy} className="btn-primary px-4 py-1.5 text-sm">
             {t("common.save")}

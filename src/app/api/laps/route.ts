@@ -9,7 +9,7 @@ const createSchema = z.object({
   trackId: z.string().min(1),
   lapTimeMs: z.number().int().positive().max(36_000_000),
   conditions: z.any().optional(),
-  setupRef: z.string().optional().nullable(),
+  setupRef: z.string().trim().max(40).optional().nullable(),
   notes: z.string().max(500).optional().nullable(),
 });
 
@@ -18,7 +18,9 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const laps = await prisma.lapRecord.findMany({
     where: { userId: user.id },
-    orderBy: { createdAt: "desc" },
+    // `id` desc como desempate: si dos vueltas comparten createdAt (doble guardado
+    // rápido), el orden cronológico queda determinista para "primer intento".
+    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
   });
   return NextResponse.json({ laps });
 }

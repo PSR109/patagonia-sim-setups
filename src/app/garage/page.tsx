@@ -39,7 +39,8 @@ export default async function GaragePage() {
     }),
     prisma.lapRecord.findMany({
       where: { userId: user.id },
-      orderBy: { createdAt: "desc" },
+      // `id` desc desempata createdAt iguales → "primer intento" determinista.
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     }),
   ]);
 
@@ -69,6 +70,7 @@ export default async function GaragePage() {
         carId: l.carId,
         trackId: l.trackId,
         lapTimeMs: l.lapTimeMs,
+        setupRef: l.setupRef,
         comboLabel: comboLabel(l.gameId, l.carId, l.trackId),
         createdAt: l.createdAt.toISOString(),
       }))}

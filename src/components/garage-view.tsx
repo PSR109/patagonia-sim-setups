@@ -33,6 +33,7 @@ type Lap = {
   carId: string;
   trackId: string;
   lapTimeMs: number;
+  setupRef: string | null;
   comboLabel: string;
   createdAt: string;
 };
