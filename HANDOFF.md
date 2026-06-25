@@ -1,7 +1,30 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-24 (iteración 11: 2º pase adversarial sobre performance/errores-cliente/UX — 7 hallazgos confirmados, 7 corregidos, ver §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
+> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 11: 2º pase adversarial sobre performance/errores-cliente/UX — 7 hallazgos confirmados, 7 corregidos + verificados en vivo, ver §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
+
+---
+
+## ▶ PRÓXIMA SESIÓN — empezar acá (2026-06-25)
+
+**Pedido explícito de Patricio:** arrancar la próxima sesión **construyendo Assetto Corsa Rally al detalle**.
+
+**Antes de construir — diagnosticar:** Patricio reportó que **"la app no está funcionando nada de bien"** (sesión del 2026-06-25). No dio síntomas específicos; no quedó capturado qué falla. Primer paso de la próxima sesión: levantar `preview_start({ name: "patagonia-sim-setups" })`, recorrer los flujos (home → elegir sim → generar → garaje) y **reproducir/listar los fallos concretos** antes de tocar datos. Puede ser data (rangos/valores irreales en el generador) o comportamiento (UI/engine). Confirmar si el problema es general o específico de AC Rally.
+
+**Estado actual de AC Rally** (`src/data/ac_rally/`, ~1229 líneas, `status: early-access`, `hasImportableSetups: false`):
+- `cars.ts` — **8 clases** (Group 2/4/B/A, WRC clásico, F2 Kit Car, Rally2, Rally4) y **15 autos verificados** (parcial; el juego apunta a **30+ en 1.0** y suma en cada versión EA). `baseSetups` sólo para 6 autos.
+- `tracks.ts` — **8 etapas** en 6 locaciones (Alsacia/Saverne tarmac, Gales grava, Livigno hielo, Monte Carlo Turini mixto + Sisteron tarmac). Faltan **largos exactos por variante**.
+- `parameters.ts` (604) · `rules.ts` (289, condition+symptom) · `ffb.ts` (142) — existen, sin auditar "al detalle".
+
+**Qué significa "al detalle" (alcance a confirmar con Patricio al inicio):**
+1. Completar autos faltantes por clase hasta el roster real de la versión EA vigente (verificar v0.4+ in-game; hoy hay 15, faltan ~15+).
+2. Validar **rangos reales de cada parámetro** contra el juego (suspensión, diff central/coast/power, presiones por superficie, ala, TC/ABS escala 1-3, brake bias) — clave porque el motor `clampToParam` depende de estos rangos.
+3. Revisar `rules.ts`: que cada síntoma (subviraje/sobreviraje/rebota/sin tracción) mueva el parámetro correcto **en dirección física correcta** por superficie (grava vs asfalto vs nieve cambian la lógica).
+4. FFB: nombres de settings in-game correctos para AC Rally + valores por base Fanatec.
+5. `baseSetups` por auto donde haga falta (FWD sin diff central, 4WD con sesgo, clásicos sin electrónica).
+- **Bloqueo conocido:** datos exactos requieren **captura in-game de Patricio** (rangos de sliders reales). Es EA y cambia por versión. Si no los tiene a mano, construir con los datos de investigación existentes y marcar lo no verificado.
+
+**Arranque sugerido de la sesión:** Workflow de 2 fases — (A) diagnóstico de los fallos reportados (auditores que reproducen flujos) → (B) construcción AC Rally por dimensión (autos / parámetros+rangos / rules / tracks / ffb), cada una verificada adversarialmente contra fuentes.
 
 ---
 
