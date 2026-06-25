@@ -65,71 +65,73 @@ export function AuthForm({
   const isLogin = mode === "login";
 
   return (
-    <div className="mx-auto max-w-sm py-10">
-      <h1 className="mb-6 text-2xl font-bold tracking-tight">
-        {isLogin ? t("auth.loginTitle") : t("auth.registerTitle")}
-      </h1>
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        {!isLogin && (
+    <div className="reveal reveal-1 mx-auto max-w-sm py-12">
+      <div className="card relative overflow-hidden p-7">
+        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand via-sky to-transparent" />
+        <span className="eyebrow">{isLogin ? t("nav.login") : t("nav.register")}</span>
+        <h1 className="mb-6 mt-1.5 font-display text-2xl font-bold tracking-tight">
+          {isLogin ? t("auth.loginTitle") : t("auth.registerTitle")}
+        </h1>
+        <form onSubmit={onSubmit} className="flex flex-col gap-4">
+          {!isLogin && (
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm font-medium text-muted">{t("auth.name")}</span>
+              <input name="name" type="text" autoComplete="name" className="field" />
+            </label>
+          )}
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-muted">{t("auth.name")}</span>
+            <span className="text-sm font-medium text-muted">{t("auth.email")}</span>
             <input
-              name="name"
-              type="text"
-              autoComplete="name"
-              className="rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              className="field"
             />
           </label>
-        )}
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-muted">{t("auth.email")}</span>
-          <input
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
-          />
-        </label>
-        <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-medium text-muted">{t("auth.password")}</span>
-          <input
-            name="password"
-            type="password"
-            required
-            autoComplete={isLogin ? "current-password" : "new-password"}
-            className="rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
-          />
-        </label>
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-muted">{t("auth.password")}</span>
+            <input
+              name="password"
+              type="password"
+              required
+              autoComplete={isLogin ? "current-password" : "new-password"}
+              className="field"
+            />
+          </label>
 
-        {error && (
-          <p className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
-            {error}
-          </p>
-        )}
+          {error && (
+            <p
+              role="alert"
+              className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger"
+            >
+              {error}
+            </p>
+          )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong disabled:opacity-50"
-        >
-          {loading
-            ? t("common.loading")
-            : isLogin
-              ? t("auth.loginSubmit")
-              : t("auth.registerSubmit")}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary mt-1 px-4 py-3 text-sm"
+          >
+            {loading
+              ? t("common.loading")
+              : isLogin
+                ? t("auth.loginSubmit")
+                : t("auth.registerSubmit")}
+          </button>
+        </form>
 
-      <p className="mt-5 text-center text-sm text-muted">
-        {isLogin ? t("auth.noAccount") : t("auth.hasAccount")}{" "}
-        <Link
-          href={isLogin ? "/register" : "/login"}
-          className="font-semibold text-brand hover:underline"
-        >
-          {isLogin ? t("auth.goRegister") : t("auth.goLogin")}
-        </Link>
-      </p>
+        <p className="mt-6 text-center text-sm text-muted">
+          {isLogin ? t("auth.noAccount") : t("auth.hasAccount")}{" "}
+          <Link
+            href={isLogin ? "/register" : "/login"}
+            className="font-semibold text-brand hover:underline"
+          >
+            {isLogin ? t("auth.goRegister") : t("auth.goLogin")}
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

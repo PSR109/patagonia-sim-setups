@@ -75,102 +75,118 @@ export function GarageView({
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <h1 className="text-2xl font-bold tracking-tight">{t("garage.title")}</h1>
+    <div className="flex flex-col gap-9">
+      <header className="reveal reveal-1">
+        <span className="eyebrow">{t("nav.garage")}</span>
+        <h1 className="mt-1.5 font-display text-3xl font-bold tracking-tight">
+          {t("garage.title")}
+        </h1>
+      </header>
 
       {delError && (
-        <p className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
+        <p
+          role="alert"
+          className="rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger"
+        >
           {delError}
         </p>
       )}
 
       {/* Favoritos */}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          {t("garage.favorites")}
-        </h2>
+      <Section title={t("garage.favorites")} className="reveal reveal-2">
         {favorites.length === 0 ? (
           <Empty text={t("garage.emptyFav")} />
         ) : (
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <ul className="grid gap-2.5 sm:grid-cols-2">
             {favorites.map((f) => (
               <li
                 key={f.id}
-                className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface/60 px-4 py-3"
+                className="card group flex items-center justify-between gap-3 px-4 py-3"
               >
                 <Link
                   href={`/app/${f.gameId}`}
-                  className="min-w-0 flex-1 truncate text-sm font-medium hover:text-brand"
+                  className="min-w-0 flex-1 truncate text-sm font-medium transition-colors hover:text-brand"
                 >
-                  ★ {f.comboLabel}
+                  <span className="text-brand">★</span> {f.comboLabel}
                 </Link>
                 <DeleteBtn onClick={() => del("favorites", f.id)} label={t("common.delete")} />
               </li>
             ))}
           </ul>
         )}
-      </section>
+      </Section>
 
       {/* Notas */}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          {t("garage.notes")}
-        </h2>
+      <Section title={t("garage.notes")} className="reveal reveal-3">
         {notes.length === 0 ? (
           <Empty text={t("garage.empty")} />
         ) : (
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2.5">
             {notes.map((n) => (
               <li
                 key={n.id}
-                className="flex items-start justify-between gap-3 rounded-lg border border-border bg-surface/60 px-4 py-3"
+                className="card flex items-start justify-between gap-3 px-4 py-3"
               >
                 <div className="min-w-0">
                   <p className="text-xs text-muted">{n.comboLabel}</p>
-                  <p className="mt-0.5 whitespace-pre-wrap text-sm">{n.body}</p>
+                  <p className="mt-1 whitespace-pre-wrap text-sm">{n.body}</p>
                 </div>
                 <DeleteBtn onClick={() => del("notes", n.id)} label={t("common.delete")} />
               </li>
             ))}
           </ul>
         )}
-      </section>
+      </Section>
 
       {/* Tiempos */}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
-          {t("garage.laps")}
-        </h2>
+      <Section title={t("garage.laps")} className="reveal reveal-4">
         {laps.length === 0 ? (
           <Empty text={t("garage.empty")} />
         ) : (
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2.5">
             {laps.map((l) => (
               <li
                 key={l.id}
-                className="flex items-center justify-between gap-3 rounded-lg border border-border bg-surface/60 px-4 py-3"
+                className="card flex items-center justify-between gap-3 px-4 py-3"
               >
-                <div className="min-w-0">
-                  <span className="font-mono text-base font-semibold text-brand">
+                <div className="flex min-w-0 items-baseline gap-3">
+                  <span className="telemetry text-lg font-bold text-brand">
                     {fmtLap(l.lapTimeMs)}
                   </span>
-                  <span className="ml-3 text-xs text-muted">
-                    {l.comboLabel}
-                  </span>
+                  <span className="truncate text-xs text-muted">{l.comboLabel}</span>
                 </div>
                 <DeleteBtn onClick={() => del("laps", l.id)} label={t("common.delete")} />
               </li>
             ))}
           </ul>
         )}
-      </section>
+      </Section>
     </div>
+  );
+}
+
+function Section({
+  title,
+  className,
+  children,
+}: {
+  title: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className={`flex flex-col gap-3 ${className ?? ""}`}>
+      <h2 className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+        {title}
+      </h2>
+      {children}
+    </section>
   );
 }
 
 function Empty({ text }: { text: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-border px-4 py-8 text-center text-sm text-muted">
+    <div className="rounded-2xl border border-dashed border-border px-4 py-8 text-center text-sm text-muted">
       {text}
     </div>
   );
@@ -180,7 +196,7 @@ function DeleteBtn({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <button
       onClick={onClick}
-      className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-muted transition-colors hover:bg-danger/10 hover:text-danger"
+      className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-faint transition-colors hover:bg-danger/10 hover:text-danger"
       aria-label={label}
     >
       ✕

@@ -136,8 +136,11 @@ export function Generator({ gameId }: { gameId: string }) {
 
   if (loadingGame) {
     return (
-      <div className="mx-auto max-w-md py-16 text-center">
-        <h1 className="text-xl font-semibold">{t("common.loading")}</h1>
+      <div className="mx-auto max-w-md py-24 text-center">
+        <div className="mx-auto mb-4 h-7 w-7 animate-spin rounded-full border-2 border-border border-t-brand" />
+        <h1 className="font-display text-lg font-semibold tracking-tight text-muted">
+          {t("common.loading")}
+        </h1>
       </div>
     );
   }
@@ -145,9 +148,9 @@ export function Generator({ gameId }: { gameId: string }) {
   if (!game) {
     return (
       <div className="mx-auto max-w-md py-16 text-center">
-        <h1 className="text-xl font-semibold">{t("games.title")}</h1>
+        <h1 className="font-display text-xl font-semibold">{t("games.title")}</h1>
         <p className="mt-2 text-sm text-muted">{t("games.noData")}</p>
-        <Link href="/app" className="mt-6 inline-block text-sm font-semibold text-brand">
+        <Link href="/app" className="mt-6 inline-block text-sm font-semibold text-brand hover:underline">
           ← {t("games.title")}
         </Link>
       </div>
@@ -245,7 +248,7 @@ export function Generator({ gameId }: { gameId: string }) {
               value={trackTempC}
               onChange={(e) => setTrackTempC(e.target.value)}
               placeholder="25"
-              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
+              className="field telemetry"
             />
           </Field>
         );
@@ -320,17 +323,26 @@ export function Generator({ gameId }: { gameId: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-center justify-between gap-3">
+    <div className="flex flex-col gap-7">
+      <header className="reveal reveal-1 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <Link href="/app" className="text-xs font-medium text-muted hover:text-fg">
+          <Link
+            href="/app"
+            className="eyebrow text-[0.65rem] text-muted transition-colors hover:text-brand"
+          >
             ← {t("games.title")}
           </Link>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight">{game.meta.name}</h1>
+          <h1 className="mt-1.5 font-display text-3xl font-bold tracking-tight">
+            {game.meta.name}
+          </h1>
         </div>
         <span
-          className="rounded px-2 py-1 text-xs font-bold uppercase"
-          style={{ background: `${game.meta.accent}22`, color: game.meta.accent }}
+          className="rounded-md border px-2.5 py-1 font-display text-xs font-bold uppercase tracking-wider"
+          style={{
+            background: `${game.meta.accent}1a`,
+            color: game.meta.accent,
+            borderColor: `${game.meta.accent}44`,
+          }}
         >
           {isRally ? t("games.rally") : t("games.circuit")}
         </span>
@@ -338,7 +350,7 @@ export function Generator({ gameId }: { gameId: string }) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
         {/* Panel de selección */}
-        <section className="flex flex-col gap-5 rounded-xl border border-border bg-surface/50 p-5">
+        <section className="card reveal reveal-2 flex h-fit flex-col gap-5 p-5 lg:sticky lg:top-20 lg:p-6">
           {/* Categoría + auto */}
           <Field label={t("gen.category")}>
             <Select
@@ -384,18 +396,18 @@ export function Generator({ gameId }: { gameId: string }) {
             />
           </Field>
 
-          <div className="h-px bg-border" />
+          <Divider />
 
           {/* Condiciones (data-driven: cada juego declara sus campos) */}
-          <p className="text-sm font-semibold text-fg">{t("gen.conditions")}</p>
+          <SectionLabel>{t("gen.conditions")}</SectionLabel>
           {conditionFields.map((f) => renderCondition(f))}
 
-          <div className="h-px bg-border" />
+          <Divider />
 
           {/* Tu estilo de manejo (nivel + balance + suavidad) */}
           <div>
-            <p className="text-sm font-semibold text-fg">{t("gen.style")}</p>
-            <p className="mt-0.5 text-xs text-muted">{t("gen.styleHint")}</p>
+            <SectionLabel>{t("gen.style")}</SectionLabel>
+            <p className="mt-1 text-xs text-muted">{t("gen.styleHint")}</p>
           </div>
           <Field label={t("gen.driverLevel")} groupLabel>
             <Segmented
@@ -428,12 +440,12 @@ export function Generator({ gameId }: { gameId: string }) {
             />
           </Field>
 
-          <div className="h-px bg-border" />
+          <Divider />
 
           {/* Problemas / síntomas */}
           <div>
-            <p className="text-sm font-semibold text-fg">{t("gen.problems")}</p>
-            <p className="mt-0.5 text-xs text-muted">{t("gen.problemsHint")}</p>
+            <SectionLabel>{t("gen.problems")}</SectionLabel>
+            <p className="mt-1 text-xs text-muted">{t("gen.problemsHint")}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             {availableSymptoms.map((s) => (
@@ -443,10 +455,10 @@ export function Generator({ gameId }: { gameId: string }) {
                 aria-pressed={symptoms.has(s)}
                 onClick={() => toggleSymptom(s)}
                 className={cn(
-                  "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                  "rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-200",
                   symptoms.has(s)
-                    ? "border-brand bg-brand/15 text-brand"
-                    : "border-border bg-surface text-muted hover:text-fg",
+                    ? "border-brand/60 bg-brand/15 text-brand shadow-[0_0_0_1px_rgba(46,139,255,0.25),0_6px_18px_-10px_rgba(46,139,255,0.7)]"
+                    : "border-border bg-bg/40 text-muted hover:border-border-strong hover:text-fg",
                 )}
               >
                 {t(`symptom.${s}`)}
@@ -463,17 +475,11 @@ export function Generator({ gameId }: { gameId: string }) {
             </p>
           )}
 
-          <div className="flex gap-2">
-            <button
-              onClick={onGenerate}
-              className="flex-1 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong"
-            >
+          <div className="flex gap-2.5 pt-1">
+            <button onClick={onGenerate} className="btn-primary flex-1 px-4 py-3 text-sm">
               {t("gen.generate")}
             </button>
-            <button
-              onClick={onReset}
-              className="rounded-lg border border-border bg-surface px-4 py-2.5 text-sm font-medium text-muted transition-colors hover:text-fg"
-            >
+            <button onClick={onReset} className="btn-ghost px-4 py-3 text-sm text-muted">
               {t("gen.reset")}
             </button>
           </div>
@@ -494,8 +500,14 @@ export function Generator({ gameId }: { gameId: string }) {
               setView={setView}
             />
           ) : (
-            <div className="flex h-full min-h-[300px] items-center justify-center rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted">
-              {t("gen.emptyResult")}
+            <div className="card flex h-full min-h-[340px] flex-col items-center justify-center gap-3 border-dashed p-8 text-center">
+              <span
+                aria-hidden
+                className="grid h-12 w-12 place-items-center rounded-xl border border-border bg-surface-2 font-display text-xl text-brand"
+              >
+                ⚙
+              </span>
+              <p className="max-w-xs text-sm text-muted">{t("gen.emptyResult")}</p>
             </div>
           )}
         </section>
@@ -549,26 +561,32 @@ function ResultPanel({
       : params.filter((p) => changedIds.has(p.id));
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="rounded-xl border border-border bg-surface/60 p-5">
-        <h2 className="text-lg font-bold">
-          {t("result.title")}
-        </h2>
-        <p className="text-sm text-muted">
-          {carName}
-          {trackName ? ` · ${trackName}` : ""}
-        </p>
-        <p className="mt-3 rounded-lg bg-surface-2 px-3 py-2 text-xs leading-relaxed text-muted">
-          {t("result.disclaimer")}
-        </p>
+    <div className="reveal reveal-3 flex flex-col gap-5">
+      <div className="card overflow-hidden p-0">
+        <div className="h-1 w-full bg-gradient-to-r from-brand via-sky to-transparent" />
+        <div className="p-5">
+          <div className="flex items-center justify-between gap-3">
+            <span className="eyebrow text-[0.6rem]">{t("result.title")}</span>
+            <span className="rounded-full bg-brand/10 px-2.5 py-0.5 font-display text-[0.65rem] font-semibold uppercase tracking-wider text-brand">
+              {result.adjustments.length} {t("result.changed")}
+            </span>
+          </div>
+          <h2 className="mt-1.5 font-display text-xl font-bold tracking-tight">
+            {carName}
+          </h2>
+          {trackName && <p className="text-sm text-muted">{trackName}</p>}
+          <p className="mt-3 rounded-lg border border-border/60 bg-bg/40 px-3 py-2 text-xs leading-relaxed text-muted">
+            {t("result.disclaimer")}
+          </p>
+        </div>
       </div>
 
       {result.notes.length > 0 && (
-        <div className="rounded-xl border border-sky/30 bg-sky/5 p-4">
+        <div className="rounded-2xl border border-sky/25 bg-sky/[0.06] p-4">
           <ul className="flex flex-col gap-2 text-xs leading-relaxed text-muted">
             {result.notes.map((n, i) => (
               <li key={i} className="flex gap-2">
-                <span aria-hidden>ℹ️</span>
+                <span aria-hidden className="text-sky">ℹ</span>
                 <span>{localize(n, locale)}</span>
               </li>
             ))}
@@ -577,14 +595,14 @@ function ResultPanel({
       )}
 
       {/* Cambios aplicados */}
-      <div className="rounded-xl border border-border bg-surface/60 p-5">
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
+      <div className="card p-5">
+        <h3 className="mb-4 font-display text-xs font-semibold uppercase tracking-[0.18em] text-muted">
           {t("result.changed")}
         </h3>
         {result.adjustments.length === 0 ? (
           <p className="text-sm text-muted">{t("result.noChanges")}</p>
         ) : (
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-3.5">
             {result.adjustments.map((a, i) => {
               const p = paramById.get(a.paramId);
               if (!p) return null;
@@ -593,7 +611,7 @@ function ResultPanel({
                 <li key={i} className="flex gap-3">
                   <span
                     className={cn(
-                      "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold",
+                      "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-xs font-bold",
                       up ? "bg-good/15 text-good" : "bg-sky/15 text-sky",
                     )}
                   >
@@ -602,8 +620,9 @@ function ResultPanel({
                   <div>
                     <p className="text-sm font-medium">
                       {localize(p.name, locale)}:{" "}
-                      <span className="text-muted line-through">{formatValue(p, a.from)}</span>{" "}
-                      → <span className="font-semibold text-fg">{formatValue(p, a.to)}</span>
+                      <span className="telemetry text-muted line-through">{formatValue(p, a.from)}</span>{" "}
+                      <span className="text-faint">→</span>{" "}
+                      <span className="telemetry font-semibold text-fg">{formatValue(p, a.to)}</span>
                     </p>
                     <p className="text-xs leading-relaxed text-muted">
                       {localize(a.reason, locale)}
@@ -617,8 +636,8 @@ function ResultPanel({
       </div>
 
       {/* Setup completo */}
-      <div className="rounded-xl border border-border bg-surface/60 p-5">
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
+      <div className="card p-5">
+        <h3 className="mb-4 font-display text-xs font-semibold uppercase tracking-[0.18em] text-muted">
           {t("result.values")}
         </h3>
         <div className="flex flex-col gap-4">
@@ -627,10 +646,10 @@ function ResultPanel({
             if (groupParams.length === 0) return null;
             return (
               <div key={group}>
-                <p className="mb-1.5 text-xs font-semibold text-brand">
+                <p className="mb-1.5 font-display text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-sky">
                   {t(`group.${group}`)}
                 </p>
-                <div className="overflow-hidden rounded-lg border border-border">
+                <div className="overflow-hidden rounded-xl border border-border">
                   <table className="w-full text-sm">
                     <tbody>
                       {groupParams.map((p, idx) => {
@@ -639,17 +658,22 @@ function ResultPanel({
                           <tr
                             key={p.id}
                             className={cn(
-                              idx > 0 && "border-t border-border",
-                              changed && "bg-brand/5",
+                              idx > 0 && "border-t border-border/70",
+                              changed && "bg-brand/[0.07]",
                             )}
                           >
-                            <td className="px-3 py-2 text-muted">{localize(p.name, locale)}</td>
-                            <td className="px-3 py-2 text-right tabular-nums text-muted">
+                            <td className="relative px-3 py-2 text-muted">
+                              {changed && (
+                                <span className="absolute inset-y-1 left-0 w-0.5 rounded-full bg-brand" />
+                              )}
+                              {localize(p.name, locale)}
+                            </td>
+                            <td className="telemetry px-3 py-2 text-right text-faint">
                               {formatValue(p, base[p.id])}
                             </td>
                             <td
                               className={cn(
-                                "px-3 py-2 text-right font-semibold tabular-nums",
+                                "telemetry px-3 py-2 text-right font-semibold",
                                 changed ? "text-brand" : "text-fg",
                               )}
                             >
@@ -674,12 +698,12 @@ function ResultPanel({
       </div>
 
       {/* Explicaciones educativas */}
-      <div className="rounded-xl border border-border bg-surface/60 p-5">
+      <div className="card p-5">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted">
+          <h3 className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-muted">
             {t("result.explainTitle")}
           </h3>
-          <div className="flex items-center rounded-md border border-border bg-surface p-0.5 text-xs font-semibold">
+          <div className="flex items-center rounded-lg border border-border bg-bg/50 p-0.5 text-xs font-semibold">
             {(["beginner", "advanced"] as const).map((v) => (
               <button
                 key={v}
@@ -687,8 +711,8 @@ function ResultPanel({
                 aria-pressed={view === v}
                 onClick={() => setView(v)}
                 className={cn(
-                  "rounded px-2 py-1 transition-colors",
-                  view === v ? "bg-brand text-bg" : "text-muted hover:text-fg",
+                  "rounded-md px-2.5 py-1 transition-colors",
+                  view === v ? "bg-brand text-white" : "text-muted hover:text-fg",
                 )}
               >
                 {v === "beginner" ? t("gen.viewBeginner") : t("gen.viewAdvanced")}
@@ -696,7 +720,7 @@ function ResultPanel({
             ))}
           </div>
         </div>
-        <div className="flex flex-col divide-y divide-border">
+        <div className="flex flex-col divide-y divide-border/70">
           {explainParams.map((p) => (
             <details key={p.id} className="group py-2">
               <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-medium">
@@ -720,7 +744,7 @@ function ResultPanel({
                   <span className="font-semibold text-sky">{t("result.decrease")}:</span>{" "}
                   {localize(p.decreaseEffect, locale)}
                 </p>
-                <p className="text-muted">
+                <p className="telemetry text-faint">
                   {t("result.range")}: {formatValue(p, p.min)} – {formatValue(p, p.max)}
                   {" · "}
                   {t("result.stepLabel")} {p.step}
@@ -873,12 +897,12 @@ function SaveBar({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-surface/60 p-4">
-      <div className="flex flex-wrap gap-2">
+    <div className="card p-4">
+      <div className="flex flex-wrap gap-2.5">
         <button
           onClick={saveFavorite}
           disabled={busy || favSaved}
-          className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong disabled:opacity-50"
+          className="btn-primary px-4 py-2 text-sm"
         >
           {favSaved ? `✓ ${t("common.saved")}` : `★ ${t("result.saveFav")}`}
         </button>
@@ -887,7 +911,7 @@ function SaveBar({
             setNoteOpen((o) => !o);
             setLapOpen(false);
           }}
-          className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+          className="btn-ghost px-4 py-2 text-sm"
         >
           {t("result.addNote")}
         </button>
@@ -896,7 +920,7 @@ function SaveBar({
             setLapOpen((o) => !o);
             setNoteOpen(false);
           }}
-          className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+          className="btn-ghost px-4 py-2 text-sm"
         >
           {t("result.addLap")}
         </button>
@@ -910,13 +934,9 @@ function SaveBar({
             placeholder={t("garage.noteBody")}
             aria-label={t("garage.noteBody")}
             rows={3}
-            className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
+            className="field"
           />
-          <button
-            onClick={saveNote}
-            disabled={busy}
-            className="self-start rounded-lg bg-brand px-4 py-1.5 text-sm font-semibold text-bg disabled:opacity-50"
-          >
+          <button onClick={saveNote} disabled={busy} className="btn-primary self-start px-4 py-1.5 text-sm">
             {t("common.save")}
           </button>
         </div>
@@ -929,13 +949,9 @@ function SaveBar({
             onChange={(e) => setLapInput(e.target.value)}
             placeholder="1:23.456"
             aria-label={t("result.addLap")}
-            className="w-32 rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
+            className="field telemetry w-32"
           />
-          <button
-            onClick={saveLap}
-            disabled={busy}
-            className="rounded-lg bg-brand px-4 py-1.5 text-sm font-semibold text-bg disabled:opacity-50"
-          >
+          <button onClick={saveLap} disabled={busy} className="btn-primary px-4 py-1.5 text-sm">
             {t("common.save")}
           </button>
         </div>
@@ -958,6 +974,18 @@ function SaveBar({
 
 /* ---------- Primitivas de UI ---------- */
 
+function Divider() {
+  return <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />;
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="font-display text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-fg">
+      {children}
+    </p>
+  );
+}
+
 let fieldGroupSeq = 0;
 
 function Field({
@@ -978,7 +1006,9 @@ function Field({
   const labelText = (
     <span className="flex items-center gap-2 text-sm font-medium text-muted">
       {label}
-      {hint && <span className="text-[10px] uppercase tracking-wide text-muted">{hint}</span>}
+      {hint && (
+        <span className="text-[10px] uppercase tracking-wide text-faint">{hint}</span>
+      )}
     </span>
   );
 
@@ -1016,7 +1046,7 @@ function Select({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
+      className="field"
     >
       {placeholder && <option value="">{placeholder}</option>}
       {options.map((o) => (
@@ -1046,10 +1076,10 @@ function Segmented({
           aria-pressed={value === o.value}
           onClick={() => onChange(o.value)}
           className={cn(
-            "rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors",
+            "rounded-lg border px-3 py-1.5 text-xs font-medium transition-all duration-200",
             value === o.value
-              ? "border-brand bg-brand/15 text-brand"
-              : "border-border bg-surface text-muted hover:text-fg",
+              ? "border-brand/60 bg-brand/15 text-brand shadow-[0_0_0_1px_rgba(46,139,255,0.25)]"
+              : "border-border bg-bg/40 text-muted hover:border-border-strong hover:text-fg",
           )}
         >
           {o.label}

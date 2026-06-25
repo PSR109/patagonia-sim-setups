@@ -1,24 +1,44 @@
 @import "tailwindcss";
 
-/* Paleta Patagonia Sim Racing: tomada de la marca oficial (patagoniasimracing.cl):
-   base azul-noche con acento azul de carrera (#2981f3), igual que el logo PSR.
-   Cambiá estos tokens para re-brandear toda la app desde un solo lugar. */
+/* ============================================================================
+   PATAGONIA SIM RACING — DESIGN SYSTEM  ("Pit Wall")
+   Aesthetic: premium motorsport engineering instrument. Deep carbon-navy base,
+   racing-blue glow, telemetry data-readouts. Brand palette from
+   patagoniasimracing.cl (azul-noche + acento #2981f3). Re-brand from these tokens.
+   ============================================================================ */
 @theme {
-  --color-bg: #061018;
-  --color-surface: #0c1c2a;
-  --color-surface-2: #122a3d;
-  --color-border: #1e3a4f;
-  --color-fg: #f5faff;
-  --color-muted: #8da3b8;
-  --color-brand: #2981f3;
-  --color-brand-strong: #1c6fe0;
-  --color-sky: #5aa6f7;
-  --color-warn: #f59e0b;
-  --color-danger: #ef4444;
-  --color-good: #34d399;
+  /* — Base surfaces (carbon-navy elevation scale) — */
+  --color-bg: #04070c;
+  --color-bg-2: #060b12;
+  --color-surface: #0a141f;
+  --color-surface-2: #0f1f2e;
+  --color-surface-3: #16293b;
+  --color-border: #1c3346;
+  --color-border-strong: #2c4d68;
 
+  /* — Text — */
+  --color-fg: #eef6ff;
+  --color-muted: #93a9bf;
+  --color-faint: #6a8195;
+
+  /* — Brand / racing accent — */
+  --color-brand: #2e8bff;
+  --color-brand-strong: #1f6fe0;
+  --color-brand-deep: #0c4ba8;
+  --color-sky: #6bb6ff;
+
+  /* — Telemetry status — */
+  --color-warn: #f5a524;
+  --color-danger: #ff5468;
+  --color-good: #2ee6a6;
+
+  /* — Type — */
   --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-saira), var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* — Motion — */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
@@ -26,14 +46,256 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(1100px 600px at 85% -10%, rgba(41, 129, 243, 0.10), transparent 60%),
-    radial-gradient(900px 500px at 0% 0%, rgba(90, 166, 247, 0.06), transparent 55%),
-    var(--color-bg);
+  background: var(--color-bg);
   color: var(--color-fg);
+  font-feature-settings: "cv01", "cv03", "ss03";
 }
 
-/* Scrollbar discreta */
+/* — Atmosphere: layered glows + telemetry grid + vignette, all fixed behind UI — */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 680px at 82% -12%, rgba(46, 139, 255, 0.16), transparent 60%),
+    radial-gradient(900px 560px at -8% 4%, rgba(107, 182, 255, 0.08), transparent 55%),
+    radial-gradient(1400px 900px at 50% 120%, rgba(12, 75, 168, 0.12), transparent 60%),
+    linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-2) 100%);
+}
+
+/* Fine engineering grid + grain overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(to right, rgba(46, 139, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(46, 139, 255, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(120% 90% at 50% 0%, #000 0%, transparent 78%);
+}
+
+/* — Scrollbar — */
 * {
-  scrollbar-color: var(--color-border) transparent;
+  scrollbar-color: var(--color-border-strong) transparent;
+  scrollbar-width: thin;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+  background-clip: padding-box;
+}
+
+/* — Selection — */
+::selection {
+  background: rgba(46, 139, 255, 0.32);
+  color: #fff;
+}
+
+/* — Focus ring (consistent, branded) — */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ============================================================================
+   Reusable component primitives
+   ============================================================================ */
+
+/* Eyebrow / kicker label */
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sky);
+}
+
+/* Glass / elevated card with hairline highlight + soft depth */
+.card {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0) 42%),
+    var(--color-surface);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+    0 18px 40px -24px rgba(0, 0, 0, 0.9);
+}
+
+/* Card that lifts + glows on hover (for links/grids) */
+.card-interactive {
+  transition:
+    transform 0.32s var(--ease-out-quint),
+    border-color 0.32s var(--ease-out-quint),
+    box-shadow 0.32s var(--ease-out-quint);
+}
+.card-interactive:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-border-strong);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+    0 30px 60px -30px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(46, 139, 255, 0.18),
+    0 12px 50px -18px rgba(46, 139, 255, 0.32);
+}
+
+/* Primary action — gradient with inner sheen + glow */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 11px;
+  background: linear-gradient(180deg, var(--color-brand) 0%, var(--color-brand-strong) 100%);
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.28) inset,
+    0 10px 24px -10px rgba(46, 139, 255, 0.7);
+  transition:
+    filter 0.2s ease,
+    transform 0.2s var(--ease-out-quint),
+    box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.32) inset,
+    0 14px 32px -10px rgba(46, 139, 255, 0.85);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  filter: none;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Secondary / ghost action — glass */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 11px;
+  border: 1px solid var(--color-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)) var(--color-surface);
+  color: var(--color-fg);
+  font-weight: 600;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s var(--ease-out-quint);
+}
+.btn-ghost:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-2);
+  transform: translateY(-1px);
+}
+
+/* Inputs / selects — consistent field treatment */
+.field {
+  width: 100%;
+  border-radius: 11px;
+  border: 1px solid var(--color-border);
+  background: rgba(4, 7, 12, 0.55);
+  padding: 0.55rem 0.8rem;
+  font-size: 0.875rem;
+  color: var(--color-fg);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.field:hover {
+  border-color: var(--color-border-strong);
+}
+.field:focus {
+  border-color: var(--color-brand);
+  background: rgba(4, 7, 12, 0.75);
+  box-shadow: 0 0 0 3px rgba(46, 139, 255, 0.16);
+}
+select.field {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-muted) 50%),
+    linear-gradient(135deg, var(--color-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.05rem) center,
+    calc(100% - 0.72rem) center;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 2.2rem;
+}
+
+/* Numeric / telemetry readout */
+.telemetry {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================================
+   Motion — staggered page-load reveal
+   ============================================================================ */
+@keyframes psr-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: psr-rise 0.7s var(--ease-out-quint) both;
+}
+.reveal-1 { animation-delay: 0.04s; }
+.reveal-2 { animation-delay: 0.12s; }
+.reveal-3 { animation-delay: 0.2s; }
+.reveal-4 { animation-delay: 0.28s; }
+.reveal-5 { animation-delay: 0.36s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-1,
+  .reveal-2,
+  .reveal-3,
+  .reveal-4,
+  .reveal-5 {
+    animation: none;
+  }
+  .card-interactive:hover {
+    transform: none;
+  }
+}
+
+/* Display headings default tracking */
+.font-display {
+  letter-spacing: -0.01em;
 }

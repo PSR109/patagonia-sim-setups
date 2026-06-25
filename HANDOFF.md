@@ -7,6 +7,29 @@
 
 ## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-25)
 
+**Iteración 20 (HECHA 2026-06-25): rediseño visual "$10k" — sistema de diseño "Pit Wall".**
+Pedido de Patricio: *"deja el diseño de la app como una app del USD$ 10k"*. SOLO capa visual;
+lógica intacta (motor/i18n/auth/datos/engine sin tocar). `tsc --noEmit` 0; verificado en vivo por
+eval (la tool de screenshot del preview da timeout en este entorno — es la tool, no la CSS).
+- **`src/app/globals.css` reescrito = el sistema de diseño**: paleta carbon-navy más profunda
+  (`--color-bg #04070c`), escala de superficies/bordes, **atmósfera fija** (glows radiales + grilla
+  técnica + viñeta vía `body::before/after`), scrollbar/selección/**focus-ring** branded, y **clases
+  reutilizables**: `.card` / `.card-interactive`, `.btn-primary` / `.btn-ghost`, `.field`, `.eyebrow`,
+  `.telemetry` (mono tabular), `.reveal*` (entrada escalonada). Re-brandeable desde los tokens `@theme`.
+- **Tipografía**: + **Saira** (display motorsport) para titulares/números grandes (next/font); Inter
+  sigue de cuerpo (marca); **Geist Mono para todo número de telemetría** (valores, vueltas, rangos).
+- **Surfaces tocadas (solo className/JSX cosmético, sin cambiar handlers/estado/i18n/aria)**:
+  `layout.tsx` (shell + fuente Saira + footer), `page.tsx` (hero con glow + chips de 5 sims + features
+  01/02/03), `site-header.tsx` (glass + hairline de marca), `brand.tsx` (wordmark display), `games-grid`
+  (cards con strip de acento + glow al hover), `generator.tsx` (panel sticky, segmented con glow, result
+  como **data-readout**: filas cambiadas con barra de acento + valores en brand, flechas ↑/↓ en chips),
+  `ffb-panel`, `garage-view` (vueltas en mono grande), `auth-form` (card con top-gradient).
+- **Verificado en vivo (eval)**: 0 errores de consola en landing/grid/generator; `font-family` h1 =
+  Saira; `.card` radius 16px; `.btn-primary` con gradiente brand; generar ACC Ferrari 296 con síntoma
+  "subviraje en entrada" → 2 barras de acento + 2 valores en brand + 2 flechas ↑/↓ (cambios resaltados OK).
+- **Pendiente menor de esta iteración**: correr `npm run build` (no corrido; solo `tsc` 0) y un repaso
+  de contraste AA sobre los nuevos `text-faint`/grises antes de commitear. NO commiteado (luz verde de Patricio).
+
 **🔴 PENDIENTE PRIORITARIO (próxima sesión): COMPLETAR TODAS LAS PISTAS/ETAPAS.**
 Faltan pistas/etapas en varios juegos; deberían estar TODAS las del juego real.
 Conteo actual (validate-engine, 2026-06-25): **ACC 25 · LMU 14 · AC EVO 18 · AC Rally 7 · EA WRC 18**.
