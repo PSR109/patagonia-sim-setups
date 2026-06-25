@@ -1,13 +1,17 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 17: F1 25 e iRacing ELIMINADOS de la app (fuera de alcance; quedan 5 sims; commit+push hechos; ver §3o). Iteración 16: LMU reconstruido contra DOS capturas in-game (Hypercar Alpine A424 #35 + LMGT3 McLaren 720S Evo #59, Bahrain) → modelo de 2 clases: 45 params universales + extras solo-Hypercar (heave, muelle de goma, diff power/inercia, híbrido regen/mapa eléctrico, diff delantero) + extra solo-LMGT3 (ABS) + paramOverrides de clase LMGT3 (ala en grados, dampers 0-50, defaults del McLaren); ver §3n. Iteración 15: AC EVO reconstruido contra captura in-game (Porsche 992 GT3 R, modo Carrera, v0.7.1, 6 pestañas → 29 params, era 35; el editor REAL no expone caja/diff power-coast/freno aparte/dampers rápidos/splitter → se eliminaron; ver §3m); iteración 14: ACC reconstruido contra captura in-game (Ferrari 296 GT3, preset Seguridad, 6 pestañas → 39 params, era 16; ver §3l); iteración 13: EA WRC reconstruido contra captura in-game (Ford Puma Rally1, 33 params, rangos exactos); iteración 12: AC Rally reconstruido (i20 N Rally2, 36 params, rangos estimados); iteración 11: 2º pase adversarial perf/errores/UX — 7 fixes, §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). F1 25 e iRacing: ELIMINADOS de la app en iteración 17 (§3o).
+> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 18: auditoría multiagente full (13 dimensiones, 106 agentes, 30 hallazgos confirmados) + fixes aplicados y commiteados — física EA WRC `weather_wet` y AC EVO `oversteer_exit` (signos invertidos), bundle split (game-metas.ts, ningún cliente importa registry), lote a11y en generator.tsx, html lang en toggle, baseFor snap, FFB LMU torque, voseo+usted→tuteo (0 restantes), tsx devDep; verificado tsc 0 / validate-engine 0 / build verde; ver §3p. Iteración 17: F1 25 e iRacing ELIMINADOS de la app (fuera de alcance; quedan 5 sims; commit+push hechos; ver §3o). Iteración 16: LMU reconstruido contra DOS capturas in-game (Hypercar Alpine A424 #35 + LMGT3 McLaren 720S Evo #59, Bahrain) → modelo de 2 clases: 45 params universales + extras solo-Hypercar (heave, muelle de goma, diff power/inercia, híbrido regen/mapa eléctrico, diff delantero) + extra solo-LMGT3 (ABS) + paramOverrides de clase LMGT3 (ala en grados, dampers 0-50, defaults del McLaren); ver §3n. Iteración 15: AC EVO reconstruido contra captura in-game (Porsche 992 GT3 R, modo Carrera, v0.7.1, 6 pestañas → 29 params, era 35; el editor REAL no expone caja/diff power-coast/freno aparte/dampers rápidos/splitter → se eliminaron; ver §3m); iteración 14: ACC reconstruido contra captura in-game (Ferrari 296 GT3, preset Seguridad, 6 pestañas → 39 params, era 16; ver §3l); iteración 13: EA WRC reconstruido contra captura in-game (Ford Puma Rally1, 33 params, rangos exactos); iteración 12: AC Rally reconstruido (i20 N Rally2, 36 params, rangos estimados); iteración 11: 2º pase adversarial perf/errores/UX — 7 fixes, §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). F1 25 e iRacing: ELIMINADOS de la app en iteración 17 (§3o).
 
 ---
 
 ## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-25)
 
 **ESTADO: los 5 sims en alcance están reconstruidos 1:1. NO hay juego pendiente.**
+**Iteración 18 (2026-06-25): auditoría multiagente full + fixes — HECHO y commiteado (§3p).**
+App auditada en 13 dimensiones con verificación adversarial; sin agujeros de seguridad/datos.
+Pendientes recomendados (NO bugs): tests del motor (mayor ROI), no-op de saturación del ala
+en ACC `oversteer_mid`, dedupe DB de favoritos, claves i18n huérfanas, polish a11y. Ver §3p.
 F1 25 e iRacing se **ELIMINARON** de la app (iter 17, §3o). Si Patricio decide sumar un
 juego nuevo, el patrón está establecido (ver iter 12–16): manda **UNA** captura in-game
 de referencia por auto/clase (todas las pestañas del editor) → reconstruir
@@ -568,6 +572,78 @@ ac_rally 36, ea_wrc 33) / `npm run build` verde (16/16 estáticas). Commit + pus
 
 **Pendiente tras esto:** ninguno de reconstrucción. La app queda con 5 sims. (Si se
 quiere re-sumar F1 25 o iRacing en el futuro, recuperar desde el historial de git.)
+
+---
+
+## 3p. COMPLETADA (iteración 18): Auditoría multiagente full + fixes (2026-06-25)
+
+Patricio pidió: *"lee el handoff y lanza una auditoría multiagente para revisar que esté
+todo bien, cómo mejorarla y optimizarla y asegurarte que sea consistente y todo funcione."*
+
+**Workflow de auditoría** `wf_3a82f33b-bd8` (106 agentes, 13 dimensiones: engine ·
+data-consistency · física ×3 (acc / rally+wrc / lmu+evo) · ffb · seguridad · api-errores
+· i18n · ux-a11y · next16-react · performance · config). Cada hallazgo pasó por **2
+refutadores adversariales** (refute-by-default). **30 confirmados, 16 descartados** como
+falsos positivos/preferencia. Veredicto: **app fundamentalmente sólida** — motor correcto
+(merge order, clamp/step, delta stacking, FWD dedup), auth bien scoped al usuario, API
+con códigos uniformes, i18n con paridad ES/EN completa. **Sin agujeros de seguridad ni de
+integridad de datos.**
+
+**APLICADO (fixes, todos verificados tsc 0 / validate-engine 0 / build verde):**
+- **🔴 Física EA WRC `weather_wet`** (`ea_wrc/rules.ts`): `brake_bias` +2 → **−2**. Movía
+  el reparto ADELANTE con la justificación "para no bloquear" (invertido vs física, vs su
+  propio param, vs snow/gravel y vs AC Rally). Reason es+en reescrita.
+- **🔴 Física AC EVO `oversteer_exit`** (`ac_evo/rules.ts`): `diff_preload` −2 → **+2**.
+  Idéntico a `understeer_exit` (síntoma opuesto) y contradecía el increaseEffect del param
+  + `oversteer_entry`/`braking_instability` (+2). Reason es+en reescrita.
+- **FFB LMU** (`lmu/ffb.ts`): `steering_torque_capability` perBase `gt_dd_pro`/`csl_dd`
+  "8" → **"5 (8 con Kit Boost)"** (contradecía `fanatec.ts` maxTorqueNm:5 y su propia nota).
+- **Motor** (`engine/index.ts` `baseFor`): defaults heredados ahora pasan por
+  `clampToParam` (encajan al step grid, como ya hacían los baseSetups; honra el doc comment).
+- **i18n** (`context.tsx` `setLocale`): ahora actualiza `document.documentElement.lang`
+  al cambiar idioma (WCAG 3.1.2; antes quedaba stale hasta navegar).
+- **Bundle / code-split** (`garage-view.tsx`, `games-grid.tsx`): eran `"use client"` e
+  importaban el barrel `@/data/registry` (arrastraba los 5 juegos completos al bundle,
+  ~100 KB gz, anulando `load-game.ts`). Nuevo módulo **`src/data/game-metas.ts`**
+  (solo `GameMeta[]` + `implementedGameIds: Set`, sin importar data por-juego); los nombres
+  del garaje se resuelven server-side en `garage/page.tsx`. Verificado: ningún módulo
+  cliente importa `@/data/registry`.
+- **a11y `generator.tsx`** (lote): **bug funcional** del botón Favorito que quedaba
+  trabado "Guardado" tras regenerar (`useEffect(setFavSaved(false),[result])`); `aria-pressed`
+  en `Segmented`; `role="group"` + `aria-labelledby` en los 5 campos segmentados (antes el
+  `<label>` no nombraba nada); contraste `text-muted/70|/60` → `text-muted` (col base +
+  caption + hint, fallaban AA 4.5:1); `aria-label` en input de vuelta; `role="alert"` en
+  mensajes de estado/error.
+- **Contraste botones** (5 componentes): `hover:bg-brand-strong` con `text-bg` (4.02:1) →
+  `text-fg` (~4.55:1) en page.tsx / generator.tsx ×2 / auth-form.tsx / site-header.tsx.
+- **Consistencia castellano** (voseo→tuteo): 21 reemplazos en 6 archivos de data +
+  11 usted→tuteo en las "reglas de oro" FFB (acc/ea_wrc/lmu/ac_evo `ffb.ts`). **0 voseo /
+  0 usted-imperativo** en strings `es:` (re-grep confirmado). `en:` intacto.
+- **Build/DX** (`package.json`): agregado `tsx ^4` a devDependencies (los scripts usaban
+  `npx tsx` sin declararlo) + scripts `validate` y `seed`.
+
+**PENDIENTE / recomendado (NO bugs — mejoras futuras, no aplicadas):**
+1. **Tests del motor**: no hay unit tests del core determinístico ni script `test`. Las
+   3 clases de bug de física/saturación de esta iteración las cazaría un suite chico
+   (snapping, delta stacking, FWD exclude, y assert "signo del reason == signo del delta"
+   por regla). Es la mejora de mayor ROI.
+2. **ACC `oversteer_mid` `rear_wing` +1** (`acc/rules.ts`): no-op por saturación en el
+   coche de referencia y la mayoría de GT3 (ala ya al máx) → la traza educativa promete un
+   cambio que no ocurre. Bajar el default global del ala, o quitar el delta de ala. Cosmético.
+3. **LMU `wet` presiones −5** (`lmu/rules.ts`): defendible pero opuesto a `tyres_cold`/
+   `track_temp_low` (+) y a AC EVO wet (+). Confirmar convención (presión fría vs objetivo).
+4. **Favoritos sin dedupe a nivel DB** (`api/favorites`): `@@unique([userId,gameId,carId,trackId])`
+   + upsert evitaría duplicados por doble-tab. Auto-scoped, baja prioridad.
+5. **13 claves i18n huérfanas** + wordmark hardcodeado (`brand.tsx`/`page.tsx`/`layout.tsx`
+   en vez de `brand.name`): limpiar o cablear.
+6. **Polish a11y**: `focus-visible` ring consistente en chips/summaries; `<thead>/<th scope>`
+   en la tabla de setup; `aria-busy`/`role=status` en loading y botones async.
+7. **Latente**: colisión de id entre `extraParams` de clase y de auto no validada (hoy
+   ningún auto define extraParams → no se dispara); agregar chequeo cross-context al validador.
+
+**Verificación final:** tsc 0 · validate-engine 0 (acc 39 / lmu 45 / ac_evo 29 / ac_rally 36
+/ ea_wrc 33) · `npm run build` verde (16/16 estáticas, Proxy presente). NO commiteado/pusheado
+(esperando luz verde de Patricio).
 
 ---
 

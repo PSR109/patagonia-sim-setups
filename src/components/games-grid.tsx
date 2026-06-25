@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { gameCatalog, isImplemented } from "@/data/registry";
+import { gameMetas, implementedGameIds } from "@/data/game-metas";
 import { useT } from "@/lib/i18n/context";
 import { cn } from "@/lib/cn";
 
@@ -16,8 +16,8 @@ export function GamesGrid() {
       </header>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {gameCatalog.map((g) => {
-          const ready = isImplemented(g.id);
+        {gameMetas.map((g) => {
+          const ready = implementedGameIds.has(g.id);
           const card = (
             <div
               className={cn(

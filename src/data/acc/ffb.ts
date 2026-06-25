@@ -123,7 +123,7 @@ export const accFfb: GameFfb = {
       name: { es: "Frequency (frecuencia)", en: "Frequency" },
       value: "333 Hz",
       whatItDoes: {
-        es: "Tasa de actualización del FFB. Es un ajuste discreto (valores fijos seleccionables), no un slider continuo. Cuanto más alta, más fino el detalle. Use el valor más alto que la base maneje sin problemas.",
+        es: "Tasa de actualización del FFB. Es un ajuste discreto (valores fijos seleccionables), no un slider continuo. Cuanto más alta, más fino el detalle. Usa el valor más alto que la base maneje sin problemas.",
         en: "FFB update rate. It is a discrete setting (a fixed set of selectable values), not a continuous slider. The higher it is, the finer the detail. Use the highest value your base handles cleanly.",
       },
       note: {
@@ -136,7 +136,7 @@ export const accFfb: GameFfb = {
       name: { es: "Steer Lock (rotación del volante)", en: "Steer Lock" },
       value: "900°",
       whatItDoes: {
-        es: "Define la rotación total que usa el juego. En PC ACC aplica un soft-lock por auto: deje 900° y el juego limita la rotación al valor real de cada GT3 (por ejemplo Audi R8 LMS ~720°, Porsche 991 II GT3 R ~800°).",
+        es: "Define la rotación total que usa el juego. En PC ACC aplica un soft-lock por auto: deja 900° y el juego limita la rotación al valor real de cada GT3 (por ejemplo Audi R8 LMS ~720°, Porsche 991 II GT3 R ~800°).",
         en: "Sets the total rotation the game uses. On PC ACC applies a per-car soft-lock: leave 900° and the game limits rotation to each GT3's real value (e.g. Audi R8 LMS ~720°, Porsche 991 II GT3 R ~800°).",
       },
       note: {
@@ -160,11 +160,11 @@ export const accFfb: GameFfb = {
   ],
   notes: [
     {
-      es: "Regla de oro: deje la base (FFB) al 100% y ajuste la fuerza con el Gain del juego mirando el medidor de FFB. Si el medidor vive en rojo, está saturando (clipping) y se pierde información del agarre.",
+      es: "Regla de oro: deja la base (FFB) al 100% y ajusta la fuerza con el Gain del juego mirando el medidor de FFB. Si el medidor vive en rojo, está saturando (clipping) y se pierde información del agarre.",
       en: "Rule of thumb: leave the base (FFB) at 100% and dial in the force with the in-game Gain while watching the FFB meter. If the meter lives in the red you're clipping and losing grip information.",
     },
     {
-      es: "Suba el Gain de a poco hasta que en las curvas más cargadas el medidor llegue al tope justo sin quedarse saturado.",
+      es: "Sube el Gain de a poco hasta que en las curvas más cargadas el medidor llegue al tope justo sin quedarse saturado.",
       en: "Raise the Gain gradually until the meter just reaches the top in the most loaded corners without staying saturated.",
     },
   ],

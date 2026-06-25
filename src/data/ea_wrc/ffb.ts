@@ -206,7 +206,7 @@ export const ea_wrcFfb: GameFfb = {
   ],
   notes: [
     {
-      es: "Regla de oro: deje la base (FFB) al 100% y ajuste la fuerza con Vibration & FFB Strength y Self-Aligning Torque dentro del juego. Si el volante se siente 'plano' en los picos (los baches y curvas fuertes ya no se notan más fuertes que el resto), está saturando (clipping) y se pierde información del agarre.",
+      es: "Regla de oro: deja la base (FFB) al 100% y ajusta la fuerza con Vibration & FFB Strength y Self-Aligning Torque dentro del juego. Si el volante se siente 'plano' en los picos (los baches y curvas fuertes ya no se notan más fuertes que el resto), está saturando (clipping) y se pierde información del agarre.",
       en: "Rule of thumb: leave the base (FFB) at 100% and dial in the force with Vibration & FFB Strength and Self-Aligning Torque in-game. If the wheel feels 'flat' at the peaks (big bumps and hard corners no longer feel stronger than the rest), you're clipping and losing grip information.",
     },
     {
@@ -214,11 +214,11 @@ export const ea_wrcFfb: GameFfb = {
       en: "The in-game channels are shown as percentages, with 100% as the default/neutral value, and can be pushed above 100. Guides and users commonly go up to ~130–150 (e.g. SAT 140, Suspension 130); ~150 is a practical recommended limit, not the slider's official ceiling.",
     },
     {
-      es: "Suba Vibration & FFB Strength y Self-Aligning Torque de a poco hasta que los baches grandes y las curvas más cargadas se sientan fuertes pero sigan teniendo detalle por encima.",
+      es: "Sube Vibration & FFB Strength y Self-Aligning Torque de a poco hasta que los baches grandes y las curvas más cargadas se sientan fuertes pero sigan teniendo detalle por encima.",
       en: "Raise Vibration & FFB Strength and Self-Aligning Torque gradually until big bumps and the most loaded corners feel strong but still have detail on top.",
     },
     {
-      es: "En tierra rugosa, si el volante se vuelve violento o ruidoso, baje Suspension y Collision antes que la fuerza general: así conserva la fuerza del agarre sin que los golpes cansen.",
+      es: "En tierra rugosa, si el volante se vuelve violento o ruidoso, baja Suspension y Collision antes que la fuerza general: así conservas la fuerza del agarre sin que los golpes cansen.",
       en: "On rough gravel, if the wheel gets violent or noisy, lower Suspension and Collision before the overall force: that keeps grip force while making impacts less tiring.",
     },
   ],

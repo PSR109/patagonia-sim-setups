@@ -165,11 +165,11 @@ export const ac_evoFfb: GameFfb = {
   ],
   notes: [
     {
-      es: "Regla de oro: la fuerza total se regula bajando el FFB por base (CSL DD ~100%; ClubSport/Podium DD 40–70%) y ajustando el FFB Gain del juego, no el FEI. Si el volante satura (clipping) en las curvas cargadas, se pierde información del agarre: baje el gain.",
+      es: "Regla de oro: la fuerza total se regula bajando el FFB por base (CSL DD ~100%; ClubSport/Podium DD 40–70%) y ajustando el FFB Gain del juego, no el FEI. Si el volante satura (clipping) en las curvas cargadas, se pierde información del agarre: baja el gain.",
       en: "Rule of thumb: overall force is dialed in by lowering the per-base FFB (CSL DD ~100%; ClubSport/Podium DD 40–70%) and tuning the in-game FFB Gain, not the FEI. If the wheel clips in loaded corners you're losing grip information: lower the gain.",
     },
     {
-      es: "Suba el FFB Gain de a poco hasta que en las curvas más cargadas el volante llegue al tope justo sin quedarse saturado. AC EVO está en Early Access: revise el FFB tras cada actualización por si cambia el comportamiento.",
+      es: "Sube el FFB Gain de a poco hasta que en las curvas más cargadas el volante llegue al tope justo sin quedarse saturado. AC EVO está en Early Access: revisa el FFB tras cada actualización por si cambia el comportamiento.",
       en: "Raise the FFB Gain gradually until the wheel just reaches the top in the most loaded corners without staying saturated. AC EVO is in Early Access: re-check FFB after each update in case behaviour changes.",
     },
   ],

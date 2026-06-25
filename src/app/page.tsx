@@ -29,7 +29,7 @@ export default function Home() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/register"
-            className="rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-bg transition-colors hover:bg-brand-strong"
+            className="rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong"
           >
             {t("landing.ctaPrimary")}
           </Link>

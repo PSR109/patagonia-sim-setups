@@ -43,6 +43,9 @@ export function LocaleProvider({
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);
     document.cookie = `locale=${l}; path=/; max-age=${60 * 60 * 24 * 365}`;
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = l;
+    }
   }, []);
 
   const t = useCallback(

@@ -23,11 +23,11 @@ export const accParameters: ParameterDef[] = [
     step: 0.1,
     default: 24.8,
     whatItDoes: {
-      es: "Presión en frío que cargás al neumático delantero. En ACC (Pirelli) la ventana en CALIENTE óptima para GT3 ronda 26.0-27.0 psi; arrancás más bajo en frío para llegar ahí rodando. El mínimo en seco del slider es 20.3 psi (changelog oficial v1.0.8).",
+      es: "Presión en frío que cargas al neumático delantero. En ACC (Pirelli) la ventana en CALIENTE óptima para GT3 ronda 26.0-27.0 psi; arrancas más bajo en frío para llegar ahí rodando. El mínimo en seco del slider es 20.3 psi (changelog oficial v1.0.8).",
       en: "Cold pressure you set on the front tyre. In ACC (Pirelli) the optimal HOT window for GT3 is around 26.0-27.0 psi; you start lower cold to reach it once rolling. The dry slider minimum is 20.3 psi (official v1.0.8 changelog).",
     },
     increaseEffect: {
-      es: "Respuesta más rápida pero menos huella y más temperatura; si te pasás, el neumático se 'globea' y patina.",
+      es: "Respuesta más rápida pero menos huella y más temperatura; si te pasas, el neumático se 'globea' y patina.",
       en: "Sharper response but less contact patch and more heat; too high and the tyre balloons and slides.",
     },
     decreaseEffect: {
@@ -183,7 +183,7 @@ export const accParameters: ParameterDef[] = [
     step: 1,
     default: 14,
     whatItDoes: {
-      es: "Cuántos grados de rueda obtenés por grado de volante. Más alto = la rueda gira más por el mismo giro de volante (dirección más directa/rápida).",
+      es: "Cuántos grados de rueda obtienes por grado de volante. Más alto = la rueda gira más por el mismo giro de volante (dirección más directa/rápida).",
       en: "How many degrees of road wheel you get per degree of steering wheel. Higher = the wheel turns more for the same input (quicker, more direct steering).",
     },
     increaseEffect: {
@@ -598,7 +598,7 @@ export const accParameters: ParameterDef[] = [
       en: "Rear ride height. With the front it sets the 'rake' that loads the diffuser.",
     },
     increaseEffect: {
-      es: "Subir atrás aumenta el rake: más carga aero y rotación, hasta volverse inestable si te pasás.",
+      es: "Subir atrás aumenta el rake: más carga aero y rotación, hasta volverse inestable si te pasas.",
       en: "Raising the rear adds rake: more aero load and rotation, until it gets unstable if overdone.",
     },
     decreaseEffect: {
@@ -761,7 +761,7 @@ export const accParameters: ParameterDef[] = [
       en: "Higher compounds change bite and fade resistance; some last longer but bite differently.",
     },
     decreaseEffect: {
-      es: "Compuestos más bajos suelen morder distinto y tener otra ventana de temperatura; elegí según carrera.",
+      es: "Compuestos más bajos suelen morder distinto y tener otra ventana de temperatura; elige según carrera.",
       en: "Lower compounds bite differently and have another temperature window; pick per race length.",
     },
   },
@@ -830,7 +830,7 @@ export const accParameters: ParameterDef[] = [
       en: "More TC = safer in the wet or low grip, but limits acceleration in the dry.",
     },
     decreaseEffect: {
-      es: "Menos TC = más aceleración pura si sabés dosificar; más riesgo de irte de cola.",
+      es: "Menos TC = más aceleración pura si sabes dosificar; más riesgo de irte de cola.",
       en: "Less TC = more raw acceleration if you can modulate; more risk of the rear stepping out.",
     },
   },
@@ -872,7 +872,7 @@ export const accParameters: ParameterDef[] = [
       en: "Engine delivery map: changes the power curve, throttle response and fuel/temperatures. Higher isn't always 'more power'; each map targets a use (qualifying, race, fuel-save, rain).",
     },
     increaseEffect: {
-      es: "Subir de mapa cambia la entrega (a veces más agresiva, a veces más de ahorro): probá cuál te da mejor tacto y consumo.",
+      es: "Subir de mapa cambia la entrega (a veces más agresiva, a veces más de ahorro): prueba cuál te da mejor tacto y consumo.",
       en: "Changing up the map alters delivery (sometimes more aggressive, sometimes fuel-saving): test which gives the best feel and consumption.",
     },
     decreaseEffect: {

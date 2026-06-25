@@ -92,7 +92,7 @@ export function SiteHeader({
               <NavLink href="/login">{t("nav.login")}</NavLink>
               <Link
                 href="/register"
-                className="ml-1 rounded-md bg-brand px-3 py-1.5 text-sm font-semibold text-bg transition-colors hover:bg-brand-strong"
+                className="ml-1 rounded-md bg-brand px-3 py-1.5 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong"
               >
                 {t("nav.register")}
               </Link>

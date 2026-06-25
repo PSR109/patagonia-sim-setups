@@ -255,7 +255,7 @@ export function Generator({ gameId }: { gameId: string }) {
           {/* Condiciones */}
           <p className="text-sm font-semibold text-fg">{t("gen.conditions")}</p>
 
-          <Field label={t("gen.weather")}>
+          <Field label={t("gen.weather")} groupLabel>
             <Segmented
               value={weather}
               onChange={(v) => setWeather(v as Weather)}
@@ -268,7 +268,7 @@ export function Generator({ gameId }: { gameId: string }) {
 
           {isRally ? (
             <>
-              <Field label={t("gen.surface")}>
+              <Field label={t("gen.surface")} groupLabel>
                 <Segmented
                   value={surface}
                   onChange={(v) => setSurface(v as typeof surface)}
@@ -278,7 +278,7 @@ export function Generator({ gameId }: { gameId: string }) {
                   }))}
                 />
               </Field>
-              <Field label={t("gen.roughness")}>
+              <Field label={t("gen.roughness")} groupLabel>
                 <Segmented
                   value={roughness}
                   onChange={(v) => setRoughness(v as typeof roughness)}
@@ -300,7 +300,7 @@ export function Generator({ gameId }: { gameId: string }) {
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
                 />
               </Field>
-              <Field label={t("gen.grip")}>
+              <Field label={t("gen.grip")} groupLabel>
                 <Segmented
                   value={grip}
                   onChange={(v) => setGrip(v as typeof grip)}
@@ -310,7 +310,7 @@ export function Generator({ gameId }: { gameId: string }) {
                   }))}
                 />
               </Field>
-              <Field label={t("gen.fuel")}>
+              <Field label={t("gen.fuel")} groupLabel>
                 <Segmented
                   value={fuel}
                   onChange={(v) => setFuel(v as typeof fuel)}
@@ -350,7 +350,10 @@ export function Generator({ gameId }: { gameId: string }) {
           </div>
 
           {showError && (
-            <p className="rounded-lg border border-warn/40 bg-warn/10 px-3 py-2 text-sm text-warn">
+            <p
+              role="alert"
+              className="rounded-lg border border-warn/40 bg-warn/10 px-3 py-2 text-sm text-warn"
+            >
               {t("gen.pickCarFirst")}
             </p>
           )}
@@ -358,7 +361,7 @@ export function Generator({ gameId }: { gameId: string }) {
           <div className="flex gap-2">
             <button
               onClick={onGenerate}
-              className="flex-1 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-bg transition-colors hover:bg-brand-strong"
+              className="flex-1 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong"
             >
               {t("gen.generate")}
             </button>
@@ -536,7 +539,7 @@ function ResultPanel({
                             )}
                           >
                             <td className="px-3 py-2 text-muted">{localize(p.name, locale)}</td>
-                            <td className="px-3 py-2 text-right tabular-nums text-muted/70">
+                            <td className="px-3 py-2 text-right tabular-nums text-muted">
                               {formatValue(p, base[p.id])}
                             </td>
                             <td
@@ -612,7 +615,7 @@ function ResultPanel({
                   <span className="font-semibold text-sky">{t("result.decrease")}:</span>{" "}
                   {localize(p.decreaseEffect, locale)}
                 </p>
-                <p className="text-muted/70">
+                <p className="text-muted">
                   {t("result.range")}: {formatValue(p, p.min)} – {formatValue(p, p.max)}
                   {" · "}
                   {t("result.stepLabel")} {p.step}
@@ -672,6 +675,11 @@ function SaveBar({
     },
     [],
   );
+
+  // Cada Generate produce un result nuevo: rehabilitamos el botón de favorito
+  // para que se pueda guardar el setup recién generado (antes quedaba latcheado
+  // en "Guardado" del setup anterior).
+  useEffect(() => setFavSaved(false), [result]);
 
   async function saveFavorite() {
     setBusy(true);
@@ -765,7 +773,7 @@ function SaveBar({
         <button
           onClick={saveFavorite}
           disabled={busy || favSaved}
-          className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-bg transition-colors hover:bg-brand-strong disabled:opacity-50"
+          className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong disabled:opacity-50"
         >
           {favSaved ? `✓ ${t("common.saved")}` : `★ ${t("result.saveFav")}`}
         </button>
@@ -815,6 +823,7 @@ function SaveBar({
             value={lapInput}
             onChange={(e) => setLapInput(e.target.value)}
             placeholder="1:23.456"
+            aria-label={t("result.addLap")}
             className="w-32 rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
           />
           <button
@@ -829,6 +838,7 @@ function SaveBar({
 
       {msg && (
         <p
+          role="alert"
           className={cn(
             "mt-3 text-sm font-medium",
             msg.error ? "text-danger" : "text-good",
@@ -843,21 +853,44 @@ function SaveBar({
 
 /* ---------- Primitivas de UI ---------- */
 
+let fieldGroupSeq = 0;
+
 function Field({
   label,
   hint,
+  groupLabel,
   children,
 }: {
   label: string;
   hint?: string;
+  // Cuando el control es un grupo de botones (Segmented) y no un input nativo
+  // labelable, un <label> no nombra nada: usamos role="group" + aria-labelledby.
+  groupLabel?: boolean;
   children: React.ReactNode;
 }) {
+  // id estable por instancia para enlazar el <span> con el role="group".
+  const groupId = useMemo(() => `fld-${++fieldGroupSeq}`, []);
+  const labelText = (
+    <span className="flex items-center gap-2 text-sm font-medium text-muted">
+      {label}
+      {hint && <span className="text-[10px] uppercase tracking-wide text-muted">{hint}</span>}
+    </span>
+  );
+
+  if (groupLabel) {
+    return (
+      <div className="flex flex-col gap-1.5">
+        <span id={groupId}>{labelText}</span>
+        <div role="group" aria-labelledby={groupId}>
+          {children}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="flex items-center gap-2 text-sm font-medium text-muted">
-        {label}
-        {hint && <span className="text-[10px] uppercase tracking-wide text-muted/60">{hint}</span>}
-      </span>
+      {labelText}
       {children}
     </label>
   );
@@ -905,6 +938,7 @@ function Segmented({
         <button
           key={o.value}
           type="button"
+          aria-pressed={value === o.value}
           onClick={() => onChange(o.value)}
           className={cn(
             "rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors",

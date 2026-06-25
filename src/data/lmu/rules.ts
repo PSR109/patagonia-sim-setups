@@ -22,7 +22,7 @@ export const lmuConditionRules: ConditionRule[] = [
       { paramId: "tyre_pressure_rear", delta: -5 },
     ],
     reason: {
-      es: "Mojado: subimos el auto para evitar aquaplaning, agregamos ala y TC para estabilidad, atrasamos un poco la frenada para no bloquear y bajamos presiones (necesitás compuesto Wet). En LMU el secado es dinámico, así que reevaluá al avanzar la sesión. En LMGT3 conviene además subir el ABS un par de puntos.",
+      es: "Mojado: subimos el auto para evitar aquaplaning, agregamos ala y TC para estabilidad, atrasamos un poco la frenada para no bloquear y bajamos presiones (necesitas compuesto Wet). En LMU el secado es dinámico, así que reevalúa al avanzar la sesión. En LMGT3 conviene además subir el ABS un par de puntos.",
       en: "Wet: raise the car to avoid aquaplaning, add wing and TC for stability, move brake bias slightly rearward to avoid locking, and lower pressures (you need the Wet compound). In LMU drying is dynamic, so reassess as the session goes on. On LMGT3 it's also worth raising ABS a couple of steps.",
     },
   },
@@ -36,7 +36,7 @@ export const lmuConditionRules: ConditionRule[] = [
       { paramId: "ride_height_rear", delta: 1 },
     ],
     reason: {
-      es: "Húmedo: agarre intermedio en transición hacia seco. Sumamos algo de TC y ala para un margen de seguridad sin sacrificar todo el ritmo de seco. (En LMGT3 podés sumar un punto de ABS.)",
+      es: "Húmedo: agarre intermedio en transición hacia seco. Sumamos algo de TC y ala para un margen de seguridad sin sacrificar todo el ritmo de seco. (En LMGT3 puedes sumar un punto de ABS.)",
       en: "Damp: in-between grip in the transition toward dry. Add a little TC and wing for a safety margin without giving up all the dry pace. (On LMGT3 you can add one ABS step.)",
     },
   },
@@ -133,7 +133,7 @@ export const lmuSymptomRules: SymptomRule[] = [
       { paramId: "arb_rear", delta: 1 },
     ],
     reason: {
-      es: "Subviraje al salir: bajamos la precarga del diferencial para liberar rotación al poner gas y endurecemos algo la barra trasera. En Hypercar también podés bajar el bloqueo en aceleración (Power) un par de puntos.",
+      es: "Subviraje al salir: bajamos la precarga del diferencial para liberar rotación al poner gas y endurecemos algo la barra trasera. En Hypercar también puedes bajar el bloqueo en aceleración (Power) un par de puntos.",
       en: "Exit understeer: lower diff preload to free rotation on throttle and stiffen the rear bar a touch. On Hypercar you can also lower the power lock a couple of points.",
     },
   },
@@ -191,7 +191,7 @@ export const lmuSymptomRules: SymptomRule[] = [
       { paramId: "toe_rear", delta: 1 },
     ],
     reason: {
-      es: "Falta de tracción: ablandamos la barra trasera para que las ruedas copien mejor el piso y sumamos TC y convergencia trasera. En Hypercar también podés bajar un poco el bloqueo en aceleración (Power).",
+      es: "Falta de tracción: ablandamos la barra trasera para que las ruedas copien mejor el piso y sumamos TC y convergencia trasera. En Hypercar también puedes bajar un poco el bloqueo en aceleración (Power).",
       en: "Poor traction: soften the rear bar so the wheels follow the road better and add some TC and rear toe-in. On Hypercar you can also ease the power lock a bit.",
     },
   },

@@ -111,7 +111,7 @@ export function AuthForm({
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-bg transition-colors hover:bg-brand-strong disabled:opacity-50"
+          className="rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-brand-strong disabled:opacity-50"
         >
           {loading
             ? t("common.loading")

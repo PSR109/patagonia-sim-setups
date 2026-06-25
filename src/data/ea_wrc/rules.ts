@@ -119,12 +119,12 @@ export const ea_wrcConditionRules: ConditionRule[] = [
       { paramId: "spring_front", delta: -8 },
       { paramId: "spring_rear", delta: -8 },
       { paramId: "brake_force", delta: -200 },
-      { paramId: "brake_bias", delta: 2 },
+      { paramId: "brake_bias", delta: -2 },
       { paramId: "diff_rear_power", delta: 4, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Mojado/barro: el agarre cae. Ablandamos los muelles para que las ruedas se claven mejor, bajamos la fuerza de freno y adelantamos algo el reparto para no bloquear, y subimos el bloqueo de conducción trasero para poner la potencia sin patinar.",
-      en: "Wet/mud: grip drops. Soften the springs so the wheels dig in, lower brake force and move bias slightly forward to avoid locking, and raise the rear power lock to put the power down without spinning.",
+      es: "Mojado/barro: el agarre cae. Ablandamos los muelles para que las ruedas se claven mejor, bajamos la fuerza de freno y atrasamos algo el reparto para no bloquear las delanteras, y subimos el bloqueo de conducción trasero para poner la potencia sin patinar.",
+      en: "Wet/mud: grip drops. Soften the springs so the wheels dig in, lower brake force and move bias slightly rearward to avoid locking the fronts, and raise the rear power lock to put the power down without spinning.",
     },
   },
   {

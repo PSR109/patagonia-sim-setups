@@ -37,11 +37,11 @@ export const lmuParameters: ParameterDef[] = [
       en: "Cold front pressure (kPa). LMU targets a hot temperature/pressure window; you start below target because pressure rises with heat. (estimated range)",
     },
     increaseEffect: {
-      es: "Calienta más rápido y respuesta más alerta, pero menos huella y agarre de pico; si te pasás, patina.",
+      es: "Calienta más rápido y respuesta más alerta, pero menos huella y agarre de pico; si te pasas, patina.",
       en: "Faster warm-up and sharper response, but less contact patch and peak grip; too high and it slides.",
     },
     decreaseEffect: {
-      es: "Más huella y agarre predecible, pero calienta más lento y la goma flexiona de más si bajás demasiado.",
+      es: "Más huella y agarre predecible, pero calienta más lento y la goma flexiona de más si bajas demasiado.",
       en: "More contact patch and predictable grip, but slower warm-up and the tyre flexes too much if too low.",
     },
   },
@@ -370,7 +370,7 @@ export const lmuParameters: ParameterDef[] = [
       en: "Rear ride height (cm). With the front it sets the rake: more rake = sharper front and more entry oversteer. (estimated range)",
     },
     increaseEffect: {
-      es: "Subir atrás aumenta el rake: más carga aero y rotación, hasta volverse inestable si te pasás.",
+      es: "Subir atrás aumenta el rake: más carga aero y rotación, hasta volverse inestable si te pasas.",
       en: "Raising the rear adds rake: more aero load and rotation, until it gets unstable if overdone.",
     },
     decreaseEffect: {

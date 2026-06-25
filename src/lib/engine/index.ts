@@ -72,7 +72,7 @@ export function effectiveParam(
 export function baseFor(game: GameData, carId: string): SetupValues {
   const params = effectiveParams(game, carId);
   const base: SetupValues = {};
-  for (const p of params) base[p.id] = p.default;
+  for (const p of params) base[p.id] = clampToParam(p.default, p);
   const carBase = game.baseSetups[carId];
   if (carBase) {
     const byId = new Map(params.map((p) => [p.id, p]));

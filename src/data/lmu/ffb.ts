@@ -86,8 +86,8 @@ export const lmuFfb: GameFfb = {
       name: { es: "Steering Torque Capability (par de la base)", en: "Steering Torque Capability" },
       value: "≈ par pico de su base",
       perBase: {
-        gt_dd_pro: "8",
-        csl_dd: "8",
+        gt_dd_pro: "5 (8 con Kit Boost)",
+        csl_dd: "5 (8 con Kit Boost)",
         clubsport_dd: "15",
         clubsport_dd_plus: "18",
         podium_dd1: "20",
@@ -176,7 +176,7 @@ export const lmuFfb: GameFfb = {
   ],
   notes: [
     {
-      es: "Regla de oro: deje la base (FFB) al 100% y ajuste la fuerza con el Force Feedback Strength mirando el medidor de FFB del juego. Si el medidor vive en rojo, hay saturación (clipping) y se pierde información del agarre.",
+      es: "Regla de oro: deja la base (FFB) al 100% y ajusta la fuerza con el Force Feedback Strength mirando el medidor de FFB del juego. Si el medidor vive en rojo, hay saturación (clipping) y se pierde información del agarre.",
       en: "Rule of thumb: leave the base (FFB) at 100% and dial in the force with Force Feedback Strength while watching the in-game FFB meter. If the meter lives in the red you're clipping and losing grip information.",
     },
     {
@@ -184,7 +184,7 @@ export const lmuFfb: GameFfb = {
       en: "LMU's FFB menu is global (no per-car multiplier). The key is to set Steering Torque Capability to your base's peak torque and then dial in Force Feedback Strength to avoid clipping.",
     },
     {
-      es: "El FFB de LMU/rF2 ya entrega mucho detalle natural: mantenga el suavizado y los efectos de la base al mínimo y deje que el motor del juego haga el trabajo.",
+      es: "El FFB de LMU/rF2 ya entrega mucho detalle natural: mantén el suavizado y los efectos de la base al mínimo y deja que el motor del juego haga el trabajo.",
       en: "LMU/rF2 FFB already delivers lots of natural detail: keep smoothing and base effects to a minimum and let the game's engine do the work.",
     },
   ],

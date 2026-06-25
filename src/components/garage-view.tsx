@@ -3,15 +3,18 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
-import { gameCatalog, getGame } from "@/data/registry";
 import { useT } from "@/lib/i18n/context";
 
+// `comboLabel` es el texto "Juego · Auto · Pista" ya resuelto en el servidor
+// (garage/page.tsx), para no importar @/data/registry desde este componente
+// 'use client' y mantener los datos de los 5 juegos fuera del bundle del cliente.
 type Fav = {
   id: string;
   gameId: string;
   carId: string;
   trackId: string | null;
   label: string | null;
+  comboLabel: string;
   createdAt: string;
 };
 type NoteT = {
@@ -20,6 +23,7 @@ type NoteT = {
   carId: string;
   trackId: string | null;
   body: string;
+  comboLabel: string;
   updatedAt: string;
 };
 type Lap = {
@@ -28,31 +32,15 @@ type Lap = {
   carId: string;
   trackId: string;
   lapTimeMs: number;
+  comboLabel: string;
   createdAt: string;
 };
 
-function gameName(id: string): string {
-  return gameCatalog.find((g) => g.id === id)?.shortName ?? id;
-}
-function carName(gameId: string, carId: string): string {
-  return getGame(gameId)?.cars.find((c) => c.id === carId)?.name ?? carId;
-}
-function trackName(gameId: string, trackId: string | null): string | null {
-  if (!trackId) return null;
-  return getGame(gameId)?.tracks.find((t) => t.id === trackId)?.name ?? trackId;
-}
 function fmtLap(ms: number): string {
   const m = Math.floor(ms / 60000);
   const s = Math.floor((ms % 60000) / 1000);
   const mm = ms % 1000;
   return `${m}:${String(s).padStart(2, "0")}.${String(mm).padStart(3, "0")}`;
-}
-
-function comboLabel(gameId: string, carId: string, trackId: string | null): string {
-  const parts = [gameName(gameId), carName(gameId, carId)];
-  const tn = trackName(gameId, trackId);
-  if (tn) parts.push(tn);
-  return parts.join(" · ");
 }
 
 export function GarageView({
@@ -114,7 +102,7 @@ export function GarageView({
                   href={`/app/${f.gameId}`}
                   className="min-w-0 flex-1 truncate text-sm font-medium hover:text-brand"
                 >
-                  ★ { comboLabel(f.gameId, f.carId, f.trackId)}
+                  ★ {f.comboLabel}
                 </Link>
                 <DeleteBtn onClick={() => del("favorites", f.id)} label={t("common.delete")} />
               </li>
@@ -138,7 +126,7 @@ export function GarageView({
                 className="flex items-start justify-between gap-3 rounded-lg border border-border bg-surface/60 px-4 py-3"
               >
                 <div className="min-w-0">
-                  <p className="text-xs text-muted">{comboLabel(n.gameId, n.carId, n.trackId)}</p>
+                  <p className="text-xs text-muted">{n.comboLabel}</p>
                   <p className="mt-0.5 whitespace-pre-wrap text-sm">{n.body}</p>
                 </div>
                 <DeleteBtn onClick={() => del("notes", n.id)} label={t("common.delete")} />
@@ -167,7 +155,7 @@ export function GarageView({
                     {fmtLap(l.lapTimeMs)}
                   </span>
                   <span className="ml-3 text-xs text-muted">
-                    {comboLabel(l.gameId, l.carId, l.trackId)}
+                    {l.comboLabel}
                   </span>
                 </div>
                 <DeleteBtn onClick={() => del("laps", l.id)} label={t("common.delete")} />

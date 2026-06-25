@@ -160,11 +160,11 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     adjust: [
       { paramId: "tc", delta: 1 },
       { paramId: "toe_rear", delta: 2 },
-      { paramId: "diff_preload", delta: -2, excludeDrivetrains: ["fwd"] },
+      { paramId: "diff_preload", delta: 2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Sobreviraje al salir (al acelerar): sumamos TC y convergencia trasera, y bajamos la precarga del diferencial para que la cola no se suelte de golpe al poner gas.",
-      en: "Exit oversteer (on power): add TC and rear toe-in, and lower diff preload so the rear doesn't snap loose on throttle.",
+      es: "Sobreviraje al salir (al acelerar): sumamos TC y convergencia trasera, y subimos la precarga del diferencial para dejar la cola más bloqueada y plantada al poner gas, de modo que no se suelte de golpe.",
+      en: "Exit oversteer (on power): add TC and rear toe-in, and raise diff preload for a more locked and planted rear on throttle so it doesn't snap loose.",
     },
   },
   {

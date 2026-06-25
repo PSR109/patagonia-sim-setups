@@ -24,11 +24,11 @@ export const ac_evoParameters: ParameterDef[] = [
     step: 0.1,
     default: 26.0,
     whatItDoes: {
-      es: "Define cuánta huella del neumático toca el piso. En AC EVO el HUD marca con color la presión: azul (frío), verde (óptimo) y naranja/rojo (caliente). Apuntá a la zona verde en caliente.",
+      es: "Define cuánta huella del neumático toca el piso. En AC EVO el HUD marca con color la presión: azul (frío), verde (óptimo) y naranja/rojo (caliente). Apunta a la zona verde en caliente.",
       en: "Sets how much of the tyre contacts the road. In AC EVO the HUD colour-codes pressure: blue (cold), green (optimal) and orange/red (hot). Aim for the green zone when hot.",
     },
     increaseEffect: {
-      es: "Respuesta más directa y menos resistencia, pero menos huella de contacto y menos agarre si te pasás; el neumático se 'globea' y patina.",
+      es: "Respuesta más directa y menos resistencia, pero menos huella de contacto y menos agarre si te pasas; el neumático se 'globea' y patina.",
       en: "Sharper response and less drag, but smaller contact patch and less grip if overdone; the tyre balloons and slides.",
     },
     decreaseEffect: {
@@ -380,7 +380,7 @@ export const ac_evoParameters: ParameterDef[] = [
       en: "Rear ride height. It should be higher than the front (positive rake). More rake = more rotation and aero load; reducing the offset stabilises.",
     },
     increaseEffect: {
-      es: "Subir atrás aumenta el rake: más carga aero y rotación, hasta volverse inestable si te pasás.",
+      es: "Subir atrás aumenta el rake: más carga aero y rotación, hasta volverse inestable si te pasas.",
       en: "Raising the rear adds rake: more aero load and rotation, until it gets unstable if overdone.",
     },
     decreaseEffect: {
@@ -468,7 +468,7 @@ export const ac_evoParameters: ParameterDef[] = [
       en: "Front damper extension speed after compressing. Controls how the front recovers its platform when load is released.",
     },
     increaseEffect: {
-      es: "Más firme retiene la transferencia de peso más tiempo: frente más estable pero puede dar nerviosismo si te pasás.",
+      es: "Más firme retiene la transferencia de peso más tiempo: frente más estable pero puede dar nerviosismo si te pasas.",
       en: "Stiffer holds the weight transfer longer: more stable front but can get nervous if overdone.",
     },
     decreaseEffect: {
@@ -490,7 +490,7 @@ export const ac_evoParameters: ParameterDef[] = [
       en: "Rear damper extension speed after compressing. Controls how the rear recovers its platform when load is released; key for exit traction.",
     },
     increaseEffect: {
-      es: "Más firme retiene la carga atrás más tiempo: cola más estable, con riesgo de nerviosismo si te pasás.",
+      es: "Más firme retiene la carga atrás más tiempo: cola más estable, con riesgo de nerviosismo si te pasas.",
       en: "Stiffer holds rear load longer: more stable rear, with a risk of nervousness if overdone.",
     },
     decreaseEffect: {
