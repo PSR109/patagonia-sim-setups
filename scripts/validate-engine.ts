@@ -51,6 +51,11 @@ for (const game of implementedGames) {
       if (!paramIds.has(a.paramId))
         log(`[${id}] symptomRule "${r.symptom}" → paramId inexistente "${a.paramId}"`);
 
+  for (const r of game.styleRules ?? [])
+    for (const a of r.adjust)
+      if (!paramIds.has(a.paramId))
+        log(`[${id}] styleRule "${r.id}" → paramId inexistente "${a.paramId}"`);
+
   for (const c of game.cars)
     if (!catIds.has(c.categoryId))
       log(`[${id}] auto "${c.id}" → categoryId inexistente "${c.categoryId}"`);
@@ -71,6 +76,7 @@ for (const game of implementedGames) {
   };
   for (const r of game.conditionRules) checkMapDeltas(`conditionRule "${r.id}"`, r.adjust);
   for (const r of game.symptomRules) checkMapDeltas(`symptomRule "${r.symptom}"`, r.adjust);
+  for (const r of game.styleRules ?? []) checkMapDeltas(`styleRule "${r.id}"`, r.adjust);
 
   for (const p of game.parameters)
     if (!(p.min <= p.default && p.default <= p.max))
@@ -161,7 +167,10 @@ for (const game of implementedGames) {
           fuelLoad: "high",
           surface: "gravel",
           roughness: "rough",
-          timeOfDay: "day",
+          timeOfDay: "night",
+          driverLevel: "beginner",
+          balance: "agile",
+          smoothness: "aggressive",
         },
         symptoms: ALL_SYMPTOMS,
       });

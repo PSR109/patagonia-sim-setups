@@ -8,12 +8,17 @@ import { localize, useT } from "@/lib/i18n/context";
 import { cn } from "@/lib/cn";
 import { FfbPanel } from "@/components/ffb-panel";
 import type {
+  BalancePref,
+  ConditionFieldId,
   ConditionInput,
+  DriverLevel,
   GameData,
   ParameterDef,
   ParameterGroup,
   SetupResult,
+  SmoothnessPref,
   Symptom,
+  TimeOfDay,
   Weather,
 } from "@/lib/types";
 
@@ -31,6 +36,14 @@ const SYMPTOMS: Symptom[] = [
   "bouncing",
   "kerb_instability",
 ];
+
+// Campos de condición por defecto si el juego no declara `conditionFields`.
+// Cada juego puede sobrescribirlos en su index.ts para mostrar SOLO las palancas
+// que aplican a su disciplina.
+const DEFAULT_CONDITION_FIELDS: Record<"circuit" | "rally", ConditionFieldId[]> = {
+  circuit: ["weather", "trackTemp", "grip", "fuel"],
+  rally: ["surface", "roughness", "weather"],
+};
 
 const GROUP_ORDER: ParameterGroup[] = [
   "tyres",
@@ -86,6 +99,13 @@ export function Generator({ gameId }: { gameId: string }) {
   const [fuel, setFuel] = useState<"low" | "medium" | "high">("medium");
   const [surface, setSurface] = useState<"tarmac" | "gravel" | "snow" | "mixed">("gravel");
   const [roughness, setRoughness] = useState<"smooth" | "medium" | "rough">("medium");
+  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>("day");
+
+  // Estilo de manejo (cómo le gusta el auto al piloto). Defaults neutros: no mueven
+  // el setup hasta que el piloto elige otra cosa.
+  const [driverLevel, setDriverLevel] = useState<DriverLevel>("intermediate");
+  const [balance, setBalance] = useState<BalancePref>("neutral");
+  const [smoothness, setSmoothness] = useState<SmoothnessPref>("neutral");
 
   const [symptoms, setSymptoms] = useState<Set<Symptom>>(new Set());
   const [result, setResult] = useState<SetupResult | null>(null);
@@ -135,6 +155,11 @@ export function Generator({ gameId }: { gameId: string }) {
   }
 
   const isRally = game.meta.discipline === "rally";
+  // Campos de condición que ESTE juego expone (data-driven). Si no los declara,
+  // usamos el set por defecto de su disciplina.
+  const conditionFields =
+    game.conditionFields ?? DEFAULT_CONDITION_FIELDS[isRally ? "rally" : "circuit"];
+  const showField = (id: ConditionFieldId) => conditionFields.includes(id);
   const car = game.cars.find((c) => c.id === carId);
   const track = game.tracks.find((t) => t.id === trackId);
   // Solo ofrecemos los síntomas que ESTE juego sabe resolver (tiene regla para
@@ -161,11 +186,17 @@ export function Generator({ gameId }: { gameId: string }) {
     setShowError(false);
     const conditions: ConditionInput = {
       weather,
-      trackTempC: trackTempC === "" ? undefined : Number(trackTempC),
-      grip: isRally ? undefined : grip,
-      fuelLoad: isRally ? undefined : fuel,
-      surface: isRally ? surface : undefined,
-      roughness: isRally ? roughness : undefined,
+      trackTempC:
+        showField("trackTemp") && trackTempC !== "" ? Number(trackTempC) : undefined,
+      grip: showField("grip") ? grip : undefined,
+      fuelLoad: showField("fuel") ? fuel : undefined,
+      surface: showField("surface") ? surface : undefined,
+      roughness: showField("roughness") ? roughness : undefined,
+      timeOfDay: showField("timeOfDay") ? timeOfDay : undefined,
+      // Estilo: siempre se pasa; en sus valores neutros no aplica ninguna regla.
+      driverLevel,
+      balance,
+      smoothness,
     };
     setResult(
       generateSetup(game!, {
@@ -182,7 +213,110 @@ export function Generator({ gameId }: { gameId: string }) {
     setSymptoms(new Set());
     setWeather("dry");
     setTrackTempC("");
+    setTimeOfDay("day");
+    setDriverLevel("intermediate");
+    setBalance("neutral");
+    setSmoothness("neutral");
     setShowError(false);
+  }
+
+  // Render de un campo de condición por id. El juego decide CUÁLES se muestran
+  // (game.conditionFields); este switch sabe pintar cada uno.
+  function renderCondition(id: ConditionFieldId): React.ReactNode {
+    switch (id) {
+      case "weather":
+        return (
+          <Field key="weather" label={t("gen.weather")} groupLabel>
+            <Segmented
+              value={weather}
+              onChange={(v) => setWeather(v as Weather)}
+              options={(["dry", "damp", "wet"] as const).map((w) => ({
+                value: w,
+                label: t(`weather.${w}`),
+              }))}
+            />
+          </Field>
+        );
+      case "trackTemp":
+        return (
+          <Field key="trackTemp" label={t("gen.trackTemp")} hint={t("common.optional")}>
+            <input
+              type="number"
+              value={trackTempC}
+              onChange={(e) => setTrackTempC(e.target.value)}
+              placeholder="25"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
+            />
+          </Field>
+        );
+      case "grip":
+        return (
+          <Field key="grip" label={t("gen.grip")} groupLabel>
+            <Segmented
+              value={grip}
+              onChange={(v) => setGrip(v as typeof grip)}
+              options={(["green", "medium", "rubbered"] as const).map((gr) => ({
+                value: gr,
+                label: t(`grip.${gr}`),
+              }))}
+            />
+          </Field>
+        );
+      case "fuel":
+        return (
+          <Field key="fuel" label={t("gen.fuel")} groupLabel>
+            <Segmented
+              value={fuel}
+              onChange={(v) => setFuel(v as typeof fuel)}
+              options={(["low", "medium", "high"] as const).map((f) => ({
+                value: f,
+                label: t(`fuel.${f}`),
+              }))}
+            />
+          </Field>
+        );
+      case "timeOfDay":
+        return (
+          <Field key="timeOfDay" label={t("gen.timeOfDay")} groupLabel>
+            <Segmented
+              value={timeOfDay}
+              onChange={(v) => setTimeOfDay(v as TimeOfDay)}
+              options={(["day", "dusk", "night"] as const).map((d) => ({
+                value: d,
+                label: t(`timeOfDay.${d}`),
+              }))}
+            />
+          </Field>
+        );
+      case "surface":
+        return (
+          <Field key="surface" label={t("gen.surface")} groupLabel>
+            <Segmented
+              value={surface}
+              onChange={(v) => setSurface(v as typeof surface)}
+              options={(["tarmac", "gravel", "snow", "mixed"] as const).map((s) => ({
+                value: s,
+                label: t(`surface.${s}`),
+              }))}
+            />
+          </Field>
+        );
+      case "roughness":
+        return (
+          <Field key="roughness" label={t("gen.roughness")} groupLabel>
+            <Segmented
+              value={roughness}
+              onChange={(v) => setRoughness(v as typeof roughness)}
+              options={(["smooth", "medium", "rough"] as const).map((r) => ({
+                value: r,
+                label: t(`roughness.${r}`),
+              }))}
+            />
+          </Field>
+        );
+      default:
+        return null;
+    }
   }
 
   return (
@@ -252,76 +386,47 @@ export function Generator({ gameId }: { gameId: string }) {
 
           <div className="h-px bg-border" />
 
-          {/* Condiciones */}
+          {/* Condiciones (data-driven: cada juego declara sus campos) */}
           <p className="text-sm font-semibold text-fg">{t("gen.conditions")}</p>
+          {conditionFields.map((f) => renderCondition(f))}
 
-          <Field label={t("gen.weather")} groupLabel>
+          <div className="h-px bg-border" />
+
+          {/* Tu estilo de manejo (nivel + balance + suavidad) */}
+          <div>
+            <p className="text-sm font-semibold text-fg">{t("gen.style")}</p>
+            <p className="mt-0.5 text-xs text-muted">{t("gen.styleHint")}</p>
+          </div>
+          <Field label={t("gen.driverLevel")} groupLabel>
             <Segmented
-              value={weather}
-              onChange={(v) => setWeather(v as Weather)}
-              options={(["dry", "damp", "wet"] as const).map((w) => ({
-                value: w,
-                label: t(`weather.${w}`),
+              value={driverLevel}
+              onChange={(v) => setDriverLevel(v as DriverLevel)}
+              options={(["beginner", "intermediate", "pro"] as const).map((l) => ({
+                value: l,
+                label: t(`level.${l}`),
               }))}
             />
           </Field>
-
-          {isRally ? (
-            <>
-              <Field label={t("gen.surface")} groupLabel>
-                <Segmented
-                  value={surface}
-                  onChange={(v) => setSurface(v as typeof surface)}
-                  options={(["tarmac", "gravel", "snow", "mixed"] as const).map((s) => ({
-                    value: s,
-                    label: t(`surface.${s}`),
-                  }))}
-                />
-              </Field>
-              <Field label={t("gen.roughness")} groupLabel>
-                <Segmented
-                  value={roughness}
-                  onChange={(v) => setRoughness(v as typeof roughness)}
-                  options={(["smooth", "medium", "rough"] as const).map((r) => ({
-                    value: r,
-                    label: t(`roughness.${r}`),
-                  }))}
-                />
-              </Field>
-            </>
-          ) : (
-            <>
-              <Field label={t("gen.trackTemp")} hint={t("common.optional")}>
-                <input
-                  type="number"
-                  value={trackTempC}
-                  onChange={(e) => setTrackTempC(e.target.value)}
-                  placeholder="25"
-                  className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand"
-                />
-              </Field>
-              <Field label={t("gen.grip")} groupLabel>
-                <Segmented
-                  value={grip}
-                  onChange={(v) => setGrip(v as typeof grip)}
-                  options={(["green", "medium", "rubbered"] as const).map((gr) => ({
-                    value: gr,
-                    label: t(`grip.${gr}`),
-                  }))}
-                />
-              </Field>
-              <Field label={t("gen.fuel")} groupLabel>
-                <Segmented
-                  value={fuel}
-                  onChange={(v) => setFuel(v as typeof fuel)}
-                  options={(["low", "medium", "high"] as const).map((f) => ({
-                    value: f,
-                    label: t(`fuel.${f}`),
-                  }))}
-                />
-              </Field>
-            </>
-          )}
+          <Field label={t("gen.balance")} groupLabel>
+            <Segmented
+              value={balance}
+              onChange={(v) => setBalance(v as BalancePref)}
+              options={(["stable", "neutral", "agile"] as const).map((b) => ({
+                value: b,
+                label: t(`balance.${b}`),
+              }))}
+            />
+          </Field>
+          <Field label={t("gen.smoothness")} groupLabel>
+            <Segmented
+              value={smoothness}
+              onChange={(v) => setSmoothness(v as SmoothnessPref)}
+              options={(["smooth", "neutral", "aggressive"] as const).map((s) => ({
+                value: s,
+                label: t(`smoothness.${s}`),
+              }))}
+            />
+          </Field>
 
           <div className="h-px bg-border" />
 

@@ -131,6 +131,15 @@ export function generateSetup(game: GameData, input: GenerateInput): SetupResult
     }
   }
 
+  // Reglas por ESTILO de manejo (nivel/balance/suavidad). Mismo mecanismo que las
+  // condiciones; leen los campos de estilo de input.conditions. En su valor neutro
+  // ninguna regla matchea, así que el setup queda igual.
+  for (const rule of game.styleRules ?? []) {
+    if (rule.when(input.conditions)) {
+      for (const d of rule.adjust) applyDelta(d, rule.reason);
+    }
+  }
+
   for (const symptom of input.symptoms) {
     for (const rule of game.symptomRules) {
       if (rule.symptom === symptom) {

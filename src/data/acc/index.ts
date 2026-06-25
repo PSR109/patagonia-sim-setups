@@ -2,7 +2,7 @@ import type { GameData } from "@/lib/types";
 import { accParameters } from "./parameters";
 import { accCars, accCategories, accBaseSetups } from "./cars";
 import { accTracks } from "./tracks";
-import { accConditionRules, accSymptomRules } from "./rules";
+import { accConditionRules, accSymptomRules, accStyleRules } from "./rules";
 import { accFfb } from "./ffb";
 
 export const acc: GameData = {
@@ -28,5 +28,7 @@ export const acc: GameData = {
   baseSetups: accBaseSetups,
   conditionRules: accConditionRules,
   symptomRules: accSymptomRules,
+  styleRules: accStyleRules,
+  conditionFields: ["weather", "trackTemp", "grip", "fuel", "timeOfDay"],
   ffb: accFfb,
 };

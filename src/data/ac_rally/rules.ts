@@ -302,3 +302,86 @@ export const ac_rallySymptomRules: SymptomRule[] = [
     },
   },
 ];
+
+// Reglas por ESTILO de manejo (rally). BALANCE = barras + toe + LSD trasero
+// (rampa de inercia); SUAVIDAD = compresión rápida del amortiguador; NIVEL =
+// electrónica + freno. Recordá la convención del LSD: MENOR rampa = MÁS bloqueo.
+// Los ajustes de diferencial trasero excluyen FWD.
+export const ac_rallyStyleRules: ConditionRule[] = [
+  {
+    id: "balance_stable",
+    when: (c) => c.balance === "stable",
+    adjust: [
+      { paramId: "arb_front", delta: 2 },
+      { paramId: "arb_rear", delta: -2 },
+      { paramId: "toe_rear", delta: 2 },
+    ],
+    reason: {
+      es: "Balance estable: endurecemos la barra delantera, ablandamos la trasera (más agarre atrás) y sumamos toe-in trasero. La cola queda plantada y previsible en grava: ideal para no perderla.",
+      en: "Stable balance: stiffen the front bar, soften the rear (more rear grip) and add rear toe-in. The rear stays planted and predictable on gravel: ideal to keep it in line.",
+    },
+  },
+  {
+    id: "balance_agile",
+    when: (c) => c.balance === "agile",
+    adjust: [
+      { paramId: "arb_front", delta: -2 },
+      { paramId: "arb_rear", delta: 2 },
+      { paramId: "diff_rear_coast_ramp", delta: 2, excludeDrivetrains: ["fwd"] },
+    ],
+    reason: {
+      es: "Balance ágil: ablandamos la barra delantera, endurecemos la trasera y subimos la rampa de inercia trasera (menos bloqueo al levantar = más rotación de entrada). La cola gira más al soltar gas, para pilotar con el coche cruzado.",
+      en: "Agile balance: soften the front bar, stiffen the rear and raise the rear coast ramp (less lock on lift = more entry rotation). The rear rotates more off-throttle, for driving the car sideways.",
+    },
+  },
+  {
+    id: "smoothness_smooth",
+    when: (c) => c.smoothness === "smooth",
+    adjust: [
+      { paramId: "damper_fast_bump_front", delta: -2 },
+      { paramId: "damper_fast_bump_rear", delta: -2 },
+    ],
+    reason: {
+      es: "Respuesta suave: bajamos la compresión rápida para que las ruedas copien baches y piedras con calma. El coche flota más sobre el terreno roto, menos nervioso.",
+      en: "Smooth response: lower fast bump so the wheels follow bumps and rocks calmly. The car floats more over rough terrain, less nervous.",
+    },
+  },
+  {
+    id: "smoothness_aggressive",
+    when: (c) => c.smoothness === "aggressive",
+    adjust: [
+      { paramId: "damper_fast_bump_front", delta: 2 },
+      { paramId: "damper_fast_bump_rear", delta: 2 },
+    ],
+    reason: {
+      es: "Respuesta agresiva: subimos la compresión rápida para una plataforma más firme y directa. El coche responde inmediato a los cambios de dirección, a cambio de saltar más en baches.",
+      en: "Aggressive response: raise fast bump for a firmer, more direct platform. The car responds instantly to direction changes, at the cost of skipping more over bumps.",
+    },
+  },
+  {
+    id: "level_beginner",
+    when: (c) => c.driverLevel === "beginner",
+    adjust: [
+      { paramId: "tc", delta: 1 },
+      { paramId: "abs", delta: 1 },
+      { paramId: "brake_pad", delta: -1 },
+      { paramId: "brake_bias", delta: 2 },
+    ],
+    reason: {
+      es: "Nivel principiante: sumamos TC/ABS donde existan, bajamos el compuesto de pastilla (menos bloqueo) y adelantamos un poco la frenada. Más margen para no cruzar la cola al frenar en grava.",
+      en: "Beginner level: add TC/ABS where available, drop the pad compound (less lock) and move brake bias slightly forward. More margin to avoid stepping the rear out under braking on gravel.",
+    },
+  },
+  {
+    id: "level_pro",
+    when: (c) => c.driverLevel === "pro",
+    adjust: [
+      { paramId: "tc", delta: -1 },
+      { paramId: "abs", delta: -1 },
+    ],
+    reason: {
+      es: "Nivel pro: bajamos TC/ABS donde existan para que la electrónica no te corte y puedas jugar con la tracción y el freno con el pie. Exige experiencia en superficie suelta.",
+      en: "Pro level: lower TC/ABS where available so the electronics don't cut in and you can play with traction and braking by foot. Demands experience on loose surfaces.",
+    },
+  },
+];

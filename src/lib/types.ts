@@ -118,16 +118,48 @@ export type SetupValues = Record<string, number>; // paramId -> valor
 
 export type Weather = "dry" | "damp" | "wet";
 
+export type TimeOfDay = "day" | "dusk" | "night";
+
+// ── Estilo de manejo (cómo le gusta el auto al piloto) ─────────────────────
+// Tres ejes independientes que sesgan el setup hacia el gusto del piloto, además
+// de las condiciones de pista. El NIVEL enmarca: cuánta ayuda/seguridad metemos
+// (electrónica, freno). BALANCE: reparto de agarre frente↔cola (estable=más
+// subviraje y perdona; ágil=más rotación). SUAVIDAD: qué tan reactivo querés el
+// coche en transiciones (suave=amortiguación más blanda; agresivo=más firme).
+// El valor "neutral"/"intermediate" no aplica ninguna regla (setup base).
+export type DriverLevel = "beginner" | "intermediate" | "pro";
+export type BalancePref = "stable" | "neutral" | "agile";
+export type SmoothnessPref = "smooth" | "neutral" | "aggressive";
+
 export interface ConditionInput {
   weather: Weather;
   airTempC?: number;
   trackTempC?: number;
-  timeOfDay?: "day" | "dusk" | "night";
+  timeOfDay?: TimeOfDay;
   grip?: "green" | "medium" | "rubbered";
   fuelLoad?: "low" | "medium" | "high"; // proxy de duración de carrera
   surface?: Surface; // rally
   roughness?: "smooth" | "medium" | "rough"; // rally
+  // Estilo de manejo (opcional). Si faltan o están en su valor neutro, no mueven
+  // nada: el setup queda en base + condiciones.
+  driverLevel?: DriverLevel;
+  balance?: BalancePref;
+  smoothness?: SmoothnessPref;
 }
+
+// Campos de condición que un juego expone en el formulario. Permite que cada
+// simulador muestre SOLO las palancas que aplican a su disciplina (ej. circuito
+// pide clima/temp/agarre/combustible y, en endurance, hora del día; rally pide
+// superficie/rugosidad). El motor ignora cualquier valor de un campo que el
+// juego no declare.
+export type ConditionFieldId =
+  | "weather"
+  | "trackTemp"
+  | "grip"
+  | "fuel"
+  | "timeOfDay"
+  | "surface"
+  | "roughness";
 
 export type Symptom =
   | "understeer_entry"
@@ -236,5 +268,11 @@ export interface GameData {
   baseSetups: Record<string, SetupValues>; // carId -> valores base (parcial ok)
   conditionRules: ConditionRule[];
   symptomRules: SymptomRule[];
+  // Campos de condición que el formulario muestra para este juego. Si se omite,
+  // la UI usa un set por defecto según la disciplina (circuito vs rally).
+  conditionFields?: ConditionFieldId[];
+  // Reglas por ESTILO de manejo (nivel/balance/suavidad). Mismo shape que las de
+  // condiciones; el motor las aplica después de las condiciones de pista.
+  styleRules?: ConditionRule[];
   ffb?: GameFfb; // recomendaciones Fanatec + FFB del juego (opcional por ahora)
 }

@@ -2,7 +2,7 @@ import type { GameData } from "@/lib/types";
 import { ac_rallyParameters } from "./parameters";
 import { ac_rallyCars, ac_rallyCategories, ac_rallyBaseSetups } from "./cars";
 import { ac_rallyTracks } from "./tracks";
-import { ac_rallyConditionRules, ac_rallySymptomRules } from "./rules";
+import { ac_rallyConditionRules, ac_rallySymptomRules, ac_rallyStyleRules } from "./rules";
 import { ac_rallyFfb } from "./ffb";
 
 export const ac_rally: GameData = {
@@ -28,5 +28,7 @@ export const ac_rally: GameData = {
   baseSetups: ac_rallyBaseSetups,
   conditionRules: ac_rallyConditionRules,
   symptomRules: ac_rallySymptomRules,
+  styleRules: ac_rallyStyleRules,
+  conditionFields: ["surface", "roughness", "weather", "trackTemp"],
   ffb: ac_rallyFfb,
 };

@@ -614,7 +614,7 @@ export const accParameters: ParameterDef[] = [
     min: 0,
     max: 12,
     step: 1,
-    default: 12,
+    default: 9,
     whatItDoes: {
       es: "Ángulo del alerón trasero: genera carga aerodinámica atrás. Más ala = más agarre, menos punta.",
       en: "Rear wing angle: makes downforce at the rear. More wing = more grip, less top speed.",

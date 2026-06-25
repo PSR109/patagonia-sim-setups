@@ -94,6 +94,32 @@ export const lmuConditionRules: ConditionRule[] = [
       en: "Long stint (heavy fuel): the extra weight squats the rear and loads the platform; raise rear height and pressure and stiffen the rear spring a touch to protect the floor until the fuel burns off.",
     },
   },
+  {
+    id: "night",
+    when: (c) => c.timeOfDay === "night",
+    adjust: [
+      { paramId: "tyre_pressure_front", delta: 5 },
+      { paramId: "tyre_pressure_rear", delta: 5 },
+      { paramId: "brake_duct_front", delta: 1 },
+      { paramId: "brake_duct_rear", delta: 1 },
+    ],
+    reason: {
+      es: "Noche (stint nocturno de endurance): la pista se enfría; subimos presiones en frío para alcanzar la ventana y cerramos un poco los ductos para retener calor de freno y de neumático.",
+      en: "Night (endurance night stint): the track cools; raise cold pressures to reach the window and close the ducts a touch to retain brake and tyre heat.",
+    },
+  },
+  {
+    id: "dusk",
+    when: (c) => c.timeOfDay === "dusk",
+    adjust: [
+      { paramId: "tyre_pressure_front", delta: 2 },
+      { paramId: "tyre_pressure_rear", delta: 2 },
+    ],
+    reason: {
+      es: "Atardecer: la temperatura cae de a poco; subimos algo las presiones en frío para acompañar la pista que se enfría hacia la noche.",
+      en: "Dusk: temperature drops gradually; raise cold pressures slightly to follow the track cooling toward night.",
+    },
+  },
 ];
 
 // Reglas por SÍNTOMA (lo que el piloto siente en pista). Cubren los 12 valores
@@ -244,6 +270,85 @@ export const lmuSymptomRules: SymptomRule[] = [
     reason: {
       es: "Inestable en los pianos: ablandamos las barras, bajamos la compresión RÁPIDA de los amortiguadores (la que actúa sobre pianos y baches bruscos) y subimos algo la altura para que el auto absorba el piano en vez de saltar.",
       en: "Unstable over kerbs: soften the bars, lower the FAST damper compression (the channel that acts on kerbs and sharp bumps) and raise ride height a touch so the car absorbs the kerb instead of jumping.",
+    },
+  },
+];
+
+// Reglas por ESTILO de manejo. BALANCE = barras + ala + precarga de diferencial;
+// SUAVIDAD = compresión rápida del amortiguador; NIVEL = electrónica + freno.
+// (El ABS solo existe en LMGT3: apply() lo ignora en los prototipos.)
+export const lmuStyleRules: ConditionRule[] = [
+  {
+    id: "balance_stable",
+    when: (c) => c.balance === "stable",
+    adjust: [
+      { paramId: "arb_front", delta: 1 },
+      { paramId: "arb_rear", delta: -1 },
+      { paramId: "rear_wing", delta: 1 },
+    ],
+    reason: {
+      es: "Balance estable: endurecemos la barra delantera y ablandamos la trasera (más agarre atrás) y sumamos ala. El prototipo queda plantado y perdona, clave en stints largos.",
+      en: "Stable balance: stiffen the front bar and soften the rear (more rear grip) and add wing. The car stays planted and forgiving, key over long stints.",
+    },
+  },
+  {
+    id: "balance_agile",
+    when: (c) => c.balance === "agile",
+    adjust: [
+      { paramId: "arb_front", delta: -1 },
+      { paramId: "arb_rear", delta: 1 },
+      { paramId: "diff_preload", delta: -1 },
+    ],
+    reason: {
+      es: "Balance ágil: ablandamos la barra delantera, endurecemos la trasera y bajamos la precarga del diferencial para liberar rotación. Más vivo de entrada y en medio de curva.",
+      en: "Agile balance: soften the front bar, stiffen the rear and lower diff preload to free rotation. Livelier on entry and mid-corner.",
+    },
+  },
+  {
+    id: "smoothness_smooth",
+    when: (c) => c.smoothness === "smooth",
+    adjust: [
+      { paramId: "damper_fast_bump_front", delta: -1 },
+      { paramId: "damper_fast_bump_rear", delta: -1 },
+    ],
+    reason: {
+      es: "Respuesta suave: bajamos la compresión rápida para que el auto absorba pianos y baches con calma. Más estable en transiciones, más fácil de mantener.",
+      en: "Smooth response: lower fast bump so the car absorbs kerbs and bumps calmly. More stable in transitions, easier to hold.",
+    },
+  },
+  {
+    id: "smoothness_aggressive",
+    when: (c) => c.smoothness === "aggressive",
+    adjust: [
+      { paramId: "damper_fast_bump_front", delta: 1 },
+      { paramId: "damper_fast_bump_rear", delta: 1 },
+    ],
+    reason: {
+      es: "Respuesta agresiva: subimos la compresión rápida para una plataforma firme y reactiva que responde inmediato, a cambio de menos perdón sobre pianos.",
+      en: "Aggressive response: raise fast bump for a firm, reactive platform that responds instantly, at the cost of less forgiveness over kerbs.",
+    },
+  },
+  {
+    id: "level_beginner",
+    when: (c) => c.driverLevel === "beginner",
+    adjust: [
+      { paramId: "tc", delta: 1 },
+      { paramId: "brake_bias", delta: 1 },
+    ],
+    reason: {
+      es: "Nivel principiante: sumamos un punto de TC y adelantamos un poco la frenada. Más margen para que el auto no se vaya de cola mientras aprendés a manejarlo (en LMGT3 conviene subir también el ABS a mano).",
+      en: "Beginner level: add one TC step and move brake bias slightly forward. More margin so the rear doesn't step out while you learn the car (on LMGT3 it's worth raising ABS by hand too).",
+    },
+  },
+  {
+    id: "level_pro",
+    when: (c) => c.driverLevel === "pro",
+    adjust: [
+      { paramId: "tc", delta: -1 },
+    ],
+    reason: {
+      es: "Nivel pro: bajamos un punto de TC para que la electrónica intervenga menos y puedas sacarle todo el agarre al tren trasero. Exige gas progresivo.",
+      en: "Pro level: lower TC by one so the electronics intervene less and you can extract all the rear grip. Demands progressive throttle.",
     },
   },
 ];

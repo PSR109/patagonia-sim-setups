@@ -1,11 +1,42 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 18: auditoría multiagente full (13 dimensiones, 106 agentes, 30 hallazgos confirmados) + fixes aplicados y commiteados — física EA WRC `weather_wet` y AC EVO `oversteer_exit` (signos invertidos), bundle split (game-metas.ts, ningún cliente importa registry), lote a11y en generator.tsx, html lang en toggle, baseFor snap, FFB LMU torque, voseo+usted→tuteo (0 restantes), tsx devDep; verificado tsc 0 / validate-engine 0 / build verde; ver §3p. Iteración 17: F1 25 e iRacing ELIMINADOS de la app (fuera de alcance; quedan 5 sims; commit+push hechos; ver §3o). Iteración 16: LMU reconstruido contra DOS capturas in-game (Hypercar Alpine A424 #35 + LMGT3 McLaren 720S Evo #59, Bahrain) → modelo de 2 clases: 45 params universales + extras solo-Hypercar (heave, muelle de goma, diff power/inercia, híbrido regen/mapa eléctrico, diff delantero) + extra solo-LMGT3 (ABS) + paramOverrides de clase LMGT3 (ala en grados, dampers 0-50, defaults del McLaren); ver §3n. Iteración 15: AC EVO reconstruido contra captura in-game (Porsche 992 GT3 R, modo Carrera, v0.7.1, 6 pestañas → 29 params, era 35; el editor REAL no expone caja/diff power-coast/freno aparte/dampers rápidos/splitter → se eliminaron; ver §3m); iteración 14: ACC reconstruido contra captura in-game (Ferrari 296 GT3, preset Seguridad, 6 pestañas → 39 params, era 16; ver §3l); iteración 13: EA WRC reconstruido contra captura in-game (Ford Puma Rally1, 33 params, rangos exactos); iteración 12: AC Rally reconstruido (i20 N Rally2, 36 params, rangos estimados); iteración 11: 2º pase adversarial perf/errores/UX — 7 fixes, §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). F1 25 e iRacing: ELIMINADOS de la app en iteración 17 (§3o).
+> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 19: estilo de manejo (nivel piloto + balance + suavidad, 3 ejes con palancas separadas: aids/freno · barras/ala/diff · amortiguador) + condiciones data-driven por juego (cada sim declara `conditionFields`; ACC/LMU suman hora del día; AC Rally suma temp pista) — nuevo `styleRules` en GameData + motor + form; tsc 0 / validate-engine 0 / verificado en vivo. PENDIENTE PRIORITARIO próxima sesión: completar TODAS las pistas/etapas (faltan en varios juegos). Iteración 18: auditoría multiagente full (13 dimensiones, 106 agentes, 30 hallazgos confirmados) + fixes aplicados y commiteados — física EA WRC `weather_wet` y AC EVO `oversteer_exit` (signos invertidos), bundle split (game-metas.ts, ningún cliente importa registry), lote a11y en generator.tsx, html lang en toggle, baseFor snap, FFB LMU torque, voseo+usted→tuteo (0 restantes), tsx devDep; verificado tsc 0 / validate-engine 0 / build verde; ver §3p. Iteración 17: F1 25 e iRacing ELIMINADOS de la app (fuera de alcance; quedan 5 sims; commit+push hechos; ver §3o). Iteración 16: LMU reconstruido contra DOS capturas in-game (Hypercar Alpine A424 #35 + LMGT3 McLaren 720S Evo #59, Bahrain) → modelo de 2 clases: 45 params universales + extras solo-Hypercar (heave, muelle de goma, diff power/inercia, híbrido regen/mapa eléctrico, diff delantero) + extra solo-LMGT3 (ABS) + paramOverrides de clase LMGT3 (ala en grados, dampers 0-50, defaults del McLaren); ver §3n. Iteración 15: AC EVO reconstruido contra captura in-game (Porsche 992 GT3 R, modo Carrera, v0.7.1, 6 pestañas → 29 params, era 35; el editor REAL no expone caja/diff power-coast/freno aparte/dampers rápidos/splitter → se eliminaron; ver §3m); iteración 14: ACC reconstruido contra captura in-game (Ferrari 296 GT3, preset Seguridad, 6 pestañas → 39 params, era 16; ver §3l); iteración 13: EA WRC reconstruido contra captura in-game (Ford Puma Rally1, 33 params, rangos exactos); iteración 12: AC Rally reconstruido (i20 N Rally2, 36 params, rangos estimados); iteración 11: 2º pase adversarial perf/errores/UX — 7 fixes, §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). F1 25 e iRacing: ELIMINADOS de la app en iteración 17 (§3o).
 
 ---
 
 ## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-25)
+
+**🔴 PENDIENTE PRIORITARIO (próxima sesión): COMPLETAR TODAS LAS PISTAS/ETAPAS.**
+Faltan pistas/etapas en varios juegos; deberían estar TODAS las del juego real.
+Conteo actual (validate-engine, 2026-06-25): **ACC 25 · LMU 14 · AC EVO 18 · AC Rally 7 · EA WRC 18**.
+Tarea: auditar cada `src/data/<juego>/tracks.ts` contra el roster real del sim y agregar las que
+falten — circuitos + DLC (circuito) y TODAS las especiales/rallies (rally) — con `country`/`kind`/
+`surface`/`roughness` correctos. Verificar `tsc` 0 / `npx tsx scripts/validate-engine.ts` 0.
+(Nota: §3h marcó los rosters de AUTOS como completos, pero las PISTAS/ETAPAS siguen incompletas.)
+
+**Iteración 19 (HECHA 2026-06-25): estilo de manejo + condiciones data-driven por juego.**
+Pedido de Patricio: "no puede ser que me muestre lo mismo para cada juego… debe adaptarse a los
+requisitos de cada juego, además preguntarme cómo me gusta el auto para que se adapte a mi manejo".
+- **Estilo de manejo** (los 5 juegos): sección "Tu estilo de manejo" con 3 ejes independientes —
+  **Nivel** (Principiante/Intermedio/Pro → electrónica TC/ABS + freno; EA WRC, sin aids, usa freno+diff),
+  **Balance** (Estable/Neutral/Ágil → barras + ala + diferencial), **Suavidad** (Suave/Neutral/Agresivo
+  → compresión del amortiguador). Defaults neutros = NO mueven el setup. Nuevo `styleRules: ConditionRule[]`
+  por juego (palancas separadas para no pisarse; magnitudes al `step` real de cada sim; diff excl FWD;
+  mapas TC/ABS a |delta|=1). El motor aplica `styleRules` justo después de `conditionRules`.
+- **Condiciones data-driven**: `GameData.conditionFields?: ConditionFieldId[]`; el form (`generator.tsx`)
+  renderiza SOLO los campos que el juego declara. ACC/LMU: clima/temp/agarre/combustible + **hora del día**
+  (reglas night/dusk → presiones; LMU además ductos). AC EVO: clima/temp/agarre/combustible. AC Rally:
+  superficie/rugosidad/clima/**temp**. EA WRC: superficie/rugosidad/clima.
+- **Tocado**: `types.ts` (DriverLevel/BalancePref/SmoothnessPref/TimeOfDay/ConditionFieldId + ConditionInput
+  + GameData), `engine/index.ts`, `dictionaries.ts` (ES/EN), 5× `rules.ts` + 5× `index.ts`, `generator.tsx`,
+  `validate-engine.ts` (chequea styleRules + ejercita estilo en el smoke test).
+- **Verificado**: tsc 0 · validate-engine 0 · en vivo (formularios LMU vs EA WRC divergen; generar con
+  Ágil+Principiante aplica deltas con razones correctas; FWD excluye el diferencial).
+- **Nota dev/local (NO commiteado a propósito):** sigue activo el bypass `DEV_NO_AUTH=1` (en `.env`,
+  gitignored) + el código guardado a no-prod en `src/proxy.ts` y `src/lib/auth/current-user.ts`. Esos 2
+  archivos quedaron SIN commitear (no se publica un bypass de auth en repo público). Para volver al muro:
+  `DEV_NO_AUTH=0` o borrar la línea. Admin de prueba: `admin@admin.cl` / `admin` (seed idempotente).
 
 **ESTADO: los 5 sims en alcance están reconstruidos 1:1. NO hay juego pendiente.**
 **Iteración 18 (2026-06-25): auditoría multiagente full + fixes — HECHO y commiteado (§3p).**

@@ -2,7 +2,7 @@ import type { GameData } from "@/lib/types";
 import { ea_wrcParameters } from "./parameters";
 import { ea_wrcCars, ea_wrcCategories, ea_wrcBaseSetups } from "./cars";
 import { ea_wrcTracks } from "./tracks";
-import { ea_wrcConditionRules, ea_wrcSymptomRules } from "./rules";
+import { ea_wrcConditionRules, ea_wrcSymptomRules, ea_wrcStyleRules } from "./rules";
 import { ea_wrcFfb } from "./ffb";
 
 export const ea_wrc: GameData = {
@@ -28,5 +28,7 @@ export const ea_wrc: GameData = {
   baseSetups: ea_wrcBaseSetups,
   conditionRules: ea_wrcConditionRules,
   symptomRules: ea_wrcSymptomRules,
+  styleRules: ea_wrcStyleRules,
+  conditionFields: ["surface", "roughness", "weather"],
   ffb: ea_wrcFfb,
 };

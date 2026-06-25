@@ -2,7 +2,7 @@ import type { GameData } from "@/lib/types";
 import { lmuParameters } from "./parameters";
 import { lmuCars, lmuCategories, lmuBaseSetups } from "./cars";
 import { lmuTracks } from "./tracks";
-import { lmuConditionRules, lmuSymptomRules } from "./rules";
+import { lmuConditionRules, lmuSymptomRules, lmuStyleRules } from "./rules";
 import { lmuFfb } from "./ffb";
 
 export const lmu: GameData = {
@@ -28,5 +28,7 @@ export const lmu: GameData = {
   baseSetups: lmuBaseSetups,
   conditionRules: lmuConditionRules,
   symptomRules: lmuSymptomRules,
+  styleRules: lmuStyleRules,
+  conditionFields: ["weather", "trackTemp", "grip", "fuel", "timeOfDay"],
   ffb: lmuFfb,
 };

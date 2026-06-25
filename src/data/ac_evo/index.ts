@@ -2,7 +2,7 @@ import type { GameData } from "@/lib/types";
 import { ac_evoParameters } from "./parameters";
 import { ac_evoCars, ac_evoCategories, ac_evoBaseSetups } from "./cars";
 import { ac_evoTracks } from "./tracks";
-import { ac_evoConditionRules, ac_evoSymptomRules } from "./rules";
+import { ac_evoConditionRules, ac_evoSymptomRules, ac_evoStyleRules } from "./rules";
 import { ac_evoFfb } from "./ffb";
 
 export const ac_evo: GameData = {
@@ -31,5 +31,7 @@ export const ac_evo: GameData = {
   baseSetups: ac_evoBaseSetups,
   conditionRules: ac_evoConditionRules,
   symptomRules: ac_evoSymptomRules,
+  styleRules: ac_evoStyleRules,
+  conditionFields: ["weather", "trackTemp", "grip", "fuel"],
   ffb: ac_evoFfb,
 };

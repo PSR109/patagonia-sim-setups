@@ -246,3 +246,84 @@ export const ac_evoSymptomRules: SymptomRule[] = [
     },
   },
 ];
+
+// Reglas por ESTILO de manejo. BALANCE = barras + ala + precarga de diferencial;
+// SUAVIDAD = compresión LENTA del amortiguador (AC EVO no expone canal rápido);
+// NIVEL = electrónica + freno. Los ajustes de diferencial excluyen FWD.
+export const ac_evoStyleRules: ConditionRule[] = [
+  {
+    id: "balance_stable",
+    when: (c) => c.balance === "stable",
+    adjust: [
+      { paramId: "arb_front", delta: 1 },
+      { paramId: "arb_rear", delta: -1 },
+      { paramId: "rear_wing", delta: 1 },
+    ],
+    reason: {
+      es: "Balance estable: endurecemos la barra delantera y ablandamos la trasera (más agarre atrás) y sumamos ala. El auto subvira un poco más y perdona, ideal para ganar confianza.",
+      en: "Stable balance: stiffen the front bar and soften the rear (more rear grip) and add wing. The car understeers a touch more and forgives, ideal to build confidence.",
+    },
+  },
+  {
+    id: "balance_agile",
+    when: (c) => c.balance === "agile",
+    adjust: [
+      { paramId: "arb_front", delta: -1 },
+      { paramId: "arb_rear", delta: 1 },
+      { paramId: "diff_preload", delta: -1, excludeDrivetrains: ["fwd"] },
+    ],
+    reason: {
+      es: "Balance ágil: ablandamos la barra delantera, endurecemos la trasera y bajamos la precarga del diferencial para liberar rotación. El auto entra más vivo y gira más al levantar gas.",
+      en: "Agile balance: soften the front bar, stiffen the rear and lower diff preload to free rotation. The car turns in livelier and rotates more off-throttle.",
+    },
+  },
+  {
+    id: "smoothness_smooth",
+    when: (c) => c.smoothness === "smooth",
+    adjust: [
+      { paramId: "damper_slow_bump_front", delta: -1 },
+      { paramId: "damper_slow_bump_rear", delta: -1 },
+    ],
+    reason: {
+      es: "Respuesta suave: bajamos la compresión lenta para que la carrocería se asiente con calma en apoyos y frenadas. Menos reactivo, más progresivo.",
+      en: "Smooth response: lower slow bump so the body settles calmly under load and braking. Less reactive, more progressive.",
+    },
+  },
+  {
+    id: "smoothness_aggressive",
+    when: (c) => c.smoothness === "aggressive",
+    adjust: [
+      { paramId: "damper_slow_bump_front", delta: 1 },
+      { paramId: "damper_slow_bump_rear", delta: 1 },
+    ],
+    reason: {
+      es: "Respuesta agresiva: subimos la compresión lenta para que el auto se apoye rápido y responda inmediato al volante, a cambio de un tren más nervioso.",
+      en: "Aggressive response: raise slow bump so the car loads up quickly and responds instantly to steering, at the cost of a more nervous platform.",
+    },
+  },
+  {
+    id: "level_beginner",
+    when: (c) => c.driverLevel === "beginner",
+    adjust: [
+      { paramId: "tc", delta: 1 },
+      { paramId: "abs", delta: 1 },
+      { paramId: "brake_bias", delta: 1 },
+    ],
+    reason: {
+      es: "Nivel principiante: sumamos un punto de TC y ABS y adelantamos un poco la frenada. Más red de seguridad mientras aprendés a leer el auto.",
+      en: "Beginner level: add one TC and ABS step and move brake bias slightly forward. More safety net while you learn to read the car.",
+    },
+  },
+  {
+    id: "level_pro",
+    when: (c) => c.driverLevel === "pro",
+    adjust: [
+      { paramId: "tc", delta: -1 },
+      { paramId: "abs", delta: -1 },
+    ],
+    reason: {
+      es: "Nivel pro: bajamos un punto de TC y ABS para que la electrónica intervenga menos y puedas exprimir el agarre. Exige manos finas con gas y freno.",
+      en: "Pro level: lower TC and ABS by one so the electronics intervene less and you can extract more grip. Demands fine throttle and brake control.",
+    },
+  },
+];

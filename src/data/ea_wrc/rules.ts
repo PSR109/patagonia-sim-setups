@@ -280,3 +280,84 @@ export const ea_wrcSymptomRules: SymptomRule[] = [
     },
   },
 ];
+
+// Reglas por ESTILO de manejo (rally). BALANCE = barras + toe + LSD trasero de
+// frenada; SUAVIDAD = compresión rápida del amortiguador; NIVEL = freno + LSD de
+// conducción (EA WRC no tiene TC/ABS ni presión en el setup, así que la "ayuda"
+// se da por freno y diferencial). Los ajustes de diferencial trasero excluyen FWD.
+export const ea_wrcStyleRules: ConditionRule[] = [
+  {
+    id: "balance_stable",
+    when: (c) => c.balance === "stable",
+    adjust: [
+      { paramId: "arb_front", delta: 10 },
+      { paramId: "arb_rear", delta: -10 },
+      { paramId: "toe_rear", delta: 3 },
+    ],
+    reason: {
+      es: "Balance estable: endurecemos la barra delantera, ablandamos la trasera (más agarre atrás) y sumamos toe-in trasero. La cola queda plantada y previsible: clave para no perderla en tierra rápida.",
+      en: "Stable balance: stiffen the front bar, soften the rear (more rear grip) and add rear toe-in. The rear stays planted and predictable: key to keep it in line on fast gravel.",
+    },
+  },
+  {
+    id: "balance_agile",
+    when: (c) => c.balance === "agile",
+    adjust: [
+      { paramId: "arb_front", delta: -10 },
+      { paramId: "arb_rear", delta: 10 },
+      { paramId: "diff_rear_coast", delta: -4, excludeDrivetrains: ["fwd"] },
+    ],
+    reason: {
+      es: "Balance ágil: ablandamos la barra delantera, endurecemos la trasera y bajamos el bloqueo de frenada trasero (menos bloqueo al levantar = más rotación de entrada). El coche gira más al soltar gas, para llevarlo cruzado.",
+      en: "Agile balance: soften the front bar, stiffen the rear and lower the rear coast lock (less lock on lift = more entry rotation). The car rotates more off-throttle, to carry it sideways.",
+    },
+  },
+  {
+    id: "smoothness_smooth",
+    when: (c) => c.smoothness === "smooth",
+    adjust: [
+      { paramId: "damper_fast_bump_front", delta: -4 },
+      { paramId: "damper_fast_bump_rear", delta: -4 },
+    ],
+    reason: {
+      es: "Respuesta suave: bajamos la compresión rápida para que las ruedas copien baches y cortes con calma. El coche flota más sobre el terreno roto, menos nervioso.",
+      en: "Smooth response: lower fast bump so the wheels follow bumps and cuts calmly. The car floats more over rough terrain, less nervous.",
+    },
+  },
+  {
+    id: "smoothness_aggressive",
+    when: (c) => c.smoothness === "aggressive",
+    adjust: [
+      { paramId: "damper_fast_bump_front", delta: 4 },
+      { paramId: "damper_fast_bump_rear", delta: 4 },
+    ],
+    reason: {
+      es: "Respuesta agresiva: subimos la compresión rápida para una plataforma firme y directa que responde inmediato a los cambios de dirección, a cambio de saltar más en baches.",
+      en: "Aggressive response: raise fast bump for a firm, direct platform that responds instantly to direction changes, at the cost of skipping more over bumps.",
+    },
+  },
+  {
+    id: "level_beginner",
+    when: (c) => c.driverLevel === "beginner",
+    adjust: [
+      { paramId: "brake_force", delta: -150 },
+      { paramId: "brake_bias", delta: 2 },
+      { paramId: "diff_rear_power", delta: 4, excludeDrivetrains: ["fwd"] },
+    ],
+    reason: {
+      es: "Nivel principiante: bajamos la fuerza de freno y adelantamos un poco el reparto para reducir bloqueos, y subimos el bloqueo de conducción trasero para más tracción estable. Más fácil de frenar y acelerar sin sustos.",
+      en: "Beginner level: lower brake force and move bias slightly forward to reduce lock-ups, and raise the rear power lock for more stable traction. Easier to brake and accelerate without scares.",
+    },
+  },
+  {
+    id: "level_pro",
+    when: (c) => c.driverLevel === "pro",
+    adjust: [
+      { paramId: "brake_force", delta: 100 },
+    ],
+    reason: {
+      es: "Nivel pro: subimos la fuerza de freno para frenadas más mordientes y tardías. Exige dosificar el pedal con el pie para no bloquear en superficie suelta.",
+      en: "Pro level: raise brake force for sharper, later braking. Demands modulating the pedal by foot to avoid locking on loose surfaces.",
+    },
+  },
+];

@@ -82,6 +82,30 @@ export const accConditionRules: ConditionRule[] = [
       en: "Long race (heavy fuel): the extra weight squats the rear; raise rear height and pressure slightly to compensate.",
     },
   },
+  {
+    id: "night",
+    when: (c) => c.timeOfDay === "night",
+    adjust: [
+      { paramId: "tyre_pressure_front", delta: 5 },
+      { paramId: "tyre_pressure_rear", delta: 5 },
+    ],
+    reason: {
+      es: "Noche (stint nocturno, ej. Spa 24h): la pista se enfría y cuesta llegar a la presión objetivo; arrancamos con presiones en frío más altas para caer en la ventana en caliente.",
+      en: "Night (night stint, e.g. Spa 24h): the track cools and it's harder to reach target pressure; start with higher cold pressures to land in the hot window.",
+    },
+  },
+  {
+    id: "dusk",
+    when: (c) => c.timeOfDay === "dusk",
+    adjust: [
+      { paramId: "tyre_pressure_front", delta: 2 },
+      { paramId: "tyre_pressure_rear", delta: 2 },
+    ],
+    reason: {
+      es: "Atardecer: la temperatura baja gradualmente; subimos un poco las presiones en frío para acompañar la pista que se enfría.",
+      en: "Dusk: temperature drops gradually; raise cold pressures slightly to follow the cooling track.",
+    },
+  },
 ];
 
 // Reglas por SÍNTOMA (lo que el piloto siente en pista).
@@ -225,6 +249,87 @@ export const accSymptomRules: SymptomRule[] = [
     reason: {
       es: "Inestable en los pianos: ablandamos las barras, subimos la altura y bajamos la compresión rápida de los amortiguadores para que el auto absorba el impacto del piano en vez de saltar.",
       en: "Unstable over kerbs: soften the bars, raise ride height and lower the dampers' fast bump so the car absorbs the kerb hit instead of jumping.",
+    },
+  },
+];
+
+// Reglas por ESTILO de manejo. Tres ejes con palancas SEPARADAS para que no se
+// pisen: BALANCE = barras + ala (reparto frente↔cola); SUAVIDAD = compresión
+// rápida del amortiguador (reactividad); NIVEL = electrónica + freno (ayuda).
+export const accStyleRules: ConditionRule[] = [
+  {
+    id: "balance_stable",
+    when: (c) => c.balance === "stable",
+    adjust: [
+      { paramId: "arb_front", delta: 1 },
+      { paramId: "arb_rear", delta: -1 },
+      { paramId: "rear_wing", delta: 1 },
+    ],
+    reason: {
+      es: "Balance estable: endurecemos la barra delantera y ablandamos la trasera (más agarre atrás) y sumamos ala. El auto subvira un poco más y perdona errores: ideal si querés un coche plantado.",
+      en: "Stable balance: stiffen the front bar and soften the rear (more rear grip) and add wing. The car understeers a touch more and forgives mistakes: ideal if you want a planted car.",
+    },
+  },
+  {
+    id: "balance_agile",
+    when: (c) => c.balance === "agile",
+    adjust: [
+      { paramId: "arb_front", delta: -1 },
+      { paramId: "arb_rear", delta: 1 },
+      { paramId: "rear_wing", delta: -1 },
+    ],
+    reason: {
+      es: "Balance ágil: ablandamos la barra delantera y endurecemos la trasera y bajamos algo de ala. El auto rota más y entra más vivo: punta de lápiz para quien sabe atrapar la cola.",
+      en: "Agile balance: soften the front bar and stiffen the rear and trim some wing. The car rotates more and turns in sharper: pointy, for those who can catch the rear.",
+    },
+  },
+  {
+    id: "smoothness_smooth",
+    when: (c) => c.smoothness === "smooth",
+    adjust: [
+      { paramId: "fast_bump_front", delta: -1 },
+      { paramId: "fast_bump_rear", delta: -1 },
+    ],
+    reason: {
+      es: "Respuesta suave: bajamos la compresión rápida de los amortiguadores para que el auto absorba baches y pianos con calma. Menos reactivo, más fácil de leer.",
+      en: "Smooth response: lower the dampers' fast bump so the car soaks up bumps and kerbs calmly. Less reactive, easier to read.",
+    },
+  },
+  {
+    id: "smoothness_aggressive",
+    when: (c) => c.smoothness === "aggressive",
+    adjust: [
+      { paramId: "fast_bump_front", delta: 1 },
+      { paramId: "fast_bump_rear", delta: 1 },
+    ],
+    reason: {
+      es: "Respuesta agresiva: subimos la compresión rápida para una plataforma más firme y reactiva. El auto responde inmediato a tus manos, a cambio de menos perdón en baches.",
+      en: "Aggressive response: raise fast bump for a firmer, more reactive platform. The car responds instantly to your hands, at the cost of less forgiveness over bumps.",
+    },
+  },
+  {
+    id: "level_beginner",
+    when: (c) => c.driverLevel === "beginner",
+    adjust: [
+      { paramId: "tc", delta: 1 },
+      { paramId: "abs", delta: 1 },
+      { paramId: "brake_bias", delta: 1 },
+    ],
+    reason: {
+      es: "Nivel principiante: sumamos un punto de TC y ABS y adelantamos un poco el balance de freno. Más red de seguridad para que el auto no te sorprenda mientras aprendés.",
+      en: "Beginner level: add one TC and ABS step and move brake bias slightly forward. More safety net so the car doesn't surprise you while you learn.",
+    },
+  },
+  {
+    id: "level_pro",
+    when: (c) => c.driverLevel === "pro",
+    adjust: [
+      { paramId: "tc", delta: -1 },
+      { paramId: "abs", delta: -1 },
+    ],
+    reason: {
+      es: "Nivel pro: bajamos un punto de TC y ABS para que la electrónica intervenga menos y puedas exprimir el agarre. Exige manos finas con el gas y el freno.",
+      en: "Pro level: lower TC and ABS by one so the electronics intervene less and you can extract more grip. Demands fine throttle and brake control.",
     },
   },
 ];
