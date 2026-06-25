@@ -5,7 +5,60 @@
 
 ---
 
-## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-25)
+## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-25, cierre iteración 25)
+
+> **North star (memoria product-north-star):** que los clientes **bajen tiempos**, no cobrar aún.
+> El tiempo viene del MANEJO (~5–15% de una vuelta) mucho más que del setup (~1%). Por eso el valor
+> es coaching + datos verificados, no visuales.
+>
+> **Regla dura:** nunca inventar datos por-pista/por-coche no verificables — una referencia errónea
+> hace al piloto MÁS lento. Solo física universal o captura verificada in-game.
+>
+> **Bypass de auth (`DEV_NO_AUTH` en `src/lib/auth/current-user.ts` + `src/proxy.ts`):** SIEMPRE
+> queda FUERA del repo público. Se modifica local para testear pero NUNCA se commitea (quedan como
+> `M` en `git status` a propósito).
+
+**Los 3 niveles del foso (moat) — COMPLETOS.** Loop de mejora cerrado punta a punta:
+diagnosticar (síntoma→técnica) → generar setup → exportar al juego → manejar → medir progreso.
+
+**Iteración 25 (HECHA 2026-06-25): A/B de setups + tiempo-objetivo, endurecido por review adversarial.**
+commit `2df9705`, pusheado. Pedido de Patricio: *"hazlas"* (ideas post-trío #2 y #3).
+- **A/B de setups** (`src/components/lap-comparator.tsx`): por combo, "qué setup fue más rápido" —
+  mejor vuelta por setup ETIQUETADO, marca el más rápido + deltas. Vueltas sin etiqueta EXCLUIDAS
+  del veredicto (comparar contra setup desconocido = dato engañoso). Etiquetas agrupadas insensibles
+  a mayúsculas/espacios ("Soft"=="soft"). Usa `LapRecord.setupRef` ya existente — sin cambio schema/API.
+- **Tiempo-objetivo**: objetivo por combo en localStorage (SSR-safe, leído en effect), gap + barra de
+  progreso desde el primer intento, `role="alert"` en input inválido.
+- **Endurecido por review multiagente adversarial (run wf_4319b333; 1 high + 3 med + 7 low, todos
+  reales aplicados):** `setupRef` con `max(40)` **server-side** en `api/laps/route.ts` (antes solo el
+  `maxLength` del cliente → hueco storage/DoS); orden de vueltas determinista
+  (`[{createdAt:desc},{id:desc}]` en API y `garage/page.tsx`); `parseLapToMs` acepta segundos-solo ≥60s
+  ("83.456"=1:23.456) según su contrato — el guard ≥60 solo aplica a formato con `:` (fix en AMBAS
+  copias: comparator + `generator.tsx`); a11y (label localizado en botón borrar + `role="progressbar"`
+  con aria); banner de mejora en magnitud positiva.
+- **Verificado:** tsc 0 · validate-engine 0 · `next build` verde · HIGH probado en vivo (POST 60 chars
+  → 400) · 8/8 checks de lógica pura PASS · datos de prueba limpiados de la DB.
+
+**Iteración 24 (HECHA): comparador de vueltas.** commit `3747e37`. `<LapComparator>` en el garaje:
+agrupa vueltas por juego+auto+pista; por combo muestra mejor vuelta, gap por intento, mejora vs primer
+intento y constancia (rango mejor↔peor). Matemática pura sobre datos PROPIOS del piloto — cero fabricación.
+
+**Iteración 23 (HECHA): hoja de setup exportable.** commit `d28c3ab`. `<SetupExport>` = hoja de texto
+copiable/descargable (setup completo en orden del editor + unidades), NO archivo binario. Para ACC/LMU
+muestra `meta.setupFileNote` (ruta real del archivo). **Decisión #1:** deliberadamente NO genera el
+`.json` de ACC / `.svm` de LMU — guardan cada valor como ÍNDICE DE CLICK interno por-coche; un valor mal
+= el archivo no carga o aplica basura → viola la regla dura. **Cómo se desbloquearía (Patricio preguntó
+2026-06-25):** capturar la codificación del JUEGO REAL, no inventar. Protocolo por-coche (~5 min): mover
+cada slider a MIN y MAX, leer el entero en el `.json` guardado, resolver `valor = base + click*step` (2
+puntos → base/step/rango). Atajos: presión neumático ACC = misma fórmula todos los coches (base 20.3 psi,
+0.1/click) → capturar 1 vez; LMU (`.svm`, motor rF2) tiene step/rango en los archivos de definición ya
+instalados → parseable por programa. **Gate:** round-trip por coche (generar → cargar en juego → valores
+coinciden → guardar → JSON idéntico); si no pasa, ese coche se queda con la hoja de texto. Recomendación:
+NO los 77 coches — Pareto, los 5–10 más usados. (No arrancado: espera confirmación de Patricio.)
+
+**Iteración 22 (HECHA): capa de coaching "Ingeniero de pista".** commit `d30fc82`. `src/lib/coach.ts` +
+`<TrackCoach>`: traduce síntoma de manejo → fix de TÉCNICA, playbook de pista y plan de práctica. Primer
+"time lever" real (manejo > setup).
 
 **Iteración 20 (HECHA 2026-06-25): rediseño visual "$10k" — sistema de diseño "Pit Wall".**
 Pedido de Patricio: *"deja el diseño de la app como una app del USD$ 10k"*. SOLO capa visual;
