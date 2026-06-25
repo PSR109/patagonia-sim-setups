@@ -1,30 +1,96 @@
 # HANDOFF — App de Setups Patagonia Sim Racing
 
 > Documento para **retomar el trabajo en otra sesión** sin perder contexto.
-> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 11: 2º pase adversarial sobre performance/errores-cliente/UX — 7 hallazgos confirmados, 7 corregidos + verificados en vivo, ver §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
+> Última actualización: 2026-06-25 (cierre de sesión; ver ▶ PRÓXIMA SESIÓN. Iteración 13: EA WRC reconstruido contra captura in-game (Ford Puma Rally1, 33 params, rangos exactos); iteración 12: AC Rally reconstruido (i20 N Rally2, 36 params, rangos estimados); iteración 11: 2º pase adversarial perf/errores/UX — 7 fixes, §3k; iteración 10: seguridad/a11y — 5 bugs, §3j; iteración 9: FFB en §3i). iRacing: DECIDIDO dejarlo como subset curado a propósito (no expandir).
 
 ---
 
-## ▶ PRÓXIMA SESIÓN — empezar acá (2026-06-25)
+## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-25)
 
-**Pedido explícito de Patricio:** arrancar la próxima sesión **construyendo Assetto Corsa Rally al detalle**.
+**SIGUIENTE JUEGO A RECONSTRUIR.** Patrón ya establecido (ver iter 12 y 13): Patricio
+manda **UNA** captura in-game de referencia de un auto por juego (todas las pestañas del
+editor) → yo reconstruyo `parameters.ts` → `rules.ts` → `cars.ts` 1:1 con el juego,
+estimando lo que no se vea (rangos si el editor no los muestra) y verifico (tsc 0 /
+`npx tsx scripts/validate-engine.ts` 0 / `npm run build` verde). Esperar a que Patricio
+mande la captura del próximo juego.
+- **Pendientes de reconstruir (4):** ACC, F1 25, LMU, AC EVO.
+- **iRacing:** DECIDIDO dejarlo como subset curado a propósito (NO reconstruir/expandir).
+- **Hechos:** AC Rally (i20 N Rally2, rangos estimados), EA WRC (Ford Puma Rally1, rangos exactos in-game).
+- **Opcional disponible:** workflow adversarial para auditar dirección física de reglas
+  (AC Rally + EA WRC: dirección de bloqueo LSD trasero, signo del toe). Independiente de rangos.
 
-**Antes de construir — diagnosticar:** Patricio reportó que **"la app no está funcionando nada de bien"** (sesión del 2026-06-25). No dio síntomas específicos; no quedó capturado qué falla. Primer paso de la próxima sesión: levantar `preview_start({ name: "patagonia-sim-setups" })`, recorrer los flujos (home → elegir sim → generar → garaje) y **reproducir/listar los fallos concretos** antes de tocar datos. Puede ser data (rangos/valores irreales en el generador) o comportamiento (UI/engine). Confirmar si el problema es general o específico de AC Rally.
+**Iteración 12 (HECHA 2026-06-25): AC Rally reconstruido contra captura IN-GAME.**
+Patricio pasó las **8 pestañas** del editor real del juego (auto **Hyundai i20 N
+Rally2**, preset **"Equilibrado"**). Se descubrió que la data previa de AC Rally era
+de investigación genérica y **NO coincidía con la UI real** (unidades, params y
+rangos equivocados). Se reescribió de cero para espejar el juego 1:1. tsc 0 /
+validate-engine 0 / build verde / verificado EN VIVO (tabla del i20 muestra los **36
+params reales** y la columna base = preset Equilibrado **exacto**; generar en Grava
+mueve los sliders correctos en magnitudes correctas).
 
-**Estado actual de AC Rally** (`src/data/ac_rally/`, ~1229 líneas, `status: early-access`, `hasImportableSetups: false`):
-- `cars.ts` — **8 clases** (Group 2/4/B/A, WRC clásico, F2 Kit Car, Rally2, Rally4) y **15 autos verificados** (parcial; el juego apunta a **30+ en 1.0** y suma en cada versión EA). `baseSetups` sólo para 6 autos.
-- `tracks.ts` — **8 etapas** en 6 locaciones (Alsacia/Saverne tarmac, Gales grava, Livigno hielo, Monte Carlo Turini mixto + Sisteron tarmac). Faltan **largos exactos por variante**.
-- `parameters.ts` (604) · `rules.ts` (289, condition+symptom) · `ffb.ts` (142) — existen, sin auditar "al detalle".
+**Qué cambió (iteración 12):**
+- `ac_rally/parameters.ts` → **36 params con unidades REALES**: muelles **N/m**,
+  amortiguadores **Ns/m** (4 canales × 2 ejes), barras **N/m**, **anillo de ajuste en
+  m** (altura), **doble LSD** frontal+trasero (rampa °/precarga Nm/placas), **balance
+  de freno fracción 0-1**, cilindros maestros **mm**, **pastilla** bajo/medio/alto,
+  freno de mano, **conjunto de cambios** (selector), **toe en metros**, ABS/TC mapas.
+- **ELIMINADOS** params inventados que NO existen en el juego: `brake_pressure %`,
+  `final_drive`, `caster`, `rear_wing`, `diff_center %`.
+- `rules.ts` → deltas en las unidades nuevas; **diff remapeado al LSD trasero**
+  (rampas/precarga; **MENOR ángulo = MÁS bloqueo**); `brake_pressure` reemplazado por
+  balance + ABS + compuesto de pastilla. 8 condition + 12 symptom rules.
+- `cars.ts` baseSetups → el i20 hereda los defaults exactos (= sus valores
+  Equilibrado); resto de autos pendiente de captura.
 
-**Qué significa "al detalle" (alcance a confirmar con Patricio al inicio):**
-1. Completar autos faltantes por clase hasta el roster real de la versión EA vigente (verificar v0.4+ in-game; hoy hay 15, faltan ~15+).
-2. Validar **rangos reales de cada parámetro** contra el juego (suspensión, diff central/coast/power, presiones por superficie, ala, TC/ABS escala 1-3, brake bias) — clave porque el motor `clampToParam` depende de estos rangos.
-3. Revisar `rules.ts`: que cada síntoma (subviraje/sobreviraje/rebota/sin tracción) mueva el parámetro correcto **en dirección física correcta** por superficie (grava vs asfalto vs nieve cambian la lógica).
-4. FFB: nombres de settings in-game correctos para AC Rally + valores por base Fanatec.
-5. `baseSetups` por auto donde haga falta (FWD sin diff central, 4WD con sesgo, clásicos sin electrónica).
-- **Bloqueo conocido:** datos exactos requieren **captura in-game de Patricio** (rangos de sliders reales). Es EA y cambia por versión. Si no los tiene a mano, construir con los datos de investigación existentes y marcar lo no verificado.
+**Lo que FALTA para exactitud total en AC Rally:**
+1. **Rangos min/max de cada slider — RESUELTO por decisión (2026-06-25).** Patricio
+   NO va a capturar los topes de cada slider: el `default` (preset Equilibrado del i20)
+   es la única referencia y el resto se **estima** desde la física del motor AC + esa
+   captura. Mismo patrón para cada juego (una captura suya → yo completo). Hecho en
+   `parameters.ts`: rangos relabelados "(rango estimado)" y afinados (muelles
+   15000–65000, anillo 0.12–0.26 m, 8 amortiguadores 1000–8000 Ns/m, barras 0–30000,
+   toe ±0.002 m, balance 0.40–0.65). Validados: tsc 0 / validate-engine 0 / build OK
+   (el validador corre `generateSetup` sobre los 15 autos sin recortes indebidos).
+2. **Convención de signo a confirmar in-game:** toe en metros (¿negativo = toe-out?) y
+   rampas del LSD (asumido: subir ángulo = menos bloqueo).
+3. **Valores de preset por-auto.** CONFIRMADO por Patricio (2026-06-25): el editor del
+   juego es **UNIFORME** (todos los autos muestran los mismos params; el i20 es solo
+   ejemplo) → **NO** hay que ocultar params por-auto (queda descartado). Lo que falta
+   son los **VALORES** del preset de cada auto (hoy todos heredan los del i20). Capturar
+   el garaje de cada auto cuando se pueda; estructura y direcciones ya están bien.
+4. **Multiplicador de FFB por-auto** (pestaña Ruedas = 1.0000): confirmar rango.
 
-**Arranque sugerido de la sesión:** Workflow de 2 fases — (A) diagnóstico de los fallos reportados (auditores que reproducen flujos) → (B) construcción AC Rally por dimensión (autos / parámetros+rangos / rules / tracks / ffb), cada una verificada adversarialmente contra fuentes.
+**Opcional ya disponible:** correr un **workflow adversarial** que verifique la
+dirección física de cada regla de AC Rally (sobre todo las rampas del LSD y el signo
+del toe) — es independiente de los rangos. Pendiente de luz verde de Patricio.
+
+**Iteración 13 (HECHA 2026-06-25): EA WRC reconstruido contra captura IN-GAME.**
+Patricio pasó las **6 pestañas** reales (auto **Ford Puma Rally1**, modo Contrarreloj):
+Marchas, Alineación, Muelles, Amortiguación, Diferenciales, Frenada. La data previa
+estaba en unidades/estructura equivocadas. Reescrito 1:1. tsc 0 / validate-engine 0
+(ea_wrc = **33 params**) / build verde. EA WRC **muestra los rangos en pantalla**, así
+que defaults Y min/max del Puma Rally1 son **exactos** (no estimados).
+
+**Qué cambió (iteración 13):**
+- `ea_wrc/parameters.ts` → **33 params reales**: muelle **N/mm**, altura **absoluta mm**
+  (no offset), barra **N/mm**, toe/camber **grados**, amortiguadores en **clicks −5..+5**
+  + **"división de amortiguación" m/s** (sin rebote rápido), **5 marchas** + transmisión
+  final 0.1–0.3, diff **frontal+trasero** (conducción/frenada % + precarga N·m), frenos
+  fuerza/freno de mano en **N·m**, reparto %.
+- **ELIMINADOS** inventados que no existen: `caster_front`, `tyre_pressure_front/rear`
+  (EA WRC **no tiene pestaña de neumáticos** ni presión ajustable).
+- `rules.ts` → deltas en unidades nuevas; superficie/clima sin presión (usan altura/
+  muelle/barra/damper/diff trasero/freno); diff toca **solo el LSD trasero** (excl fwd);
+  **sin reglas de temperatura** (no hay lever); `tyres_cold` omitido a propósito.
+- `cars.ts` → **Puma Rally1 = referencia** (hereda defaults); overrides de muelle por
+  clase con `step` alineado a 1 N/mm; baseSetups limpiados (solo Lancia Stratos).
+
+**EA WRC NO es uniforme:** rangos de muelle/barra/diff varían por clase. Puma Rally1 =
+exacto para Rally1; otras clases heredan la referencia (+ overrides de muelle ya
+existentes). Falta: captura del garaje de otras clases para refinar. Igual que AC Rally,
+queda disponible el **workflow adversarial** para auditar dirección física de las reglas.
+
+**Otros sims (ACC, F1 25, LMU, AC EVO, iRacing):** sin cambios; pendientes en §3.
 
 ---
 

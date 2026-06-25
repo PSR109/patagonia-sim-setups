@@ -43,20 +43,23 @@ export const ac_rallyCars: Car[] = [
   { id: "lancia-fulvia-16hf-gr4", gameId: "ac_rally", categoryId: "gr4", name: "Lancia Fulvia Coupé 1.6 HF Gr.4", brand: "Lancia", year: 1970, drivetrain: "fwd" },
 ];
 
-// Ajustes de base por auto. Los clásicos exponen menos parámetros (aero fija,
-// sin electrónica); los modernos 4WD suman diferencial central, TC/ABS y ala.
-// El resto de los parámetros usa los defaults de parameters.ts.
+// Ajustes de base por auto. Tras la reconstrucción 2026-06-25, los parámetros
+// reflejan la UI REAL del juego (LSD frontal+trasero, anillo de ajuste en m,
+// balance de freno 0-1, amortiguadores Ns/m, etc.) y los `default` de
+// parameters.ts YA son los valores VERIFICADOS del preset "Equilibrado" del
+// Hyundai i20 N Rally2 (captura in-game de Patricio). Por eso el i20 no necesita
+// override: hereda los defaults exactos.
+//
+// El editor del juego es UNIFORME: todos los autos exponen los MISMOS parámetros
+// (el i20 es solo el ejemplo de la captura). Lo único que falta es el VALOR del
+// preset por-auto: el resto de los coches hereda hoy los defaults del i20 y queda
+// PENDIENTE de capturar su garaje in-game (los números difieren auto a auto). No
+// inventamos valores por-auto sin fuente.
 export const ac_rallyBaseSetups: Record<string, SetupValues> = {
-  // Group A 4WD: diff central con leve sesgo trasero para rotación
-  "subaru-impreza-s3-gra": { diff_center: 45, rear_wing: 5, toe_front: -0.20 },
-  "lancia-delta-hf-integrale-evo-gra": { diff_center: 50, rear_wing: 4, toe_front: -0.18 },
-  // WRC clásico 4WD: muy ajustable, ala activa. TC/ABS al mapa mínimo (1) —
-  // estos autos corren con la mínima asistencia (la escala del juego es 1-3).
-  "citroen-xsara-wrc": { diff_center: 45, rear_wing: 6, tc: 1, abs: 1 },
-  // Rally2 moderno 4WD con electrónica ajustable
-  "hyundai-i20n-rally2": { diff_center: 45, rear_wing: 6, tc: 3, abs: 3 },
-  // Rally4 tracción delantera: nada de diff central, ala chica
-  "peugeot-208-rally4": { rear_wing: 2, tc: 2, abs: 2 },
-  // Group B trasera/4WD ligera: cola viva
-  "lancia-037-evo2-grb": { rear_wing: 5, brake_bias: 58.0 },
+  // Hyundai i20 N Rally2 — VERIFICADO. Sus valores = defaults de parameters.ts,
+  // así que hereda sin override (no hace falta listarlo).
+
+  // Group B RWD clásico (Lancia 037): sin electrónica real; balance de freno algo
+  // más al frente que el neutro del i20. (Representativo; confirmar in-game.)
+  "lancia-037-evo2-grb": { brake_bias: 0.55 },
 };

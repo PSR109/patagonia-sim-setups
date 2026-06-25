@@ -4,18 +4,17 @@ import type { Car, Category, SetupValues } from "@/lib/types";
 // aquí cargamos las clases y los coches de ejemplo verificados de cada una.
 // La lista de coches es PARCIAL (ver gaps): faltan coches que la investigación
 // no listó por nombre dentro de cada clase.
-// Rangos de muelle por clase (workflow de exactitud, 2.ª fuente independiente
-// takegaki-drive.com + WRCsetups): el global 40-130 N/mm es muy bajo para las
-// clases modernas, que en asfalto llegan a ~186-260 N/mm (verificado: 306 Maxi
-// 186, C3 Rally2 260). Se ensancha el tope por clase. La agrupación es
-// representativa; el cap exacto del slider sigue siendo best-effort por-clase.
+// Rangos de muelle por clase: el global de la REFERENCIA (Puma Rally1, 60-200 N/mm)
+// se queda corto para clases modernas de asfalto (verificado 2.ª fuente: 306 Maxi
+// ~186, C3 Rally2 ~260 N/mm). Por eso se ensancha el tope por clase. step alineado a
+// 1 N/mm (igual que el global nuevo) para que los deltas de las reglas escalen igual.
 const springsKit: Record<string, { min: number; max: number; step: number; default: number }> = {
-  spring_front: { min: 30, max: 250, step: 5, default: 120 },
-  spring_rear: { min: 30, max: 250, step: 5, default: 120 },
+  spring_front: { min: 30, max: 250, step: 1, default: 120 },
+  spring_rear: { min: 30, max: 250, step: 1, default: 120 },
 };
 const springsModern: Record<string, { min: number; max: number; step: number; default: number }> = {
-  spring_front: { min: 45, max: 260, step: 5, default: 90 },
-  spring_rear: { min: 45, max: 260, step: 5, default: 90 },
+  spring_front: { min: 45, max: 260, step: 1, default: 90 },
+  spring_rear: { min: 45, max: 260, step: 1, default: 90 },
 };
 
 export const ea_wrcCategories: Category[] = [
@@ -183,18 +182,14 @@ export const ea_wrcCars: Car[] = [
   { id: "ea_wrc_toyota_gr_yaris_rally1_24", gameId: "ea_wrc", categoryId: "wrc_rally1", name: "Toyota GR Yaris Rally1 HYBRID '24", brand: "Toyota", year: 2024 },
 ];
 
-// Pequeños ajustes de base por auto. El juego ajusta setups por superficie, no
-// por archivo importable; los overrides reflejan tendencias por tipo de tracción.
-// El resto de los coches usa los defaults de los parámetros.
+// Pequeños ajustes de base por auto. El juego ajusta setups por superficie, no por
+// archivo importable. Tras la reconstrucción 2026-06-25, el Ford Puma Rally1 es la
+// REFERENCIA (sus valores = defaults de parameters.ts), así que hereda sin override;
+// el resto de los Rally1 (Toyota, Hyundai) y las demás clases heredan la referencia
+// hasta capturar su garaje in-game. Solo dejamos overrides con sentido claro en las
+// unidades nuevas (grados, %, N·m). No inventamos valores por-auto sin fuente.
 export const ea_wrcBaseSetups: Record<string, SetupValues> = {
-  // Tracción trasera clásica: cola viva, conviene algo más de toe-in trasero y
-  // el reparto de frenada algo adelantado para domarla.
-  ea_wrc_lancia_stratos: { toe_rear: 0.15, brake_bias: 60.0 },
-  // Rally1 híbrido 4WD: mucha tracción, más bloqueo en aceleración y final más larga.
-  ea_wrc_toyota_gr_yaris_rally1: { diff_power: 55, final_drive: 12 },
-  ea_wrc_ford_puma_rally1: { diff_power: 55, final_drive: 12 },
-  ea_wrc_hyundai_i20_n_rally1: { diff_power: 55, final_drive: 12 },
-  // FWD de época: balance hacia subviraje, conviene endurecer la barra trasera
-  // para soltar la cola y rotar (default 18 N/mm → 24, un escalón firme y seguro).
-  ea_wrc_peugeot_205_gti: { arb_rear: 24, brake_bias: 60.0 },
+  // Lancia Stratos (H3 RWD): cola muy viva; algo de toe-in trasero (0.15°) y reparto
+  // de frenada algo adelantado (60%) para domarla. (Representativo; confirmar in-game.)
+  ea_wrc_lancia_stratos: { toe_rear: 0.15, brake_bias: 60 },
 };

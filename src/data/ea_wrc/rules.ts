@@ -1,84 +1,111 @@
 import type { ConditionRule, SymptomRule } from "@/lib/types";
 
-// Reglas por CONDICIONES de EA Sports WRC. `delta` está en pasos (se multiplica
-// por el step del parámetro). En rally la SUPERFICIE manda: tierra y nieve piden
-// un coche alto, blando y suave; el tarmac pide bajo y firme. Cada regla lleva su
-// explicación educativa.
+// Reglas por CONDICIONES y por SÍNTOMA para EA SPORTS WRC. `delta` está en PASOS
+// (se multiplica por el `step` real del parámetro). Tras la reconstrucción
+// 2026-06-25 (captura in-game del Ford Puma Rally1, 6 pestañas reales), los deltas
+// están en las unidades reales del juego: altura mm (step 1), muelle N/mm (step 1),
+// barra N/mm (step 0.3), amortiguadores en clicks (step 0.5), diff conducción/frenada
+// % (step 1) / precarga N·m (step 1), frenos N·m (step 1), reparto % (step 1),
+// camber/toe ° (step 0.05).
+//
+// DIFERENCIAL: EA WRC tiene LSD FRONTAL y TRASERO. Las reglas tocan SOLO el TRASERO
+// (rotación/tracción de la cola); el frontal queda en base. Convención del juego
+// (tooltip in-game): bloqueo de conducción/frenada ALTO = más tracción/estabilidad,
+// posible subviraje; BAJO = más giro en curva, menos estabilidad. Los deltas de diff
+// llevan excludeDrivetrains:["fwd"] (un FWD no tiene LSD trasero).
+//
+// SIN NEUMÁTICOS: EA WRC no expone presión en el setup, así que NO hay reglas de
+// presión ni de temperatura de pista (no existe lever). La superficie/clima se
+// modela con altura, muelles, barras, amortiguadores, diferencial trasero y frenos.
 export const ea_wrcConditionRules: ConditionRule[] = [
   {
     id: "surface_gravel",
     when: (c) => c.surface === "gravel",
     adjust: [
-      { paramId: "ride_height_front", delta: 4 },
-      { paramId: "ride_height_rear", delta: 4 },
-      { paramId: "spring_front", delta: -2 },
-      { paramId: "spring_rear", delta: -2 },
-      { paramId: "tyre_pressure_front", delta: -4 },
-      { paramId: "tyre_pressure_rear", delta: -4 },
+      { paramId: "ride_height_front", delta: 12 },
+      { paramId: "ride_height_rear", delta: 12 },
+      { paramId: "spring_front", delta: -20 },
+      { paramId: "spring_rear", delta: -20 },
+      { paramId: "arb_front", delta: -20 },
+      { paramId: "arb_rear", delta: -20 },
+      { paramId: "damper_fast_bump_front", delta: -4 },
+      { paramId: "damper_fast_bump_rear", delta: -4 },
+      { paramId: "brake_bias", delta: -4 },
+      { paramId: "diff_rear_power", delta: 6, excludeDrivetrains: ["fwd"] },
+      { paramId: "toe_front", delta: -4 },
     ],
     reason: {
-      es: "Tierra: subimos el coche para tener recorrido sobre baches y piedras, ablandamos los muelles para que las ruedas copien el terreno suelto y bajamos presiones para ganar huella y agarre mecánico.",
-      en: "Gravel: raise the car for travel over bumps and rocks, soften the springs so the wheels follow the loose terrain, and lower pressures to gain contact patch and mechanical grip.",
+      es: "Tierra: subimos el coche (~+12 mm) para tener recorrido sobre baches y piedras, ablandamos muelles y barras para que las ruedas copien el terreno suelto, suavizamos la compresión rápida ante impactos, atrasamos el reparto de frenada para no bloquear, subimos el bloqueo de conducción trasero para más tracción mecánica y abrimos el toe delantero para una entrada más viva.",
+      en: "Gravel: raise the car (~+12 mm) for travel over bumps and rocks, soften springs and bars so the wheels follow the loose terrain, soften fast bump for impacts, move brake bias rearward to avoid locking, raise the rear power lock for more mechanical traction, and add front toe-out for sharper turn-in.",
     },
   },
   {
     id: "surface_snow",
     when: (c) => c.surface === "snow",
     adjust: [
-      { paramId: "ride_height_front", delta: 3 },
-      { paramId: "ride_height_rear", delta: 3 },
-      { paramId: "spring_front", delta: -3 },
-      { paramId: "spring_rear", delta: -3 },
-      { paramId: "diff_power", delta: -2, excludeDrivetrains: ["fwd"] },
-      { paramId: "brake_force", delta: -4 },
-      { paramId: "tyre_pressure_front", delta: -3 },
-      { paramId: "tyre_pressure_rear", delta: -3 },
+      { paramId: "ride_height_front", delta: 12 },
+      { paramId: "ride_height_rear", delta: 12 },
+      { paramId: "spring_front", delta: -28 },
+      { paramId: "spring_rear", delta: -28 },
+      { paramId: "arb_front", delta: -25 },
+      { paramId: "arb_rear", delta: -25 },
+      { paramId: "brake_force", delta: -300 },
+      { paramId: "brake_bias", delta: -2 },
+      { paramId: "diff_rear_coast", delta: 4, excludeDrivetrains: ["fwd"] },
+      { paramId: "diff_rear_preload", delta: 10, excludeDrivetrains: ["fwd"] },
+      { paramId: "toe_rear", delta: 4 },
     ],
     reason: {
-      es: "Nieve/hielo: agarre muy bajo. Ablandamos todo y subimos el coche para máxima tracción mecánica, bajamos el bloqueo en aceleración y la fuerza de freno para no bloquear, y reducimos presiones para más huella sobre la nieve.",
-      en: "Snow/ice: very low grip. Soften everything and raise the car for maximum mechanical traction, lower the power lock and brake force to avoid locking up, and reduce pressures for more contact patch on the snow.",
+      es: "Nieve/hielo: agarre bajísimo. Subimos y ablandamos todo para máxima tracción mecánica, bajamos la fuerza de freno y atrasamos un poco el reparto para no bloquear, subimos el bloqueo de frenada y la precarga del LSD trasero para que la cola no se cruce al levantar/frenar, y sumamos toe-in trasero para estabilidad.",
+      en: "Snow/ice: very low grip. Raise and soften everything for maximum mechanical traction, lower brake force and move bias slightly rearward to avoid locking, raise the rear coast lock and preload so the rear doesn't snap on lift/brake, and add rear toe-in for stability.",
     },
   },
   {
     id: "surface_tarmac",
     when: (c) => c.surface === "tarmac",
     adjust: [
-      { paramId: "ride_height_front", delta: -4 },
-      { paramId: "ride_height_rear", delta: -4 },
-      { paramId: "spring_front", delta: 3 },
-      { paramId: "spring_rear", delta: 3 },
-      { paramId: "arb_front", delta: 4 },
-      { paramId: "arb_rear", delta: 4 },
-      { paramId: "caster_front", delta: 2 },
-      { paramId: "tyre_pressure_front", delta: 3 },
-      { paramId: "tyre_pressure_rear", delta: 3 },
+      { paramId: "ride_height_front", delta: -15 },
+      { paramId: "ride_height_rear", delta: -15 },
+      { paramId: "spring_front", delta: 30 },
+      { paramId: "spring_rear", delta: 24 },
+      { paramId: "arb_front", delta: 25 },
+      { paramId: "arb_rear", delta: 12 },
+      { paramId: "camber_front", delta: -10 },
+      { paramId: "camber_rear", delta: -5 },
+      { paramId: "damper_slow_bump_front", delta: 4 },
+      { paramId: "damper_slow_bump_rear", delta: 4 },
+      { paramId: "brake_bias", delta: 3 },
+      { paramId: "brake_force", delta: 200 },
     ],
     reason: {
-      es: "Asfalto: hay mucho agarre. Bajamos el coche y endurecemos muelles y barras para reducir el balanceo y mejorar la respuesta, subimos el caster para estabilidad direccional y subimos presiones para menos resistencia y mejor tacto.",
-      en: "Tarmac: lots of grip. Lower the car and stiffen springs and bars to reduce roll and sharpen response, raise caster for directional stability, and raise pressures for less resistance and better feel.",
+      es: "Asfalto: mucho agarre. Bajamos el coche (~−15 mm) para reducir el centro de gravedad, endurecemos muelles y barras para controlar el balanceo, agregamos camber negativo (−0.5° del / −0.25° tras) para más agarre lateral, firmamos la compresión lenta para precisión y subimos fuerza y reparto de freno hacia adelante porque podemos frenar más fuerte.",
+      en: "Tarmac: lots of grip. Lower the car (~−15 mm) to drop the centre of gravity, stiffen springs and bars to control roll, add negative camber (−0.5° front / −0.25° rear) for lateral grip, firm slow bump for precision, and raise brake force and forward bias since we can brake harder.",
     },
   },
   {
     id: "roughness_rough",
     when: (c) => c.roughness === "rough",
     adjust: [
-      { paramId: "ride_height_front", delta: 3 },
-      { paramId: "ride_height_rear", delta: 3 },
-      { paramId: "bump_fast", delta: -2 },
-      { paramId: "rebound_fast", delta: -2 },
+      { paramId: "ride_height_front", delta: 8 },
+      { paramId: "ride_height_rear", delta: 8 },
+      { paramId: "damper_fast_bump_front", delta: -4 },
+      { paramId: "damper_fast_bump_rear", delta: -4 },
+      { paramId: "damper_slow_rebound_front", delta: -2 },
+      { paramId: "damper_slow_rebound_rear", delta: -2 },
     ],
     reason: {
-      es: "Etapa muy rugosa (Kenia, Grecia, Cerdeña): subimos aún más la altura para no tocar fondo y ablandamos la compresión y el rebote rápidos para que la suspensión absorba los baches bruscos sin llegar al tope.",
-      en: "Very rough stage (Kenya, Greece, Sardinia): raise ride height further to avoid bottoming and soften fast bump and rebound so the suspension absorbs sharp hits without hitting the bump stop.",
+      es: "Etapa muy rugosa (Kenia, Grecia, Cerdeña): subimos más la altura para no tocar fondo, ablandamos la compresión rápida para absorber los baches bruscos y suavizamos el rebote (único canal de extensión en EA WRC) para que la rueda recupere contacto rápido.",
+      en: "Very rough stage (Kenya, Greece, Sardinia): raise ride height more to avoid bottoming, soften fast bump to absorb sharp hits and soften rebound (the only extension channel in EA WRC) so the wheel regains contact quickly.",
     },
   },
   {
     id: "roughness_smooth",
     when: (c) => c.roughness === "smooth" && c.surface !== "snow",
     adjust: [
-      { paramId: "ride_height_front", delta: -2 },
-      { paramId: "ride_height_rear", delta: -2 },
-      { paramId: "bump_fast", delta: 1 },
+      { paramId: "ride_height_front", delta: -6 },
+      { paramId: "ride_height_rear", delta: -6 },
+      { paramId: "damper_fast_bump_front", delta: 2 },
+      { paramId: "damper_fast_bump_rear", delta: 2 },
     ],
     reason: {
       es: "Superficie lisa (asfalto rápido): bajamos un poco el coche y firmamos la compresión rápida para una plataforma más estable y reactiva, ya que no hay baches grandes que absorber.",
@@ -86,117 +113,92 @@ export const ea_wrcConditionRules: ConditionRule[] = [
     },
   },
   {
-    id: "wet",
+    id: "weather_wet",
     when: (c) => c.weather === "wet",
     adjust: [
-      { paramId: "spring_front", delta: -1 },
-      { paramId: "spring_rear", delta: -1 },
-      { paramId: "diff_power", delta: -2, excludeDrivetrains: ["fwd"] },
-      { paramId: "brake_force", delta: -3 },
+      { paramId: "spring_front", delta: -8 },
+      { paramId: "spring_rear", delta: -8 },
+      { paramId: "brake_force", delta: -200 },
       { paramId: "brake_bias", delta: 2 },
-      { paramId: "tyre_pressure_front", delta: -2 },
-      { paramId: "tyre_pressure_rear", delta: -2 },
+      { paramId: "diff_rear_power", delta: 4, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Mojado/barro: el agarre cae. Ablandamos los muelles para que las ruedas se claven mejor, bajamos el bloqueo en aceleración y la fuerza de freno para no patinar ni bloquear, adelantamos algo el reparto de frenada y bajamos presiones para más huella.",
-      en: "Wet/mud: grip drops. Soften the springs so the wheels dig in better, lower power lock and brake force to avoid spinning or locking, move brake bias slightly forward, and lower pressures for more contact patch.",
+      es: "Mojado/barro: el agarre cae. Ablandamos los muelles para que las ruedas se claven mejor, bajamos la fuerza de freno y adelantamos algo el reparto para no bloquear, y subimos el bloqueo de conducción trasero para poner la potencia sin patinar.",
+      en: "Wet/mud: grip drops. Soften the springs so the wheels dig in, lower brake force and move bias slightly forward to avoid locking, and raise the rear power lock to put the power down without spinning.",
     },
   },
   {
-    id: "damp",
+    id: "weather_damp",
     when: (c) => c.weather === "damp",
     adjust: [
-      { paramId: "diff_power", delta: -1, excludeDrivetrains: ["fwd"] },
-      { paramId: "brake_force", delta: -1 },
-      { paramId: "tyre_pressure_front", delta: -1 },
-      { paramId: "tyre_pressure_rear", delta: -1 },
+      { paramId: "brake_force", delta: -80 },
+      { paramId: "diff_rear_power", delta: 2, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Húmedo: agarre intermedio. Bajamos un punto el bloqueo en aceleración y la fuerza de freno y las presiones para un margen de seguridad sin sacrificar todo el ritmo de seco.",
-      en: "Damp: in-between grip. Lower power lock, brake force and pressures a notch for a safety margin without giving up all the dry pace.",
-    },
-  },
-  {
-    id: "track_temp_high",
-    when: (c) => c.trackTempC != null && c.trackTempC >= 30,
-    adjust: [
-      { paramId: "tyre_pressure_front", delta: -2 },
-      { paramId: "tyre_pressure_rear", delta: -2 },
-    ],
-    reason: {
-      es: "Calor (Grecia, Kenia, Cerdeña): la presión sube sola con el calor de la etapa, así que arrancamos con presiones más bajas para no perder huella ni recalentar.",
-      en: "Heat (Greece, Kenya, Sardinia): pressure rises on its own with stage heat, so we start with lower pressures to keep contact patch and avoid overheating.",
-    },
-  },
-  {
-    id: "track_temp_low",
-    when: (c) => c.trackTempC != null && c.trackTempC <= 5,
-    adjust: [
-      { paramId: "tyre_pressure_front", delta: 2 },
-      { paramId: "tyre_pressure_rear", delta: 2 },
-    ],
-    reason: {
-      es: "Frío (Suecia, Monte-Carlo): cuesta meter temperatura en el neumático, así que arrancamos con presiones algo más altas para que trabaje antes.",
-      en: "Cold (Sweden, Monte-Carlo): hard to get heat into the tyre, so we start with slightly higher pressures so it works sooner.",
+      es: "Húmedo: agarre intermedio. Bajamos un poco la fuerza de freno y subimos algo el bloqueo de conducción trasero como margen de seguridad, sin sacrificar el ritmo de seco.",
+      en: "Damp: in-between grip. Lower brake force a little and raise the rear power lock a touch as a safety margin, without giving up the dry pace.",
     },
   },
 ];
 
-// Reglas por SÍNTOMA (lo que el piloto siente en la etapa). En rally se prioriza
-// el balance mecánico (muelles, barras, diferencial) y el freno de mano.
+// Reglas por SÍNTOMA (lo que el piloto siente en la etapa). En rally se prioriza el
+// balance mecánico (muelles, barras, diferencial trasero) y el freno. No hay reglas
+// de neumáticos frío/caliente: EA WRC no tiene presión ajustable (solo camber para
+// sobrecalentamiento, y "tyres_cold" no tiene lever de setup → se omite a propósito).
 export const ea_wrcSymptomRules: SymptomRule[] = [
   {
     symptom: "understeer_entry",
     adjust: [
       { paramId: "brake_bias", delta: -2 },
-      { paramId: "diff_brake", delta: -2, excludeDrivetrains: ["fwd"] },
-      { paramId: "arb_front", delta: -1 },
+      { paramId: "diff_rear_coast", delta: -4, excludeDrivetrains: ["fwd"] },
+      { paramId: "arb_front", delta: -10 },
+      { paramId: "toe_front", delta: -3 },
     ],
     reason: {
-      es: "Subviraje al entrar: atrasamos un poco el reparto de frenada y bajamos el bloqueo en frenada para que la cola ayude a girar, y ablandamos la barra delantera para dar más agarre al frente.",
-      en: "Entry understeer: move brake bias slightly rearward and lower the braking lock so the rear helps rotate, and soften the front bar for more front grip.",
+      es: "Subviraje al entrar: atrasamos un poco el reparto de frenada y bajamos el bloqueo de frenada trasero (menos bloqueo = más rotación de entrada), ablandamos la barra delantera para dar más agarre al frente y abrimos el toe delantero.",
+      en: "Entry understeer: move brake bias slightly rearward and lower the rear coast lock (less lock = more entry rotation), soften the front bar for more front grip and add front toe-out.",
     },
   },
   {
     symptom: "understeer_mid",
     adjust: [
-      { paramId: "spring_front", delta: -2 },
-      { paramId: "arb_front", delta: -1 },
-      { paramId: "diff_preload", delta: -1, excludeDrivetrains: ["fwd"] },
+      { paramId: "spring_front", delta: -15 },
+      { paramId: "arb_front", delta: -12 },
+      { paramId: "camber_front", delta: -5 },
     ],
     reason: {
-      es: "Subviraje en el medio: ablandamos el muelle y la barra delanteros para dar más agarre al frente y bajamos la precarga del diferencial para liberar rotación.",
-      en: "Mid-corner understeer: soften the front spring and bar for more front grip and lower diff preload to free rotation.",
+      es: "Subviraje en el medio: ablandamos el muelle y la barra delanteros para dar más agarre al frente y agregamos algo de camber negativo (−0.25°) para más mordida lateral.",
+      en: "Mid-corner understeer: soften the front spring and bar for more front grip and add a little negative camber (−0.25°) for more lateral bite.",
     },
   },
   {
     symptom: "understeer_exit",
     adjust: [
-      { paramId: "diff_power", delta: -2, excludeDrivetrains: ["fwd"] },
-      { paramId: "arb_rear", delta: 1 },
+      { paramId: "diff_rear_power", delta: -4, excludeDrivetrains: ["fwd"] },
+      { paramId: "arb_rear", delta: 6 },
     ],
     reason: {
-      es: "Subviraje al salir: bajamos el bloqueo en aceleración para que el coche gire al poner gas y endurecemos algo la barra trasera para sumar rotación.",
-      en: "Exit understeer: lower the power lock so the car turns on throttle and stiffen the rear bar a touch to add rotation.",
+      es: "Subviraje al salir: bajamos el bloqueo de conducción trasero (menos bloqueo = el coche gira más al poner gas) y endurecemos algo la barra trasera para sumar rotación.",
+      en: "Exit understeer: lower the rear power lock (less lock = the car turns more on throttle) and stiffen the rear bar a touch to add rotation.",
     },
   },
   {
     symptom: "oversteer_entry",
     adjust: [
       { paramId: "brake_bias", delta: 2 },
-      { paramId: "diff_brake", delta: 2, excludeDrivetrains: ["fwd"] },
-      { paramId: "toe_rear", delta: 2 },
+      { paramId: "diff_rear_coast", delta: 4, excludeDrivetrains: ["fwd"] },
+      { paramId: "toe_rear", delta: 3 },
     ],
     reason: {
-      es: "Sobreviraje al entrar: adelantamos el reparto de frenada y subimos el bloqueo en frenada para calmar la cola, y sumamos convergencia trasera (toe-in) para más estabilidad.",
-      en: "Entry oversteer: move brake bias forward and raise the braking lock to calm the rear, and add rear toe-in for stability.",
+      es: "Sobreviraje al entrar: adelantamos el reparto de frenada y subimos el bloqueo de frenada trasero (más bloqueo = cola estable al levantar/frenar) y sumamos toe-in trasero para más estabilidad.",
+      en: "Entry oversteer: move brake bias forward and raise the rear coast lock (more lock = a stable rear on lift/brake) and add rear toe-in for more stability.",
     },
   },
   {
     symptom: "oversteer_mid",
     adjust: [
-      { paramId: "spring_rear", delta: -2 },
-      { paramId: "arb_rear", delta: -1 },
+      { paramId: "spring_rear", delta: -15 },
+      { paramId: "arb_rear", delta: -12 },
     ],
     reason: {
       es: "Sobreviraje en el medio: ablandamos el muelle y la barra traseros para dar más agarre a la cola y desplazar el balance hacia el subviraje.",
@@ -206,68 +208,56 @@ export const ea_wrcSymptomRules: SymptomRule[] = [
   {
     symptom: "oversteer_exit",
     adjust: [
-      { paramId: "diff_power", delta: 2, excludeDrivetrains: ["fwd"] },
-      { paramId: "toe_rear", delta: 2 },
+      { paramId: "diff_rear_power", delta: 4, excludeDrivetrains: ["fwd"] },
+      { paramId: "toe_rear", delta: 3 },
     ],
     reason: {
-      es: "Sobreviraje al salir (al acelerar): subimos el bloqueo en aceleración para repartir mejor la tracción y sumamos convergencia trasera para que la cola no se suelte al poner gas.",
-      en: "Exit oversteer (on power): raise the power lock to share traction better and add rear toe-in so the rear doesn't snap on throttle.",
+      es: "Sobreviraje al salir (al acelerar): subimos el bloqueo de conducción trasero (más bloqueo = ambas ruedas traccionan parejo y la cola no se suelta) y sumamos toe-in trasero.",
+      en: "Exit oversteer (on power): raise the rear power lock (more lock = both wheels pull evenly and the rear doesn't snap) and add rear toe-in.",
     },
   },
   {
     symptom: "braking_instability",
     adjust: [
       { paramId: "brake_bias", delta: 2 },
-      { paramId: "diff_brake", delta: 2, excludeDrivetrains: ["fwd"] },
-      { paramId: "brake_force", delta: -2 },
+      { paramId: "brake_force", delta: -150 },
+      { paramId: "diff_rear_coast", delta: 4, excludeDrivetrains: ["fwd"] },
     ],
     reason: {
-      es: "Inestable al frenar: adelantamos el reparto de frenada y subimos el bloqueo en frenada para alinear la cola, y bajamos algo la fuerza de freno para reducir los bloqueos.",
-      en: "Unstable braking: move brake bias forward and raise the braking lock to keep the rear in line, and lower brake force a bit to reduce lock-ups.",
+      es: "Inestable al frenar: adelantamos el reparto de frenada, bajamos algo la fuerza de freno para reducir los bloqueos y subimos el bloqueo de frenada trasero para mantener la cola en línea.",
+      en: "Unstable braking: move brake bias forward, lower brake force a bit to reduce lock-ups and raise the rear coast lock to keep the rear in line.",
     },
   },
   {
     symptom: "poor_traction",
     adjust: [
-      { paramId: "spring_rear", delta: -1 },
-      { paramId: "diff_power", delta: 2, excludeDrivetrains: ["fwd"] },
-      { paramId: "ride_height_rear", delta: 1 },
+      { paramId: "diff_rear_power", delta: 4, excludeDrivetrains: ["fwd"] },
+      { paramId: "spring_rear", delta: -10 },
+      { paramId: "ride_height_rear", delta: 4 },
     ],
     reason: {
-      es: "Falta de tracción: ablandamos el muelle trasero para que la rueda copie mejor el terreno, subimos el bloqueo en aceleración para repartir el par y subimos un poco la altura trasera para más recorrido.",
-      en: "Poor traction: soften the rear spring so the wheel follows the terrain better, raise the power lock to share torque, and raise the rear ride height slightly for more travel.",
+      es: "Falta de tracción: subimos el bloqueo de conducción trasero para repartir el par entre ambas ruedas, ablandamos el muelle trasero para que copie mejor el terreno y subimos un poco la altura trasera para más recorrido.",
+      en: "Poor traction: raise the rear power lock to share torque between both wheels, soften the rear spring so it follows the terrain better, and raise the rear ride height slightly for more travel.",
     },
   },
   {
     symptom: "tyres_overheat",
     adjust: [
-      { paramId: "tyre_pressure_front", delta: -3 },
-      { paramId: "tyre_pressure_rear", delta: -3 },
-      { paramId: "camber_front", delta: 1 },
-      { paramId: "camber_rear", delta: 1 },
+      { paramId: "camber_front", delta: 5 },
+      { paramId: "camber_rear", delta: 5 },
     ],
     reason: {
-      es: "Neumáticos sobrecalentados: bajamos presiones para reducir la temperatura del centro y reducimos un poco la caída (camber) para repartir mejor el calor por toda la banda.",
-      en: "Overheating tyres: lower pressures to reduce core temperature and reduce camber slightly to spread the heat across the tread.",
-    },
-  },
-  {
-    symptom: "tyres_cold",
-    adjust: [
-      { paramId: "tyre_pressure_front", delta: 3 },
-      { paramId: "tyre_pressure_rear", delta: 3 },
-    ],
-    reason: {
-      es: "Neumáticos fríos (Suecia, Monte-Carlo): subimos presiones para que entren más rápido en temperatura y trabajen antes.",
-      en: "Cold tyres (Sweden, Monte-Carlo): raise pressures so they come up to temperature and work sooner.",
+      es: "Neumáticos sobrecalentados: como EA WRC no permite ajustar presión, reducimos un poco la caída (camber, +0.25° hacia 0) para repartir mejor el calor por toda la banda de rodadura.",
+      en: "Overheating tyres: since EA WRC doesn't allow pressure adjustment, reduce camber slightly (+0.25° toward 0) to spread heat across the tread.",
     },
   },
   {
     symptom: "bouncing",
     adjust: [
-      { paramId: "bump_fast", delta: 2 },
-      { paramId: "ride_height_front", delta: 2 },
-      { paramId: "ride_height_rear", delta: 2 },
+      { paramId: "damper_fast_bump_front", delta: 4 },
+      { paramId: "damper_fast_bump_rear", delta: 4 },
+      { paramId: "ride_height_front", delta: 6 },
+      { paramId: "ride_height_rear", delta: 6 },
     ],
     reason: {
       es: "El coche rebota / toca fondo: endurecemos la compresión rápida para que no llegue al tope y subimos la altura para darle recorrido y que el piso no golpee el terreno.",
@@ -277,14 +267,16 @@ export const ea_wrcSymptomRules: SymptomRule[] = [
   {
     symptom: "kerb_instability",
     adjust: [
-      { paramId: "bump_fast", delta: -2 },
-      { paramId: "rebound_fast", delta: -2 },
-      { paramId: "arb_front", delta: -1 },
-      { paramId: "arb_rear", delta: -1 },
+      { paramId: "damper_fast_bump_front", delta: -4 },
+      { paramId: "damper_fast_bump_rear", delta: -4 },
+      { paramId: "damper_slow_rebound_front", delta: -2 },
+      { paramId: "damper_slow_rebound_rear", delta: -2 },
+      { paramId: "arb_front", delta: -8 },
+      { paramId: "arb_rear", delta: -8 },
     ],
     reason: {
-      es: "Inestable en cortes, saltos y baches bruscos: ablandamos la compresión y el rebote rápidos y las barras para que el coche absorba el golpe y recupere contacto con el suelo en vez de saltar.",
-      en: "Unstable over cuts, jumps and sharp bumps: soften fast bump and rebound and the bars so the car absorbs the hit and regains contact with the ground instead of jumping.",
+      es: "Inestable en cortes, saltos y baches bruscos: ablandamos la compresión rápida, el rebote y las barras para que el coche absorba el golpe y recupere contacto con el suelo en vez de saltar.",
+      en: "Unstable over cuts, jumps and sharp bumps: soften fast bump, rebound and the bars so the car absorbs the hit and regains contact with the ground instead of jumping.",
     },
   },
 ];
