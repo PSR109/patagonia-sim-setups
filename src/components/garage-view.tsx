@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import { useT } from "@/lib/i18n/context";
+import { LapComparator } from "@/components/lap-comparator";
 
 // `comboLabel` es el texto "Juego · Auto · Pista" ya resuelto en el servidor
 // (garage/page.tsx), para no importar @/data/registry desde este componente
@@ -35,13 +36,6 @@ type Lap = {
   comboLabel: string;
   createdAt: string;
 };
-
-function fmtLap(ms: number): string {
-  const m = Math.floor(ms / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  const mm = ms % 1000;
-  return `${m}:${String(s).padStart(2, "0")}.${String(mm).padStart(3, "0")}`;
-}
 
 export function GarageView({
   favorites,
@@ -143,22 +137,7 @@ export function GarageView({
         {laps.length === 0 ? (
           <Empty text={t("garage.empty")} />
         ) : (
-          <ul className="flex flex-col gap-2.5">
-            {laps.map((l) => (
-              <li
-                key={l.id}
-                className="card flex items-center justify-between gap-3 px-4 py-3"
-              >
-                <div className="flex min-w-0 items-baseline gap-3">
-                  <span className="telemetry text-lg font-bold text-brand">
-                    {fmtLap(l.lapTimeMs)}
-                  </span>
-                  <span className="truncate text-xs text-muted">{l.comboLabel}</span>
-                </div>
-                <DeleteBtn onClick={() => del("laps", l.id)} label={t("common.delete")} />
-              </li>
-            ))}
-          </ul>
+          <LapComparator laps={laps} onDelete={(id) => del("laps", id)} />
         )}
       </Section>
     </div>
