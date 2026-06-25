@@ -8,6 +8,7 @@ import { localize, useT } from "@/lib/i18n/context";
 import { cn } from "@/lib/cn";
 import { FfbPanel } from "@/components/ffb-panel";
 import { TrackCoach } from "@/components/track-coach";
+import { SetupExport } from "@/components/setup-export";
 import type {
   BalancePref,
   ConditionFieldId,
@@ -706,6 +707,14 @@ function ResultPanel({
           </span>
         </p>
       </div>
+
+      <SetupExport
+        game={game}
+        carId={carId}
+        carName={carName}
+        trackName={trackName}
+        result={result}
+      />
 
       {/* Explicaciones educativas */}
       <div className="card p-5">
