@@ -1,8 +1,9 @@
 import type { Track } from "@/lib/types";
 
-// Circuitos de Assetto Corsa EVO (Early Access 0.7). Lista PARCIAL: el roadmap
-// apunta a ~20 pistas para la 1.0. cornerProfile asignado por el carácter del
-// trazado (low-speed / high-speed / mixed). Todas láser-escaneadas (tarmac).
+// Circuitos de Assetto Corsa EVO (Early Access). 19 trazados = todo el contenido
+// del EA al día (jun 2026, verificado RacingGames/Traxion); el roadmap suma más
+// hacia la 1.0. El Nürburgring está como GP, Nordschleife y 24h (Gesamtstrecke).
+// cornerProfile asignado por el carácter del trazado. Todos láser-escaneados (tarmac).
 export const ac_evoTracks: Track[] = [
   { id: "ac_evo_imola", gameId: "ac_evo", name: "Imola", country: "Italia", kind: "circuit", lengthKm: 4.91, cornerProfile: "mixed" },
   { id: "ac_evo_monza", gameId: "ac_evo", name: "Monza", country: "Italia", kind: "circuit", lengthKm: 5.79, cornerProfile: "high-speed" },
@@ -22,4 +23,6 @@ export const ac_evoTracks: Track[] = [
   { id: "ac_evo_watkins_glen", gameId: "ac_evo", name: "Watkins Glen", country: "Estados Unidos", kind: "circuit", lengthKm: 5.43, cornerProfile: "high-speed" },
   { id: "ac_evo_red_bull_ring", gameId: "ac_evo", name: "Red Bull Ring", country: "Austria", kind: "circuit", lengthKm: 4.32, cornerProfile: "mixed" },
   { id: "ac_evo_paul_ricard", gameId: "ac_evo", name: "Paul Ricard", country: "Francia", kind: "circuit", lengthKm: 5.79, cornerProfile: "mixed" },
+  // Gesamtstrecke (GP + Nordschleife unidos, ~25 km): trazado de resistencia. El compromiso de setup lo domina el Nordschleife.
+  { id: "ac_evo_nurburgring_24h", gameId: "ac_evo", name: "Nürburgring 24h (Gesamtstrecke)", country: "Alemania", kind: "circuit", lengthKm: 25.38, cornerProfile: "high-speed" },
 ];

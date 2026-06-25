@@ -1,9 +1,9 @@
 import type { Track } from "@/lib/types";
 
-// Etapas / rallies de EA Sports WRC. El juego tiene ~264 etapas en ~20 ubicaciones;
-// aquí cargamos los rallies (ubicaciones) verificados de la investigación con su
-// superficie característica. La lista es PARCIAL (ver gaps): cada ubicación agrupa
-// múltiples etapas individuales que no se desglosan aquí.
+// Etapas / rallies de EA Sports WRC. El juego tiene ~200+ etapas individuales
+// agrupadas en 18 ubicaciones (rallies); aquí cargamos las 18 ubicaciones con su
+// superficie característica — roster COMPLETO del juego. No se desglosan las etapas
+// individuales: comparten superficie/rugosidad, que es lo que el motor usa para el setup.
 export const ea_wrcTracks: Track[] = [
   {
     id: "ea_wrc_monte_carlo",

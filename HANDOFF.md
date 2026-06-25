@@ -27,16 +27,23 @@ eval (la tool de screenshot del preview da timeout en este entorno — es la too
 - **Verificado en vivo (eval)**: 0 errores de consola en landing/grid/generator; `font-family` h1 =
   Saira; `.card` radius 16px; `.btn-primary` con gradiente brand; generar ACC Ferrari 296 con síntoma
   "subviraje en entrada" → 2 barras de acento + 2 valores en brand + 2 flechas ↑/↓ (cambios resaltados OK).
-- **Pendiente menor de esta iteración**: correr `npm run build` (no corrido; solo `tsc` 0) y un repaso
-  de contraste AA sobre los nuevos `text-faint`/grises antes de commitear. NO commiteado (luz verde de Patricio).
+- **Cierre de esta iteración (HECHO)**: `npm run build` verde (Next 16.2.9, 16/16). Repaso AA: el token
+  `--color-faint` daba 3.9:1 (bajo AA) → subido `#5f768c → #6a8195` = **4.58:1** sobre la superficie más
+  oscura, sigue más tenue que `muted` (8.3:1). **Commiteado + pusheado** (commit `740cd0c`, 11 archivos de
+  diseño; los 2 archivos del bypass `DEV_NO_AUTH` quedaron FUERA del commit → HEAD público limpio).
 
-**🔴 PENDIENTE PRIORITARIO (próxima sesión): COMPLETAR TODAS LAS PISTAS/ETAPAS.**
-Faltan pistas/etapas en varios juegos; deberían estar TODAS las del juego real.
-Conteo actual (validate-engine, 2026-06-25): **ACC 25 · LMU 14 · AC EVO 18 · AC Rally 7 · EA WRC 18**.
-Tarea: auditar cada `src/data/<juego>/tracks.ts` contra el roster real del sim y agregar las que
-falten — circuitos + DLC (circuito) y TODAS las especiales/rallies (rally) — con `country`/`kind`/
-`surface`/`roughness` correctos. Verificar `tsc` 0 / `npx tsx scripts/validate-engine.ts` 0.
-(Nota: §3h marcó los rosters de AUTOS como completos, pero las PISTAS/ETAPAS siguen incompletas.)
+**Iteración 21 (HECHA 2026-06-25): pistas/etapas auditadas contra rosters reales — COMPLETO al contenido actual.**
+Auditoría con WebSearch/WebFetch (Traxion/RacingGames/OverTake, jun 2026). Resultado: ACC/LMU/EA WRC ya
+estaban al roster real completo (el "incompleto" del handoff previo era pesimista). Gaps reales corregidos:
+- **AC Rally** + **Rally Grecia** (`greece-elatia`, `greece-loutraki`, grava, rough) — contenido agregado al
+  EA tras 0.3. 7 → **9** etapas (5 locaciones: Alsacia, Gales, Livigno, Monte Carlo, Grecia).
+- **AC EVO** + **Nürburgring 24h (Gesamtstrecke)** (`ac_evo_nurburgring_24h`, ~25 km) — el trazado de
+  resistencia que faltaba. 18 → **19** (cubre los 19 del roster EA; el Nürburgring va como GP + Nordschleife + 24h).
+- **EA WRC**: comentario "PARCIAL" era stale → las **18 ubicaciones = roster COMPLETO** del juego (corregido el comentario).
+Conteo final: **ACC 25 · LMU 14 · AC EVO 19 · AC Rally 9 · EA WRC 18**. `build` verde, tsc 0, sin ids duplicados,
+verificado en vivo (los 3 picker muestran las nuevas pistas, 0 errores de consola). Commiteado + pusheado.
+Nota: las pistas restantes que faltan en AC EVO / AC Rally son contenido aún NO lanzado del Early Access
+(llegan en updates futuros hacia 1.0), no datos faltantes del roster actual.
 
 **Iteración 19 (HECHA 2026-06-25): estilo de manejo + condiciones data-driven por juego.**
 Pedido de Patricio: "no puede ser que me muestre lo mismo para cada juego… debe adaptarse a los
