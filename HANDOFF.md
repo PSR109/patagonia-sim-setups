@@ -45,6 +45,24 @@ verificado en vivo (los 3 picker muestran las nuevas pistas, 0 errores de consol
 Nota: las pistas restantes que faltan en AC EVO / AC Rally son contenido aún NO lanzado del Early Access
 (llegan en updates futuros hacia 1.0), no datos faltantes del roster actual.
 
+**Iteración 22 (HECHA 2026-06-25): capa de COACHING "Ingeniero de pista" — bajar tiempos, no solo setup.**
+Pedido de Patricio: *"herramienta extremadamente potente para que mis clientes mejoren mucho sus tiempos"*.
+Tesis: el tiempo sale del MANEJO (~5–15% de vuelta) más que del setup (~1%). Nuevo panel en el resultado:
+- **`src/lib/coach.ts`** (módulo puro, strings `LocalizedText` locales — NO toca el diccionario global de 155
+  claves): `drivingTips` (fix de TÉCNICA por cada uno de los 12 síntomas: ej. subviraje entrada → trail-braking),
+  `trackPlaybook(track)` (guía por carácter: circuito por `cornerProfile` + bonus si ≥7 km; rally por `surface`),
+  `practicePlan` (método universal: consistencia → un sector → cazar la frenada). Física universal, verdadera;
+  CERO referencias de frenada inventadas por pista (no verificables → harían MÁS lento al piloto; política del proyecto).
+- **`src/components/track-coach.tsx`** (`<TrackCoach track symptoms>`): card con franja `good→brand`, reusa las claves
+  i18n `symptom.${s}` existentes. Muestra técnica por síntoma marcado + playbook de la pista + plan de práctica.
+- **`generator.tsx`**: import + se pasa `track`/`symptoms` a `ResultPanel` y se renderiza `<TrackCoach>` arriba del
+  resultado (placement de titular). +import de tipo `Track`. Sin tocar motor/estado/handlers.
+- **Verificado**: build verde, tsc 0, validate-engine 0, 0 errores de consola. En vivo (ACC Ferrari 296 + Spa +
+  síntoma "subviraje en entrada"): renderiza "Ingeniero de pista" + tip trail-braking + playbook "Trazado rápido"
+  (Spa high-speed) + plan completo (consistencia / cazá la frenada). Commiteado + pusheado.
+Próxima palanca de producto (NO hecha): export del setup AL juego (archivos .json/.sto/.svm por sim) y comparador
+de vueltas guardadas vs objetivo. Eso + esta capa de coaching son el verdadero foso, no más CSS.
+
 **Iteración 19 (HECHA 2026-06-25): estilo de manejo + condiciones data-driven por juego.**
 Pedido de Patricio: "no puede ser que me muestre lo mismo para cada juego… debe adaptarse a los
 requisitos de cada juego, además preguntarme cómo me gusta el auto para que se adapte a mi manejo".

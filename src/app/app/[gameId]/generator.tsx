@@ -7,6 +7,7 @@ import { generateSetup, baseFor, effectiveParams } from "@/lib/engine";
 import { localize, useT } from "@/lib/i18n/context";
 import { cn } from "@/lib/cn";
 import { FfbPanel } from "@/components/ffb-panel";
+import { TrackCoach } from "@/components/track-coach";
 import type {
   BalancePref,
   ConditionFieldId,
@@ -19,6 +20,7 @@ import type {
   SmoothnessPref,
   Symptom,
   TimeOfDay,
+  Track,
   Weather,
 } from "@/lib/types";
 
@@ -496,6 +498,8 @@ export function Generator({ gameId }: { gameId: string }) {
               carName={car.name}
               trackId={trackId}
               trackName={track?.name ?? null}
+              track={track}
+              symptoms={[...symptoms]}
               view={view}
               setView={setView}
             />
@@ -528,6 +532,8 @@ function ResultPanel({
   carName,
   trackId,
   trackName,
+  track,
+  symptoms,
   view,
   setView,
 }: {
@@ -538,6 +544,8 @@ function ResultPanel({
   carName: string;
   trackId: string;
   trackName: string | null;
+  track?: Track;
+  symptoms: Symptom[];
   view: "beginner" | "advanced";
   setView: (v: "beginner" | "advanced") => void;
 }) {
@@ -580,6 +588,8 @@ function ResultPanel({
           </p>
         </div>
       </div>
+
+      <TrackCoach track={track} symptoms={symptoms} />
 
       {result.notes.length > 0 && (
         <div className="rounded-2xl border border-sky/25 bg-sky/[0.06] p-4">
