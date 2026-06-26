@@ -41,6 +41,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# datasets/scripts con rutas personales (C:/Users/...) — NUNCA versionar (ver HANDOFF iter 26/27)
+/tools/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

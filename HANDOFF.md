@@ -5,7 +5,7 @@
 
 ---
 
-## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-26, cierre iteración 26)
+## ▶ PRÓXIMA SESIÓN — empezar acá (actualizado 2026-06-26, cierre iteración 27 — deploy a producción)
 
 > **North star (memoria product-north-star):** que los clientes **bajen tiempos**, no cobrar aún.
 > El tiempo viene del MANEJO (~5–15% de una vuelta) mucho más que del setup (~1%). Por eso el valor
@@ -17,6 +17,14 @@
 > **Bypass de auth (`DEV_NO_AUTH` en `src/lib/auth/current-user.ts` + `src/proxy.ts`):** SIEMPRE
 > queda FUERA del repo público. Se modifica local para testear pero NUNCA se commitea (quedan como
 > `M` en `git status` a propósito).
+
+**Iteración 27 (HECHA 2026-06-26): DEPLOY A PRODUCCIÓN — app privada solo-admin en su propio proyecto Vercel + subdominio.** Pedido de Patricio: dejarlo todo listo de forma autónoma en `configuracion.patagoniasimracing.cl`, correo admin `contacto@patagoniasimracing.cl`. Detalle completo en la memoria `deploy-configuracion-subdomain.md`.
+- **Proyecto Vercel** `patagonia-sim-setups` (team `psr109s-projects`, Hobby, cuenta contacto@patagoniasimracing.cl) — SEPARADO del sitio principal (`chat-gpt-1`/ChatGPT1). Auto-deploy en push (GitHub App con acceso al repo). URL: `patagonia-sim-setups.vercel.app`.
+- **Base Neon** `patagonia-sim-db` (Postgres Free, iad1) conectada → inyecta `POSTGRES_PRISMA_URL`/`DATABASE_URL_UNPOOLED`; `schema.prisma` apunta a esas vars (commits `aab07a4`, `ec6d1ab`).
+- **Provisioning por build:** `package.json` build = `prisma generate && prisma db push && tsx scripts/seed-admin.ts && next build` → crea tablas + siembra admin (upsert) en cada deploy. Vars de Vercel: `ADMIN_EMAIL`, `ADMIN_PASSWORD` (fuente de verdad de la clave), `ADMIN_NAME`, `AUTH_SECRET`. Build Ready = seed OK.
+- **Subdominio `configuracion.patagoniasimracing.cl`** LIVE con HTTPS. DNS en xhost por **CWP** (no cPanel): clientes.xhost.cl → Ver detalles del servicio → Login to Control Panel → DNS Functions → DNS Zone Editor → `CNAME configuracion → cname.vercel-dns.com.` (TTL 14400). Vercel valida OK (check azul + cert). Apex `@` ya era A→76.76.21.21 (Vercel). Vercel sugiere el target `*.vercel-dns-017.com` ("DNS Change Recommended") pero CWP rechaza ese hostname largo al guardar; el genérico funciona igual.
+- **Registro público bloqueado** (API + UI); `src/proxy.ts` (middleware Next 16, "Proxy") gatea `/app` y `/garage` a rol admin. El bypass `DEV_NO_AUTH` (`current-user.ts`) sigue como `M` fuera del repo.
+- **Verificado en vivo:** login admin OK, subdominio sirve la app por HTTPS, registro redirige a `/login`.
 
 **Iteración 26 (HECHA 2026-06-26): rosters/etapas de rally completos + preguntas y coaching por DISCIPLINA + castellano neutro.** commit `9de108b`, pusheado. Sesión de Patricio: dejar listos TODOS los autos/pistas/etapas de cada juego, adaptar las preguntas al tipo de juego, y castellano neutro (Chile).
 - **EA WRC — grilla REAL del juego.** `Documents/My Games/WRC/telemetry/readme/ids.json` (UTF-16 LE, BOM) es el catálogo propio del juego → regenerado `data/ea_wrc/cars.ts` (**100 autos jugables** = 103 vehicles − 3 "Vehículo del creador") + `tracks.ts` (**20 ubicaciones + 264 etapas = 284 pistas**). Las rutas NO traen location id: mapeadas por RANGO de route-id contiguo a su rally (0 huérfanos). Cada etapa hereda surface/roughness de su rally (no inventado).
@@ -879,9 +887,9 @@ Patricio quiere ver un **preview en vivo** de la app en cada sesión para valida
 ### Cuenta de administrador (para ver el avance)
 Hay un seed idempotente que crea/actualiza la cuenta admin de Patricio:
 - Script: `scripts/seed-admin.ts` → `npx tsx scripts/seed-admin.ts`.
-- Credenciales por defecto: **email** `patricio.ponce358@gmail.com` · **clave** `Patagonia2026!` · `role=admin`.
+- Defaults del script (DEV local): **email** `contacto@patagoniasimracing.cl` · **clave** `Patagonia2026!` · `role=admin`. Overridables por `ADMIN_EMAIL`/`ADMIN_PASSWORD`/`ADMIN_NAME`.
 - Cambiar clave: `ADMIN_PASSWORD="otra" npx tsx scripts/seed-admin.ts` (o `ADMIN_EMAIL`/`ADMIN_NAME`).
-- Es cuenta de **desarrollo local**: para producción, cambiar la clave y no versionar credenciales reales.
+- **PRODUCCIÓN (iter 27):** la cuenta real es `contacto@patagoniasimracing.cl`; la clave vive SOLO en la env var `ADMIN_PASSWORD` de Vercel (no se versiona). Para rotarla: editar esa env en Vercel y redeploy (el seed la re-aplica en el build).
 - Nota: el rol `admin` ya está en el schema y viaja en el JWT, pero todavía NO restringe ninguna vista (no hay panel admin); por ahora solo desbloquea el login a `/app` y `/garage`.
 
 ---
