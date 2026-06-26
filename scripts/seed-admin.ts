@@ -7,7 +7,7 @@
 import { prisma } from "@/lib/db";
 import { hashPassword } from "@/lib/auth/password";
 
-const EMAIL = (process.env.ADMIN_EMAIL ?? "patricio.ponce358@gmail.com").toLowerCase();
+const EMAIL = (process.env.ADMIN_EMAIL ?? "contacto@patagoniasimracing.cl").toLowerCase();
 const PASSWORD = process.env.ADMIN_PASSWORD ?? "Patagonia2026!";
 const NAME = process.env.ADMIN_NAME ?? "Patricio";
 
@@ -18,8 +18,9 @@ async function main() {
     update: { passwordHash, role: "admin", name: NAME },
     create: { email: EMAIL, name: NAME, passwordHash, role: "admin", locale: "es" },
   });
+  // No imprimimos la clave: este script corre en el build de Vercel y los logs
+  // quedan guardados. La clave es la que esté en ADMIN_PASSWORD.
   console.log(`✓ Admin listo: ${user.email}  (role=${user.role})`);
-  console.log(`  Clave: ${PASSWORD}`);
 }
 
 main()

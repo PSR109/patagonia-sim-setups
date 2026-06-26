@@ -9,8 +9,11 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  // En Vercel, la integración de Neon inyecta estas variables automáticamente.
+  //   POSTGRES_PRISMA_URL    = pooled (pgbouncer) — la usa la app en runtime
+  //   DATABASE_URL_UNPOOLED  = directo (sin pooler) — migraciones / db push
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model User {
