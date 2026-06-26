@@ -16,7 +16,7 @@ const L = {
   playbook: { es: "Guía de esta pista", en: "This track's playbook" },
   practice: { es: "Plan para encontrar tiempo", en: "Plan to find time" },
   noSymptoms: {
-    es: "Marcá un problema arriba (subviraje, sobreviraje…) y acá te digo cómo corregirlo MANEJANDO, no solo con el setup.",
+    es: "Marca un problema arriba (subviraje, sobreviraje…) y aquí te digo cómo corregirlo MANEJANDO, no solo con el setup.",
     en: "Tick a problem above (understeer, oversteer…) and here I'll tell you how to fix it by DRIVING, not just with setup.",
   },
 } as const;

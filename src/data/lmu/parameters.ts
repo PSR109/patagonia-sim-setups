@@ -167,7 +167,7 @@ export const lmuParameters: ParameterDef[] = [
     step: 1,
     default: 13,
     whatItDoes: {
-      es: "Ángulo del alerón trasero: genera carga aerodinámica atrás y equilibra con el rake. OJO: en Hypercar es una escala de pasos (P1-P20, acá P13); en LMGT3 el editor lo muestra en GRADOS (rango 0-15°, default 10.0°). (rango estimado)",
+      es: "Ángulo del alerón trasero: genera carga aerodinámica atrás y equilibra con el rake. OJO: en Hypercar es una escala de pasos (P1-P20, aquí P13); en LMGT3 el editor lo muestra en GRADOS (rango 0-15°, default 10.0°). (rango estimado)",
       en: "Rear wing angle: makes rear downforce and balances with rake. NOTE: in Hypercar it's a step scale (P1-P20, here P13); in LMGT3 the editor shows DEGREES (0-15° range, default 10.0°). (estimated range)",
     },
     increaseEffect: {
