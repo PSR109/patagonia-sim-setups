@@ -62,12 +62,8 @@ export const ea_wrcFfb: GameFfb = {
       },
       value: "75",
       perBase: {
-        gt_dd_pro: "85–100",
-        csl_dd: "85–100",
-        clubsport_dd: "70–85",
+        csl_dd: "82–100",
         clubsport_dd_plus: "65–78",
-        podium_dd1: "55–68",
-        podium_dd2: "48–60",
       },
       whatItDoes: {
         es: "Primer ítem del menú de FFB y ajuste maestro de la intensidad general. Súbelo hasta que en los baches y curvas más cargadas el volante esté fuerte pero sin saturar (cuando satura, los detalles finos desaparecen porque la base ya está al máximo). En la práctica el Self-Aligning Torque actúa como master de la fuerza de la dirección, así que ambos se ajustan juntos.",

@@ -75,12 +75,8 @@ export const ac_evoFfb: GameFfb = {
       name: { es: "FFB Gain (fuerza del FFB)", en: "FFB Gain" },
       value: "85",
       perBase: {
-        gt_dd_pro: "90–100",
-        csl_dd: "90–100",
-        clubsport_dd: "75–85",
+        csl_dd: "88–100",
         clubsport_dd_plus: "70–80",
-        podium_dd1: "60–70",
-        podium_dd2: "52–62",
       },
       whatItDoes: {
         es: "Fuerza total del FFB dentro de AC EVO (escala 0–100). Es el ajuste más importante: súbelo hasta que en las curvas más cargadas el volante llegue al tope justo sin saturar (clipping), que hace perder detalle del agarre.",

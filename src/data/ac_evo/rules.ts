@@ -25,45 +25,10 @@ export const ac_evoConditionRules: ConditionRule[] = [
       en: "Wet: raise the car to avoid aquaplaning, add wing and electronics (TC/ABS) for stability, move brake bias slightly rearward and RAISE pressures since water cools the tyre and drops running pressure; inflate higher cold to compensate. Use the Wet compound.",
     },
   },
-  {
-    id: "damp",
-    when: (c) => c.weather === "damp",
-    adjust: [
-      { paramId: "tc", delta: 2 },
-      { paramId: "abs", delta: 1 },
-      { paramId: "rear_wing", delta: 1 },
-      { paramId: "ride_height_front", delta: 1 },
-      { paramId: "ride_height_rear", delta: 1 },
-    ],
-    reason: {
-      es: "Húmedo (llovizna): agarre intermedio. Sumamos algo de TC/ABS y ala para un margen de seguridad sin sacrificar todo el ritmo de seco.",
-      en: "Damp (drizzle): in-between grip. Add a little TC/ABS and wing for a safety margin without giving up all the dry pace.",
-    },
-  },
-  {
-    id: "track_temp_high",
-    when: (c) => c.trackTempC != null && c.trackTempC >= 35,
-    adjust: [
-      { paramId: "tyre_pressure_front", delta: -5 },
-      { paramId: "tyre_pressure_rear", delta: -5 },
-    ],
-    reason: {
-      es: "Pista caliente: la presión sube sola con el calor, así que arrancamos con presiones en frío más bajas para caer en la zona verde del HUD en caliente.",
-      en: "Hot track: pressure rises on its own with heat, so we start with lower cold pressures to land in the HUD's green zone when hot.",
-    },
-  },
-  {
-    id: "track_temp_low",
-    when: (c) => c.trackTempC != null && c.trackTempC <= 15,
-    adjust: [
-      { paramId: "tyre_pressure_front", delta: 5 },
-      { paramId: "tyre_pressure_rear", delta: 5 },
-    ],
-    reason: {
-      es: "Pista fría: cuesta llegar a la presión y a la temperatura objetivo, así que arrancamos con presiones en frío más altas para caer en la zona verde del HUD.",
-      en: "Cold track: harder to reach target pressure and temperature, so we start with higher cold pressures to land in the HUD's green zone.",
-    },
-  },
+  // AC EVO no expone un estado intermedio "húmedo/damp" (clima por presets
+  // Clear/Cloudy/Rain/Heavy rain) ni un valor de TEMPERATURA DE PISTA ajustable en
+  // la UI del jugador (verificado 2026-06-26). Por eso no hay reglas de damp ni de
+  // temperatura de pista: el clima sólo distingue seco vs mojado.
   {
     id: "grip_green",
     when: (c) => c.grip === "green",

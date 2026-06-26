@@ -63,12 +63,8 @@ export const accFfb: GameFfb = {
       name: { es: "Gain (ganancia)", en: "Gain" },
       value: "88",
       perBase: {
-        gt_dd_pro: "90–100",
-        csl_dd: "90–100",
-        clubsport_dd: "78–88",
+        csl_dd: "88–100",
         clubsport_dd_plus: "72–82",
-        podium_dd1: "62–72",
-        podium_dd2: "55–65",
       },
       whatItDoes: {
         es: "Fuerza total del FFB dentro de ACC, en escala 0–100. Es el ajuste más importante: súbelo hasta que en las curvas más cargadas el medidor de FFB toque el tope sin quedarse clavado en rojo (eso es clipping y hace perder detalle).",

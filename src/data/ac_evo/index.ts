@@ -32,6 +32,10 @@ export const ac_evo: GameData = {
   conditionRules: ac_evoConditionRules,
   symptomRules: ac_evoSymptomRules,
   styleRules: ac_evoStyleRules,
-  conditionFields: ["weather", "trackTemp", "grip", "fuel"],
+  // AC EVO no expone temperatura de pista ajustable en la UI del jugador
+  // (verificado 2026-06-26): se quita trackTemp. Sí tiene grip y combustible.
+  conditionFields: ["weather", "grip", "fuel"],
+  // Clima por presets sin estado intermedio "húmedo": solo seco/mojado.
+  conditionOptions: { weather: ["dry", "wet"] },
   ffb: ac_evoFfb,
 };

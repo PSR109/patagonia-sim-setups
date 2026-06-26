@@ -29,6 +29,10 @@ export const ac_rally: GameData = {
   conditionRules: ac_rallyConditionRules,
   symptomRules: ac_rallySymptomRules,
   styleRules: ac_rallyStyleRules,
-  conditionFields: ["surface", "roughness", "weather", "trackTemp"],
+  // AC Rally no expone temperatura de pista ajustable (verificado 2026-06-26): se
+  // quita trackTemp. Las condiciones reales son superficie, rugosidad y clima.
+  conditionFields: ["surface", "roughness", "weather"],
+  // Clima por evento sin estado intermedio "húmedo": solo seco/mojado.
+  conditionOptions: { weather: ["dry", "wet"] },
   ffb: ac_rallyFfb,
 };

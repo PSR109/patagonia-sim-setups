@@ -166,6 +166,20 @@ export type ConditionFieldId =
   | "surface"
   | "roughness";
 
+// Opciones que un juego ofrece para cada campo de condición de tipo "elección".
+// Permite que un sim muestre SOLO los valores que su UI real expone: p. ej. AC EVO,
+// EA WRC y AC Rally no tienen estado intermedio "húmedo/damp", así que su clima es
+// solo seco/mojado. Si un campo no se declara aquí, la UI usa el set canónico
+// completo (weather: seco/húmedo/mojado, grip: verde/medio/engomado, etc.). El
+// motor ignora cualquier valor que el juego no ofrezca.
+export interface ConditionOptions {
+  weather?: Weather[];
+  grip?: NonNullable<ConditionInput["grip"]>[];
+  fuel?: NonNullable<ConditionInput["fuelLoad"]>[];
+  surface?: Surface[];
+  roughness?: NonNullable<ConditionInput["roughness"]>[];
+}
+
 export type Symptom =
   | "understeer_entry"
   | "understeer_mid"
@@ -276,6 +290,10 @@ export interface GameData {
   // Campos de condición que el formulario muestra para este juego. Si se omite,
   // la UI usa un set por defecto según la disciplina (circuito vs rally).
   conditionFields?: ConditionFieldId[];
+  // Opciones por campo de condición (subconjunto de los valores canónicos) que
+  // este juego ofrece de verdad. Si se omite un campo, la UI muestra el set
+  // canónico completo.
+  conditionOptions?: ConditionOptions;
   // Reglas por ESTILO de manejo (nivel/balance/suavidad). Mismo shape que las de
   // condiciones; el motor las aplica después de las condiciones de pista.
   styleRules?: ConditionRule[];

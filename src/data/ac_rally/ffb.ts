@@ -81,12 +81,8 @@ export const ac_rallyFfb: GameFfb = {
       name: { es: "Gain (ganancia FFB)", en: "FFB Gain" },
       value: "85",
       perBase: {
-        gt_dd_pro: "90–100",
-        csl_dd: "90–100",
-        clubsport_dd: "75–85",
+        csl_dd: "88–100",
         clubsport_dd_plus: "70–80",
-        podium_dd1: "60–70",
-        podium_dd2: "52–62",
       },
       whatItDoes: {
         es: "Fuerza total del FFB dentro de Assetto Corsa Rally. Es el ajuste más importante. La escala del slider llega hasta 200% (no 100): súbelo hasta que en los apoyos más cargados el medidor de FFB llegue al tope sin quedarse clavado en rojo (eso es clipping y se pierde detalle del agarre).",

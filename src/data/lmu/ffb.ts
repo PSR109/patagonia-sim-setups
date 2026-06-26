@@ -65,12 +65,8 @@ export const lmuFfb: GameFfb = {
       name: { es: "Force Feedback Strength (fuerza global)", en: "Force Feedback Strength" },
       value: "85–95%",
       perBase: {
-        gt_dd_pro: "90%",
-        csl_dd: "90%",
-        clubsport_dd: "85–90%",
-        clubsport_dd_plus: "80–90%",
-        podium_dd1: "70–85%",
-        podium_dd2: "60–75%",
+        csl_dd: "88–92%",
+        clubsport_dd_plus: "78–88%",
       },
       whatItDoes: {
         es: "Ganancia global del FFB dentro de LMU (el menú es único para todos los coches). Es el slider que se baja para no saturar: ajústalo hasta que en las curvas más cargadas el medidor de FFB del juego llegue al tope sin quedarse pegado en rojo (eso es clipping y se pierde detalle del agarre).",
@@ -86,12 +82,8 @@ export const lmuFfb: GameFfb = {
       name: { es: "Steering Torque Capability (par de la base)", en: "Steering Torque Capability" },
       value: "≈ par pico de su base",
       perBase: {
-        gt_dd_pro: "5 (8 con Kit Boost)",
-        csl_dd: "5 (8 con Kit Boost)",
-        clubsport_dd: "15",
+        csl_dd: "5 (8 con Boost Kit)",
         clubsport_dd_plus: "18",
-        podium_dd1: "20",
-        podium_dd2: "25",
       },
       whatItDoes: {
         es: "Indica al juego el par pico (en Nm) que entrega su base. Es uno de los ajustes más importantes: bien fijado corrige las oscilaciones feas en recta y suaviza la base direct drive. Se setea igual al par pico de la base (base de 20 Nm → 20).",

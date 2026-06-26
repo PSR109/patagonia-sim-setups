@@ -8,9 +8,11 @@ import { localize, useT } from "@/lib/i18n/context";
 import { cn } from "@/lib/cn";
 import { FfbPanel } from "@/components/ffb-panel";
 import { TrackCoach } from "@/components/track-coach";
+import { BrakeCoach } from "@/components/brake-coach";
 import { SetupExport } from "@/components/setup-export";
 import type {
   BalancePref,
+  Car,
   ConditionFieldId,
   ConditionInput,
   DriverLevel,
@@ -126,6 +128,16 @@ export function Generator({ gameId }: { gameId: string }) {
       setCategoryId(g?.categories[0]?.id ?? "");
       setCarId("");
       setResult(null);
+      // Reseteamos las condiciones a valores válidos para el juego nuevo: cada sim
+      // ofrece distintas opciones (ej. AC EVO/EA WRC/AC Rally no tienen "húmedo"),
+      // así que una elección vieja como "damp" quedaría huérfana al cambiar de juego.
+      // "dry" está en el set de clima de los 5 juegos.
+      setWeather("dry");
+      setTrackTempC("");
+      setGrip("medium");
+      setFuel("medium");
+      setSurface("gravel");
+      setRoughness("medium");
       setLoadingGame(false);
     });
     return () => {
@@ -237,7 +249,7 @@ export function Generator({ gameId }: { gameId: string }) {
             <Segmented
               value={weather}
               onChange={(v) => setWeather(v as Weather)}
-              options={(["dry", "damp", "wet"] as const).map((w) => ({
+              options={(game!.conditionOptions?.weather ?? (["dry", "damp", "wet"] as Weather[])).map((w) => ({
                 value: w,
                 label: t(`weather.${w}`),
               }))}
@@ -262,7 +274,7 @@ export function Generator({ gameId }: { gameId: string }) {
             <Segmented
               value={grip}
               onChange={(v) => setGrip(v as typeof grip)}
-              options={(["green", "medium", "rubbered"] as const).map((gr) => ({
+              options={(game!.conditionOptions?.grip ?? (["green", "medium", "rubbered"] as (typeof grip)[])).map((gr) => ({
                 value: gr,
                 label: t(`grip.${gr}`),
               }))}
@@ -275,7 +287,7 @@ export function Generator({ gameId }: { gameId: string }) {
             <Segmented
               value={fuel}
               onChange={(v) => setFuel(v as typeof fuel)}
-              options={(["low", "medium", "high"] as const).map((f) => ({
+              options={(game!.conditionOptions?.fuel ?? (["low", "medium", "high"] as (typeof fuel)[])).map((f) => ({
                 value: f,
                 label: t(`fuel.${f}`),
               }))}
@@ -301,7 +313,7 @@ export function Generator({ gameId }: { gameId: string }) {
             <Segmented
               value={surface}
               onChange={(v) => setSurface(v as typeof surface)}
-              options={(["tarmac", "gravel", "snow", "mixed"] as const).map((s) => ({
+              options={(game!.conditionOptions?.surface ?? (["tarmac", "gravel", "snow", "mixed"] as (typeof surface)[])).map((s) => ({
                 value: s,
                 label: t(`surface.${s}`),
               }))}
@@ -314,7 +326,7 @@ export function Generator({ gameId }: { gameId: string }) {
             <Segmented
               value={roughness}
               onChange={(v) => setRoughness(v as typeof roughness)}
-              options={(["smooth", "medium", "rough"] as const).map((r) => ({
+              options={(game!.conditionOptions?.roughness ?? (["smooth", "medium", "rough"] as (typeof roughness)[])).map((r) => ({
                 value: r,
                 label: t(`roughness.${r}`),
               }))}
@@ -506,6 +518,7 @@ export function Generator({ gameId }: { gameId: string }) {
               gameId={gameId}
               result={result}
               carId={carId}
+              car={car}
               carName={car.name}
               trackId={trackId}
               trackName={track?.name ?? null}
@@ -540,6 +553,7 @@ function ResultPanel({
   gameId,
   result,
   carId,
+  car,
   carName,
   trackId,
   trackName,
@@ -552,6 +566,7 @@ function ResultPanel({
   gameId: string;
   result: SetupResult;
   carId: string;
+  car: Car;
   carName: string;
   trackId: string;
   trackName: string | null;
@@ -601,6 +616,8 @@ function ResultPanel({
       </div>
 
       <TrackCoach track={track} symptoms={symptoms} isRally={game.meta.discipline === "rally"} />
+
+      <BrakeCoach game={game} car={car} track={track} />
 
       {result.notes.length > 0 && (
         <div className="rounded-2xl border border-sky/25 bg-sky/[0.06] p-4">

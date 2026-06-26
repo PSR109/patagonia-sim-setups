@@ -127,18 +127,8 @@ export const ea_wrcConditionRules: ConditionRule[] = [
       en: "Wet/mud: grip drops. Soften the springs so the wheels dig in, lower brake force and move bias slightly rearward to avoid locking the fronts, and raise the rear power lock to put the power down without spinning.",
     },
   },
-  {
-    id: "weather_damp",
-    when: (c) => c.weather === "damp",
-    adjust: [
-      { paramId: "brake_force", delta: -80 },
-      { paramId: "diff_rear_power", delta: 2, excludeDrivetrains: ["fwd"] },
-    ],
-    reason: {
-      es: "Húmedo: agarre intermedio. Bajamos un poco la fuerza de freno y subimos algo el bloqueo de conducción trasero como margen de seguridad, sin sacrificar el ritmo de seco.",
-      en: "Damp: in-between grip. Lower brake force a little and raise the rear power lock a touch as a safety margin, without giving up the dry pace.",
-    },
-  },
+  // EA Sports WRC no tiene un estado de clima intermedio "húmedo/damp": el clima
+  // distingue seco vs lluvia (y nieve via superficie). Verificado 2026-06-26.
 ];
 
 // Reglas por SÍNTOMA (lo que el piloto siente en la etapa). En rally se prioriza el

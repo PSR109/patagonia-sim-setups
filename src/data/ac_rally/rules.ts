@@ -114,42 +114,11 @@ export const ac_rallyConditionRules: ConditionRule[] = [
       en: "Wet/rain: add TC/ABS where available, lower the rear power ramp (more lock on throttle to reduce wheelspin on slippery ground), move brake balance slightly rearward and, due to the EA build's inverted-PSI bug, RAISE pressures to gain grip in-game (opposite to real physics).",
     },
   },
-  {
-    id: "weather_damp",
-    when: (c) => c.weather === "damp",
-    adjust: [
-      { paramId: "tc", delta: 1 },
-      { paramId: "abs", delta: 1 },
-    ],
-    reason: {
-      es: "Húmedo: adherencia intermedia. Sumamos un punto de TC/ABS como margen de seguridad sin perder ritmo; el resto del setup se mantiene cerca del de seco.",
-      en: "Damp: in-between grip. Add one TC/ABS step as a safety margin without losing pace; the rest of the setup stays close to the dry one.",
-    },
-  },
-  {
-    id: "track_temp_high",
-    when: (c) => c.trackTempC != null && c.trackTempC >= 35,
-    adjust: [
-      { paramId: "tyre_pressure_front", delta: 1 },
-      { paramId: "tyre_pressure_rear", delta: 1 },
-    ],
-    reason: {
-      es: "Pista caliente: en la física real bajaríamos la presión en frío porque sube sola con el calor, pero por el bug de PSI invertido de la build EA SUBIMOS presión para mantener el grip in-game (al revés de lo realista). Cuando se corrija el bug, volver a bajar.",
-      en: "Hot track: in real physics we'd lower cold pressure because it rises with heat, but due to the EA build's inverted-PSI bug we RAISE pressure to keep grip in-game (opposite to reality). Revert to lowering once the bug is fixed.",
-    },
-  },
-  {
-    id: "track_temp_low",
-    when: (c) => c.trackTempC != null && c.trackTempC <= 5,
-    adjust: [
-      { paramId: "tyre_pressure_front", delta: 2 },
-      { paramId: "tyre_pressure_rear", delta: 2 },
-    ],
-    reason: {
-      es: "Pista muy fría (alpina/invernal): cuesta llegar a la presión objetivo, así que arrancamos con presiones en frío más altas.",
-      en: "Very cold track (alpine/winter): harder to reach target pressure, so we start with higher cold pressures.",
-    },
-  },
+  // Assetto Corsa Rally NO tiene estado de clima intermedio "húmedo/damp" (clima
+  // por evento: Despejado/Lluvia/Nieve/Niebla, sin intermedio) ni un valor de
+  // TEMPERATURA DE PISTA ajustable en la UI (verificado 2026-06-26; la temp de
+  // pista previa era contaminación de datos de otro juego). El clima sólo
+  // distingue seco vs mojado.
 ];
 
 // Reglas por SÍNTOMA (lo que el piloto siente en pista). Cubren los 12 valores

@@ -4,6 +4,7 @@
 // no rompa ni produzca NaN para ningún auto. Correr: npx tsx scripts/validate-engine.ts
 import { implementedGames } from "@/data/registry";
 import { generateSetup, baseFor, effectiveParams } from "@/lib/engine";
+import { fanatecBases } from "@/data/hardware/fanatec";
 import type { Symptom } from "@/lib/types";
 
 const ALL_SYMPTOMS: Symptom[] = [
@@ -21,14 +22,9 @@ const ALL_SYMPTOMS: Symptom[] = [
   "kerb_instability",
 ];
 
-const BASE_IDS = new Set([
-  "gt_dd_pro",
-  "csl_dd",
-  "clubsport_dd",
-  "clubsport_dd_plus",
-  "podium_dd1",
-  "podium_dd2",
-]);
+// Derivado del catálogo real de bases (hoy: csl_dd + clubsport_dd_plus). Así el
+// validador caza cualquier key de perBase que apunte a una base que ya no existe.
+const BASE_IDS = new Set(fanatecBases.map((b) => b.id));
 
 let problems = 0;
 const log = (m: string) => {

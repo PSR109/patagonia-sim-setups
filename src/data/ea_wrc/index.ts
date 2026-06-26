@@ -30,5 +30,8 @@ export const ea_wrc: GameData = {
   symptomRules: ea_wrcSymptomRules,
   styleRules: ea_wrcStyleRules,
   conditionFields: ["surface", "roughness", "weather"],
+  // EA WRC no tiene estado intermedio "húmedo": el clima es seco/mojado (la nieve
+  // va por superficie). Verificado 2026-06-26.
+  conditionOptions: { weather: ["dry", "wet"] },
   ffb: ea_wrcFfb,
 };

@@ -1,39 +1,21 @@
 import type { FanatecBase, FfbTuningParam } from "@/lib/types";
 
-// Línea Direct Drive moderna de Fanatec (2024-2026). El par máximo determina
-// cuánta fuerza puede entregar la base: con más par hay que bajar el gain dentro
-// del juego para no "clippear" (saturar) el FFB y perder detalle.
+// Bases Direct Drive de Fanatec del piloto (Patagonia Sim Racing). Solo se
+// modelan las DOS bases que se usan: la CSL DD (con Boost Kit 180 = 8 Nm) y la
+// ClubSport DD+ (18 Nm). El par máximo determina cuánta fuerza puede entregar la
+// base: con más par hay que bajar el gain dentro del juego para no "clippear"
+// (saturar) el FFB y perder detalle.
 // Nota (firmware Fanatec App v1.4.2.3, abr-may 2026): el par de sujeción de la
-// ClubSport DD subió de 12 a 15 Nm y el de la ClubSport DD+ de 15 a 18 Nm, sin
-// costo ni cambio de hardware. Valores actualizados al 2026-06-23.
+// ClubSport DD+ subió de 15 a 18 Nm sin costo ni cambio de hardware.
 export const fanatecBases: FanatecBase[] = [
-  {
-    id: "gt_dd_pro",
-    name: "Gran Turismo DD Pro",
-    maxTorqueNm: 5,
-    boostTorqueNm: 8,
-    note: {
-      es: "Base para consola (PlayStation) y PC. 5 Nm de fábrica, 8 Nm con el Boost Kit 180.",
-      en: "Console (PlayStation) and PC base. 5 Nm stock, 8 Nm with the Boost Kit 180.",
-    },
-  },
   {
     id: "csl_dd",
     name: "CSL DD",
     maxTorqueNm: 5,
     boostTorqueNm: 8,
     note: {
-      es: "Base de entrada para PC (y Xbox con volante compatible). 5 Nm de fábrica, 8 Nm con el Boost Kit 180.",
-      en: "Entry PC base (and Xbox with a compatible wheel). 5 Nm stock, 8 Nm with the Boost Kit 180.",
-    },
-  },
-  {
-    id: "clubsport_dd",
-    name: "ClubSport DD",
-    maxTorqueNm: 15,
-    note: {
-      es: "Direct drive de gama media, 15 Nm de par de sujeción (subió de 12 a 15 Nm vía firmware v1.4.2.3, 2026). Buen equilibrio entre fuerza y detalle. Con volantes de lado QR2 Lite queda limitada a 8 Nm.",
-      en: "Mid-range direct drive, 15 Nm holding torque (raised from 12 to 15 Nm via firmware v1.4.2.3, 2026). Good balance of force and detail. Limited to 8 Nm when used with QR2 Lite wheel-side connectors.",
+      es: "Base de entrada para PC (y Xbox con volante compatible). 5 Nm de fábrica, 8 Nm con el Boost Kit 180. Si la corres a 8 Nm, baja un poco el gain del juego respecto a los 5 Nm.",
+      en: "Entry PC base (and Xbox with a compatible wheel). 5 Nm stock, 8 Nm with the Boost Kit 180. If you run it at 8 Nm, lower the in-game gain a touch versus 5 Nm.",
     },
   },
   {
@@ -41,26 +23,8 @@ export const fanatecBases: FanatecBase[] = [
     name: "ClubSport DD+",
     maxTorqueNm: 18,
     note: {
-      es: "Versión de más par de la ClubSport DD, 18 Nm (subió de 15 a 18 Nm vía firmware v1.4.2.3, 2026). Más par para autos pesados y de fórmula.",
-      en: "Higher-torque version of the ClubSport DD, 18 Nm (raised from 15 to 18 Nm via firmware v1.4.2.3, 2026). More torque for heavy and formula cars.",
-    },
-  },
-  {
-    id: "podium_dd1",
-    name: "Podium DD1",
-    maxTorqueNm: 20,
-    note: {
-      es: "Gama alta, 20 Nm. Mucha fuerza: conviene bajar el gain del juego para no saturar.",
-      en: "High-end, 20 Nm. Lots of force: lower the in-game gain to avoid clipping.",
-    },
-  },
-  {
-    id: "podium_dd2",
-    name: "Podium DD2",
-    maxTorqueNm: 25,
-    note: {
-      es: "Tope de gama, 25 Nm. Par muy alto; usa gain bajo y súbelo de a poco.",
-      en: "Flagship, 25 Nm. Very high torque; use a low gain and raise it gradually.",
+      es: "Versión de más par de la ClubSport DD, 18 Nm (subió de 15 a 18 Nm vía firmware v1.4.2.3, 2026). Más par para autos pesados y de fórmula; usa un gain más bajo para no saturar.",
+      en: "Higher-torque version of the ClubSport DD, 18 Nm (raised from 15 to 18 Nm via firmware v1.4.2.3, 2026). More torque for heavy and formula cars; use a lower gain to avoid clipping.",
     },
   },
 ];
@@ -76,8 +40,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     name: { es: "Sensibilidad / ángulo de giro", en: "Sensitivity / steering angle" },
     unit: "°",
     whatItDoes: {
-      es: "Define cuántos grados gira el volante de tope a tope (rango 90–1080° en el menú estándar, hasta 2520° en el menú avanzado de las bases Podium; default AUTO). En AUTO, el juego fija el ángulo correcto para cada auto, que es lo ideal en sims modernos.",
-      en: "Sets how many degrees the wheel turns lock to lock (range 90–1080° in the standard menu, up to 2520° in the advanced menu on Podium bases; default AUTO). On AUTO the game sets the correct angle per car, which is ideal in modern sims.",
+      es: "Define cuántos grados gira el volante de tope a tope (rango 90–1080° en la CSL DD y la ClubSport DD+; default AUTO). En AUTO, el juego fija el ángulo correcto para cada auto, que es lo ideal en sims modernos.",
+      en: "Sets how many degrees the wheel turns lock to lock (range 90–1080° on the CSL DD and ClubSport DD+; default AUTO). On AUTO the game sets the correct angle per car, which is ideal in modern sims.",
     },
     increaseEffect: {
       es: "Más grados = volante más lento y suave, pero menos directo en curvas cerradas.",
@@ -111,8 +75,8 @@ export const ffbTuningParams: FfbTuningParam[] = [
     label: "FFS",
     name: { es: "Escala del FFB (Peak/Linear)", en: "FFB Scale (Peak/Linear)" },
     whatItDoes: {
-      es: "Cómo se escala la fuerza. PEAK aprovecha todo el par; LINEAR da una respuesta más lineal y predecible (recomendado en bases potentes >15 Nm). Ojo: solo las Podium (DD1/DD2) lo muestran como «FFS» con valores PEAK/LINEAR; en las bases nuevas (GT DD Pro, CSL DD, ClubSport DD/DD+) el equivalente se llama «LIN».",
-      en: "How force is scaled. PEAK uses the full torque; LINEAR gives a more linear, predictable response (recommended on strong bases >15 Nm). Note: only the Podium bases (DD1/DD2) show it as 'FFS' with PEAK/LINEAR values; on the newer bases (GT DD Pro, CSL DD, ClubSport DD/DD+) the equivalent is called 'LIN'.",
+      es: "Cómo se escala la fuerza. En la CSL DD y la ClubSport DD+ el ajuste se llama «LIN»: apagado aprovecha todo el par (picos más fuertes) y activado da una respuesta más lineal y predecible (útil sobre todo en la ClubSport DD+ a 18 Nm). En las viejas Podium era «FFS» con valores PEAK/LINEAR.",
+      en: "How force is scaled. On the CSL DD and ClubSport DD+ this setting is called 'LIN': off uses the full torque (stronger peaks), on gives a more linear, predictable response (most useful on the ClubSport DD+ at 18 Nm). On the older Podium bases it was 'FFS' with PEAK/LINEAR values.",
     },
     increaseEffect: {
       es: "PEAK: máximo par disponible, picos más fuertes.",
