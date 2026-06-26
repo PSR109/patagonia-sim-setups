@@ -61,7 +61,7 @@ export default function Home() {
           {t("landing.heroSubtitle")}
         </p>
         <div className="reveal reveal-4 mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/register" className="btn-primary px-7 py-3 text-sm">
+          <Link href="/login" className="btn-primary px-7 py-3 text-sm">
             {t("landing.ctaPrimary")}
             <span aria-hidden className="text-base leading-none">→</span>
           </Link>

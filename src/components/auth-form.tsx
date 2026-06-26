@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useState } from "react";
 import { useT } from "@/lib/i18n/context";
 
@@ -121,16 +120,6 @@ export function AuthForm({
                 : t("auth.registerSubmit")}
           </button>
         </form>
-
-        <p className="mt-6 text-center text-sm text-muted">
-          {isLogin ? t("auth.noAccount") : t("auth.hasAccount")}{" "}
-          <Link
-            href={isLogin ? "/register" : "/login"}
-            className="font-semibold text-brand hover:underline"
-          >
-            {isLogin ? t("auth.goRegister") : t("auth.goLogin")}
-          </Link>
-        </p>
       </div>
     </div>
   );

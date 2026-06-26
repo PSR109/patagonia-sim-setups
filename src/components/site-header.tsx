@@ -92,12 +92,7 @@ export function SiteHeader({
               {t("nav.logout")}
             </button>
           ) : (
-            <>
-              <NavLink href="/login">{t("nav.login")}</NavLink>
-              <Link href="/register" className="btn-primary ml-1 px-4 py-1.5 text-sm">
-                {t("nav.register")}
-              </Link>
-            </>
+            <NavLink href="/login">{t("nav.login")}</NavLink>
           )}
         </nav>
       </div>

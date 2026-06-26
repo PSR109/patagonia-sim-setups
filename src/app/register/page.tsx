@@ -1,11 +1,6 @@
-import { AuthForm } from "@/components/auth-form";
+import { redirect } from "next/navigation";
 
-export default async function RegisterPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ next?: string }>;
-}) {
-  const sp = await searchParams;
-  const next = typeof sp.next === "string" ? sp.next : "/app";
-  return <AuthForm mode="register" next={next} />;
+// El registro está deshabilitado (app privada, un solo dueño). Mandamos a login.
+export default function RegisterPage() {
+  redirect("/login");
 }
