@@ -205,7 +205,7 @@ export const lmuSymptomRules: SymptomRule[] = [
       { paramId: "brake_migration", delta: 1 },
     ],
     reason: {
-      es: "Inestable al frenar: adelantamos el reparto de frenada y subimos la migración de freno para sumar bias delantero al pisar fuerte, así la cola no se cruza. En LMGT3 sumá además un punto de ABS.",
+      es: "Inestable al frenar: adelantamos el reparto de frenada y subimos la migración de freno para sumar bias delantero al pisar fuerte, así la cola no se cruza. En LMGT3 suma además un punto de ABS.",
       en: "Unstable braking: move brake bias forward and raise brake migration to add front bias under heavy pedal so the rear stays in line. On LMGT3, also add one ABS step.",
     },
   },

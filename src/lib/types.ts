@@ -84,6 +84,11 @@ export interface Track {
   cornerProfile?: "low-speed" | "high-speed" | "mixed";
   surface?: Surface; // rally
   roughness?: "smooth" | "medium" | "rough"; // rally
+  // Rally/ubicación a la que pertenece una ETAPA individual (ej. "Rallye
+  // Monte-Carlo"). Permite agrupar las etapas bajo su rally en el selector
+  // (optgroup) y en el comparador de vueltas. Las ubicaciones-rally en sí no lo
+  // llevan; solo las etapas hijas. Hereda la superficie/rugosidad de su rally.
+  region?: string;
   notes?: LocalizedText;
 }
 
@@ -124,7 +129,7 @@ export type TimeOfDay = "day" | "dusk" | "night";
 // Tres ejes independientes que sesgan el setup hacia el gusto del piloto, además
 // de las condiciones de pista. El NIVEL enmarca: cuánta ayuda/seguridad metemos
 // (electrónica, freno). BALANCE: reparto de agarre frente↔cola (estable=más
-// subviraje y perdona; ágil=más rotación). SUAVIDAD: qué tan reactivo querés el
+// subviraje y perdona; ágil=más rotación). SUAVIDAD: qué tan reactivo quieres el
 // coche en transiciones (suave=amortiguación más blanda; agresivo=más firme).
 // El valor "neutral"/"intermediate" no aplica ninguna regla (setup base).
 export type DriverLevel = "beginner" | "intermediate" | "pro";

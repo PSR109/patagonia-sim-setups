@@ -1,7 +1,7 @@
 "use client";
 
 import { localize, useT } from "@/lib/i18n/context";
-import { drivingTips, trackPlaybook, practicePlan } from "@/lib/coach";
+import { drivingTipFor, trackPlaybook, practicePlan } from "@/lib/coach";
 import type { Symptom, Track } from "@/lib/types";
 
 // Etiquetas locales del panel (no van al diccionario global, igual que FfbPanel).
@@ -9,7 +9,7 @@ const L = {
   eyebrow: { es: "Ingeniero de pista", en: "Race engineer" },
   title: { es: "Cómo bajar tu tiempo", en: "How to lower your time" },
   intro: {
-    es: "El tiempo sale del manejo más que del setup. Esto es lo que tenés que hacer arriba del auto.",
+    es: "El tiempo sale del manejo más que del setup. Esto es lo que tienes que hacer arriba del auto.",
     en: "Lap time comes from driving more than setup. Here's what to do behind the wheel.",
   },
   technique: { es: "Técnica para tus problemas", en: "Technique for your issues" },
@@ -24,9 +24,11 @@ const L = {
 export function TrackCoach({
   track,
   symptoms,
+  isRally = false,
 }: {
   track?: Track;
   symptoms: Symptom[];
+  isRally?: boolean;
 }) {
   const { t, locale } = useT();
   const playbook = trackPlaybook(track);
@@ -56,10 +58,12 @@ export function TrackCoach({
                 {symptoms.map((s) => (
                   <li key={s} className="rounded-xl border border-border bg-bg/40 p-3">
                     <p className="mb-1 font-display text-xs font-semibold uppercase tracking-wide text-brand">
-                      {t(`symptom.${s}`)}
+                      {isRally && s === "kerb_instability"
+                        ? t("symptom.kerb_instability_rally")
+                        : t(`symptom.${s}`)}
                     </p>
                     <p className="text-xs leading-relaxed text-muted">
-                      {localize(drivingTips[s], locale)}
+                      {localize(drivingTipFor(s, isRally), locale)}
                     </p>
                   </li>
                 ))}

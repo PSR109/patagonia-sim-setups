@@ -81,6 +81,7 @@ export const dictionaries = {
       track: "Pista / etapa",
       conditions: "Condiciones",
       problems: "¿Qué te pasa en pista?",
+      problemsRally: "¿Qué te pasa en la etapa?",
       problemsHint:
         "Marca lo que sientes. Vamos a ajustar el setup para corregirlo (opcional).",
       weather: "Clima",
@@ -144,6 +145,7 @@ export const dictionaries = {
       tyres_cold: "Neumáticos fríos",
       bouncing: "El auto rebota",
       kerb_instability: "Inestable en pianos",
+      kerb_instability_rally: "Inestable en saltos y baches",
     },
     result: {
       title: "Tu setup recomendado",
@@ -266,6 +268,7 @@ export const dictionaries = {
       track: "Track / stage",
       conditions: "Conditions",
       problems: "What's the car doing?",
+      problemsRally: "What's the car doing?",
       problemsHint:
         "Tick what you feel. We'll tune the setup to fix it (optional).",
       weather: "Weather",
@@ -329,6 +332,7 @@ export const dictionaries = {
       tyres_cold: "Cold tyres",
       bouncing: "Car bounces",
       kerb_instability: "Unstable over kerbs",
+      kerb_instability_rally: "Unstable over jumps & bumps",
     },
     result: {
       title: "Your recommended setup",

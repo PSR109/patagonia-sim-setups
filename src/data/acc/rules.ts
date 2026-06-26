@@ -266,7 +266,7 @@ export const accStyleRules: ConditionRule[] = [
       { paramId: "rear_wing", delta: 1 },
     ],
     reason: {
-      es: "Balance estable: endurecemos la barra delantera y ablandamos la trasera (más agarre atrás) y sumamos ala. El auto subvira un poco más y perdona errores: ideal si querés un coche plantado.",
+      es: "Balance estable: endurecemos la barra delantera y ablandamos la trasera (más agarre atrás) y sumamos ala. El auto subvira un poco más y perdona errores: ideal si quieres un coche plantado.",
       en: "Stable balance: stiffen the front bar and soften the rear (more rear grip) and add wing. The car understeers a touch more and forgives mistakes: ideal if you want a planted car.",
     },
   },

@@ -297,8 +297,8 @@ export const ac_rallySymptomRules: SymptomRule[] = [
       { paramId: "damper_fast_rebound_rear", delta: -2 },
     ],
     reason: {
-      es: "Inestable en pianos/baches grandes: ablandamos las barras y la amortiguación rápida (compresión y extensión, ambos ejes) para que el auto absorba el impacto en vez de saltar.",
-      en: "Unstable over kerbs/big bumps: soften the bars and fast damping (bump and rebound, both axles) so the car absorbs the impact instead of jumping.",
+      es: "Inestable en saltos y baches grandes: ablandamos las barras y la amortiguación rápida (compresión y extensión, ambos ejes) para que el auto absorba el impacto en vez de saltar.",
+      en: "Unstable over jumps and big bumps: soften the bars and fast damping (bump and rebound, both axles) so the car absorbs the impact instead of jumping.",
     },
   },
 ];

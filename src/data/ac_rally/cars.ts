@@ -59,6 +59,45 @@ export const ac_rallyBaseSetups: Record<string, SetupValues> = {
   // Hyundai i20 N Rally2 — VERIFICADO. Sus valores = defaults de parameters.ts,
   // así que hereda sin override (no hace falta listarlo).
 
+  // Škoda Fabia RS Rally2 — VERIFICADO. Valores reales leídos del save del juego
+  // (CarSetupsDataSaveSlot.sav, jun 2026): muelles N/m, amortiguadores Ns/m (4
+  // canales × 2 ejes), barras N/m, LSD por rampa (°) + precarga (Nm), anillo de
+  // altura en m, presiones psi, caída °, toe en m, balance de freno 0-1, cilindros
+  // mm, pastilla Type20_Soft = 1. Confirma las unidades del modelo i20 (iter 12).
+  "skoda-fabia-rs-rally2": {
+    spring_rate_front: 20000,
+    spring_rate_rear: 25000,
+    ride_height_front: 0.18,
+    ride_height_rear: 0.19,
+    damper_slow_bump_front: 3250,
+    damper_slow_rebound_front: 4000,
+    damper_fast_bump_front: 2250,
+    damper_fast_rebound_front: 3500,
+    damper_slow_bump_rear: 3500,
+    damper_slow_rebound_rear: 4250,
+    damper_fast_bump_rear: 2750,
+    damper_fast_rebound_rear: 3500,
+    arb_front: 2250,
+    arb_rear: 10250,
+    tyre_pressure_front: 24,
+    tyre_pressure_rear: 22,
+    camber_front: -3.3,
+    camber_rear: -4.0,
+    toe_front: -0.0015,
+    toe_rear: 0.00196,
+    brake_bias: 0.6,
+    brake_cylinder_front: 19.05,
+    brake_cylinder_rear: 20.64,
+    handbrake_force: 1.0,
+    brake_pad: 1,
+    diff_front_power_ramp: 39,
+    diff_front_coast_ramp: 85,
+    diff_front_preload: 75,
+    diff_rear_power_ramp: 68,
+    diff_rear_coast_ramp: 85,
+    diff_rear_preload: 72,
+  },
+
   // Group B RWD clásico (Lancia 037): sin electrónica real; balance de freno algo
   // más al frente que el neutro del i20. (Representativo; confirmar in-game.)
   "lancia-037-evo2-grb": { brake_bias: 0.55 },

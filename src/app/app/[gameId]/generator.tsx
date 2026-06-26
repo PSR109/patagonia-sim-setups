@@ -354,7 +354,7 @@ export function Generator({ gameId }: { gameId: string }) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
         {/* Panel de selección */}
-        <section className="card reveal reveal-2 flex h-fit flex-col gap-5 p-5 lg:sticky lg:top-20 lg:p-6">
+        <section className="card reveal reveal-2 flex h-fit flex-col gap-5 p-5 lg:p-6">
           {/* Categoría + auto */}
           <Field label={t("gen.category")}>
             <Select
@@ -395,7 +395,14 @@ export function Generator({ gameId }: { gameId: string }) {
               placeholder={isRally ? t("gen.selectTrackRally") : t("gen.selectTrackCircuit")}
               options={game.tracks.map((tk) => ({
                 value: tk.id,
-                label: tk.country ? `${tk.name} · ${tk.country}` : tk.name,
+                // Las etapas (con `region`) muestran solo su nombre y se agrupan
+                // bajo su rally; las pistas/ubicaciones sueltas muestran país.
+                label: tk.region
+                  ? tk.name
+                  : tk.country
+                    ? `${tk.name} · ${tk.country}`
+                    : tk.name,
+                group: tk.region,
               }))}
             />
           </Field>
@@ -448,7 +455,7 @@ export function Generator({ gameId }: { gameId: string }) {
 
           {/* Problemas / síntomas */}
           <div>
-            <SectionLabel>{t("gen.problems")}</SectionLabel>
+            <SectionLabel>{t(isRally ? "gen.problemsRally" : "gen.problems")}</SectionLabel>
             <p className="mt-1 text-xs text-muted">{t("gen.problemsHint")}</p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -465,7 +472,9 @@ export function Generator({ gameId }: { gameId: string }) {
                     : "border-border bg-bg/40 text-muted hover:border-border-strong hover:text-fg",
                 )}
               >
-                {t(`symptom.${s}`)}
+                {isRally && s === "kerb_instability"
+                  ? t("symptom.kerb_instability_rally")
+                  : t(`symptom.${s}`)}
               </button>
             ))}
           </div>
@@ -591,7 +600,7 @@ function ResultPanel({
         </div>
       </div>
 
-      <TrackCoach track={track} symptoms={symptoms} />
+      <TrackCoach track={track} symptoms={symptoms} isRally={game.meta.discipline === "rally"} />
 
       {result.notes.length > 0 && (
         <div className="rounded-2xl border border-sky/25 bg-sky/[0.06] p-4">
@@ -1077,9 +1086,17 @@ function Select({
 }: {
   value: string;
   onChange: (v: string) => void;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; group?: string }[];
   placeholder?: string;
 }) {
+  // Opciones sin `group` van sueltas arriba; las que tienen `group` se agrupan
+  // en <optgroup> por nombre (ej. etapas de rally bajo su rally). Esto mantiene
+  // navegable un selector con cientos de entradas (las 264 etapas de EA WRC).
+  const ungrouped = options.filter((o) => !o.group);
+  const groups: string[] = [];
+  for (const o of options) {
+    if (o.group && !groups.includes(o.group)) groups.push(o.group);
+  }
   return (
     <select
       value={value}
@@ -1087,10 +1104,21 @@ function Select({
       className="field"
     >
       {placeholder && <option value="">{placeholder}</option>}
-      {options.map((o) => (
+      {ungrouped.map((o) => (
         <option key={o.value} value={o.value}>
           {o.label}
         </option>
+      ))}
+      {groups.map((g) => (
+        <optgroup key={g} label={g}>
+          {options
+            .filter((o) => o.group === g)
+            .map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+        </optgroup>
       ))}
     </select>
   );
